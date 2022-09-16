@@ -16,7 +16,6 @@
     describe("index", function () {
         it("should say 'hello world'", function () {
             assert.equal(helloWorld(), "hello world");
-            assert.ok(true);
         });
     });
 });
