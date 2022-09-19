@@ -1,5 +1,6 @@
 import "mocha";
 import * as assert from "assert";
+import {delete_all_data_in_table_projects} from "../source/database";
 
 before(() => {
     delete_all_data_in_table_projects();
