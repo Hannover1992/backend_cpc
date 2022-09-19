@@ -21,15 +21,13 @@
     var prisma = new client_1.PrismaClient();
     prisma.project.findMany().then(function (projects) {
         console.log(projects);
+    }).catch(function (e) {
+        console.log(e);
     });
-    prisma.project.findMany({
-        where: {
-            Id: {
-                equals: 1
-            }
-        }
-    }).then(function (products) {
-        console.log(products);
+    prisma.project.deleteMany().then(function () {
+        console.log("deleted");
+    }).catch(function (e) {
+        console.log(e);
     });
 });
 //# sourceMappingURL=index.js.map

@@ -3,7 +3,7 @@ interface IProject {
     name: string;
 }
 
-class Project implements IProject{
+export class Project implements IProject{
     private _id: number;
     private _name: string;
 
@@ -26,6 +26,4 @@ class Project implements IProject{
         this._id = id;
         this._name = name;
     }
-}
-
 }
