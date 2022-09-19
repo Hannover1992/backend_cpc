@@ -1,23 +1,20 @@
 import "mocha";
 import * as assert from "assert";
-import {delete_all_data_in_table_projects} from "../source/database";
+import {Database} from "../source/database";
 
 before(() => {
-    delete_all_data_in_table_projects();
+    console.log("bevor");
 });
 
 after(() => {
     console.log("after");
 });
 
-describe("index", () => {
 
-    it("should say 'hello world'", () => {
+describe("test if connection can be establiesched to database", () => {
+    it("should say 'connec to database'", () => {
         assert.equal(true, true);
     });
     //
-    it("doesnt should be equal", () => {
-        assert.notEqual(true, false);
-    });
 });
 
