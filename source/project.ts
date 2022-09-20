@@ -28,14 +28,16 @@ export class Project extends Database implements IProject{
 
 
     async delete(){
-        //get this id
-        let id = this.id;
         //delete project with this id
         this.ready = await this.prisma.project.delete({
             where: {
-                id: id
+                id: this.id
             }
-        });
+        }).catch(
+            (error: any) => {
+                throw error;
+            }
+        )
     }
 
     async delete_all_projects(){

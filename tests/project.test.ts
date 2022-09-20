@@ -21,7 +21,13 @@ describe('test the projects class', () => {
         let project2 = new Project(1, "test2");
         //expect rpoject2.ready promise to thora an error thath contain string PRIMARY
         await expect(project2.ready).rejects.toThrow("PRIMARY");
-        await project2.delete();
+        try{
+            await project2.delete();
+        }
+        catch (e) {
+            //expect the error to contain string 'need at least one'
+            expect(e.message).toContain("needs at least one argument");
+        }
     });
 
     afterAll(async () => {
