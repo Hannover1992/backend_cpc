@@ -4,7 +4,6 @@ interface IProject {
     Ready: Promise<void>;
     id: number;
     name: string;
-    test: Promise<number>
 }
 
 export class Project extends Database implements IProject{
