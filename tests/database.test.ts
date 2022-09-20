@@ -8,6 +8,11 @@ describe('CRUD Project Direct', () => {
     let prisma: PrismaClient;
     let projects;
 
+    beforeAll(async () => {
+        prisma = new PrismaClient();
+        projects = new Projects();
+    });
+
 
 
     it("the project should be empty at the begin", async () => {
@@ -22,7 +27,7 @@ describe('CRUD Project Direct', () => {
         await prisma.project.create({
             data: {
                 Id: 1,
-                Location: "test"
+                Name: "test"
             }
         })
         await prisma.project.findMany()
@@ -39,7 +44,7 @@ describe('CRUD Project Direct', () => {
         await prisma.project.create({
                 data: {
                     Id: 1,
-                    Location: "test"
+                    Name: "test"
                 }
             }
         ).catch(
@@ -54,7 +59,7 @@ describe('CRUD Project Direct', () => {
         await prisma.project.create({
             data: {
                 Id: 3,
-                Location: "test3"
+                Name: "test3"
             }
         })
         await prisma.project.findMany()
@@ -63,10 +68,10 @@ describe('CRUD Project Direct', () => {
                     //project will contain the project with the name TEST3
                     let project: Project;
                     // @ts-ignore
-                    project = projects.find((project) => project.Location === "test3");
+                    project = projects.find((project) => project.Name === "test3");
                     expect(project).not.toBeNull();
                     // @ts-ignore
-                    expect(project.Location).toBe("test3");
+                    expect(project.Name).toBe("test3");
                 }
             )
         ;
@@ -83,11 +88,3 @@ describe('CRUD Project Direct', () => {
 
 });
 
-describe('test the projects class', () => {
-    let projects;
-
-    beforeAll(async () => {
-        projects = new Projects();
-    });
-
-});
