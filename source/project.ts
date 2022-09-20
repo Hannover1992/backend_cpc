@@ -1,94 +1,64 @@
 import {Database} from "./database";
 
 interface IProject {
-    Ready: Promise<void>;
+    ready: Promise<any>;
     id: number;
     name: string;
 }
 
 export class Project extends Database implements IProject{
-    public Ready: Promise<void>;
-    private _id: number;
-    private _name: string;
+    id: number;
+    name: string;
+    ready: Promise<any>;
 
-
-    constructor(id: number, name: string){
+    constructor(id: number, name: string) {
         super();
-        this._id = id;
-        this._name = name;
-        this.Ready = this.create(id, name);
-    }
-
-    public get name(): string {
-        let name;
-        this.Ready.then(() => {
-            name = this._name;
-        });
-
-        return this._name;
-    }
-
-    public set name(value: string) {
-        this._name = value;
-    }
-    public get id(): number {
-        return this._id;
-    }
-
-    public set id(value: number) {
-        this._id = value;
+        this.ready = this.prisma.project.create({
+            data: {
+                id: id,
+                name: name
+            }
+        }).then(
+            (result: any) => {
+                this.id = result.id;
+                this.name = result.name;
+            }
+        )
     }
 
 
-
-
-    async delete() {
-        await this.prisma.project.delete({
+    async delete(){
+        //get this id
+        let id = this.id;
+        //delete project with this id
+        this.ready = await this.prisma.project.delete({
             where: {
-                Id: this.id
+                id: id
             }
         });
     }
 
-    private update() {
-        return this.prisma.project.update({
+    async delete_all_projects(){
+        this.ready = await this.prisma.project.deleteMany();
+    }
+
+    async update(name: string){
+        this.ready = await this.prisma.project.update({
             where: {
-                Id: this.id
+                id: this.id
             },
             data: {
-                Name: this.name
+                id: this.id,
+                name: name
             }
-        });
-    }
-
-    private async create(id: number, name: string) {
-        return await this.prisma.project.create({
-            data: {
-                Id: id,
-                Name: name
+        }).then(
+            (result: any) => {
+                this.name = result.name;
             }
-        });
-    }
-
-    async get_id_direct_from_db() {
-        return await this.prisma.project.findUnique({
-            where: {
-                Id: this.id
+        ).catch(
+            (error: any) => {
+                throw error;
             }
-            // @ts-ignore
-        }).then((project) => {
-            return project.Id;
-        });
-    }
-
-    async get_name_direct_from_db() {
-        return await this.prisma.project.findUnique({
-            where: {
-                Id: this.id
-            }
-            // @ts-ignore
-        }).then((project) => {
-            return project.Name;
-        });
+        )
     }
 }
