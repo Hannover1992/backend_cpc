@@ -1,36 +1,19 @@
-export module SmokeTest {
-    export function helloWorld() {
-        return "hello world";
-    }
-}
+import {Project} from "./project";
 
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
-//insert into project project with nr 5
-prisma.project.findMany().then((projects) => {
-    console.log(projects)
-}).catch((e) => {
-    console.log(e)
-});
+const express = require( "express" );
+const app = express();
+const port = 8080; // default port to listen
 
-//insert into project project with nr 5
-// prisma.project.create({
-//     data: {
-//         Id: 28,
-//         Location: "test"
-//     }
-// }
-// ).then(() => {
-//     console.log("inserted")
-// }
-// ).catch((e) => {
-//     console.log(e)
-// }
-// );
+let project: Project = new Project(1, "my-project" );
+let name = project.name;
+// define a route handler for the default home page
+app.get( "/", ( req, res ) => {
+    // res.send( "Hello world!" );
+} );
 
 
-prisma.project.deleteMany().then(() => {
-    console.log("deleted")
-}).catch((e) => {
-    console.log(e);
-});
+
+// start the Express server
+app.listen( port, () => {
+    console.log( `server started at http://localhost:${ port }` );
+} );

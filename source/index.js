@@ -4,30 +4,21 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "@prisma/client"], factory);
+        define(["require", "exports", "./project"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.SmokeTest = void 0;
-    var SmokeTest;
-    (function (SmokeTest) {
-        function helloWorld() {
-            return "hello world";
-        }
-        SmokeTest.helloWorld = helloWorld;
-    })(SmokeTest = exports.SmokeTest || (exports.SmokeTest = {}));
-    var client_1 = require("@prisma/client");
-    var prisma = new client_1.PrismaClient();
-    prisma.project.findMany().then(function (projects) {
-        console.log(projects);
-    }).catch(function (e) {
-        console.log(e);
+    var project_1 = require("./project");
+    var express = require("express");
+    var app = express();
+    var port = 8080;
+    var project = new project_1.Project(1, "my-project");
+    var name = project.name;
+    app.get("/", function (req, res) {
     });
-    prisma.project.deleteMany().then(function () {
-        console.log("deleted");
-    }).catch(function (e) {
-        console.log(e);
+    app.listen(port, function () {
+        console.log("server started at http://localhost:".concat(port));
     });
 });
 //# sourceMappingURL=index.js.map

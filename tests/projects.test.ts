@@ -16,22 +16,14 @@ describe('Projects CRUD', () => {
     });
 
     it("after insert an Project the projects id should be 1", async () => {
-        await projects.create_project(1, "test");
+        let project = new Project(1, "test");
         expect(projects.length).toBe(1);
     });
 
     it("test if the project is in the database", async () => {
-        await projects.create_project(1, "test");
-        await projects.update();
-        expect(projects.projects).not.toBeNull();
-        expect(projects.projects.length).toBe(1);
-        let project : Project = projects.projects[0];
-        expect(project.name).toBe("test");
     });
 
     it("after insert an Project the projects id should be 1", async () => {
-        await projects.create_project(1, "test");
-        expect(projects.length).toBe(1);
     });
 
     afterEach(async () => {
