@@ -74,4 +74,15 @@ export class Project extends Database implements IProject {
             }
         })
     }
+
+    async update() {
+        await this.prisma.project.update({
+            where: {
+                id: this.id
+            },
+            data: {
+                name: this.name
+            }
+        })
+    }
 }
