@@ -25,10 +25,10 @@ export class Project extends Database implements IProject {
         this._id = value;
     }
 
-    constructor(id: number, name: string) {
+    constructor(id: number, name?: string) {
         super();
         this.id = id;
-        this.name = name;
+        this.name = name || " ";
     }
 
     async create() {
@@ -41,8 +41,13 @@ export class Project extends Database implements IProject {
     }
 
     async delete() {
-        //delete project with this id
+        await this.prisma.project.delete({
+            where: {
+                id: this.id
+            }
+        })
     }
+
 
 
     public async project_exists_in_db(): Promise<boolean> {
@@ -55,4 +60,18 @@ export class Project extends Database implements IProject {
         return users.length > 0;
     }
 
+    async read(id?: number) {
+        //read form database if project exists then set this.name = name from db
+         await this.prisma.project.findMany({
+            where: {
+                id: id || this.id
+            }
+        }).then((result: any) => {
+            if(result.length > 0) {
+                this.name = result[0].name;
+            } else {
+                throw new Error("Project not found in db");
+            }
+        })
+    }
 }
