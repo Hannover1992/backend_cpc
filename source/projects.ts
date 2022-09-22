@@ -13,6 +13,17 @@ export class Projects extends Database {
         this.ready = this.get_projects();
     }
 
+    //return boolean
+    public async project_exists_in_db(id: number, name: string): Promise<boolean> {
+        let result = await this.prisma.project.findUnique({
+            where: {
+                id: id,
+                name: name
+            }
+        });
+        return result != null;
+    }
+
     async delete_all_projects() {
         await this.prisma.project.deleteMany();
     }

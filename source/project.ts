@@ -1,16 +1,29 @@
 import {Database} from "./database";
 
 interface IProject {
-    ready: Promise<any>;
     id: number;
     name: string;
 }
 
 // @ts-ignore
 export class Project extends Database implements IProject {
-    private id: number;
-    private name: string;
-    ready: Promise<any>;
+    private _id: number;
+    private _name: string;
+
+    get name(): string {
+        return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
+    }
+    get id(): number {
+        return this._id;
+    }
+
+    set id(value: number) {
+        this._id = value;
+    }
 
     constructor(id: number, name: string) {
         super();
@@ -18,104 +31,28 @@ export class Project extends Database implements IProject {
         this.name = name;
     }
 
-    async inset_in_database() {
-        this.ready = this.prisma.project.create({
+    async create() {
+        await this.prisma.project.create({
             data: {
                 id: this.id,
                 name: this.name
             }
-        }).then(
-            (result: any) => {
-                this.id = result.id;
-                this.name = result.name;
-            }
-        )
-    }
-
-    public async push_to_database() {
-        this.ready =
-    }
-
-    async sync_with_data_base(){
-        //update database
-        this.ready = await this.prisma.project.update({
-            where: {
-                id: this.id
-            }
-        });
+        })
     }
 
     async delete() {
         //delete project with this id
-        this.ready = await this.prisma.project.delete({
-            where: {
-                id: this.id
-            }
-        }).catch(
-            (error: any) => {
-                throw error;
-            }
-        )
     }
 
-    async set_name(name: string) {
-        await this.ready;
-        this.ready = await this.prisma.project.update({
-            where: {
-                id: this.id
-            },
-            data: {
-            }
-        }).then(
-            (result: any) => {
-                this.name = result.name;
-            }
-        ).catch(
-            (error: any) => {
-                throw error;
-            }
-        )
-    }
 
-    async set_id(id: number) {
-        await this.ready;
-        this.ready = await this.prisma.project.update({
+    public async project_exists_in_db(): Promise<boolean> {
+        const users = await this.prisma.project.findMany({
             where: {
-                id: this.id
-            },
-            data: {
-                id: id,
+                id: this.id,
                 name: this.name
             }
-        }).then(
-            (result: any) => {
-                this.id = result.id;
-            }
-        ).catch(
-            (error: any) => {
-                throw error;
-            }
-        )
-
-    }
-
-    public async get_id() {
-        await this.ready;
-        return this.id;
-    }
-
-    public async get_name() {
-        await this.ready;
-        return this.name;
-    }
-
-    public async project_exists_in_db(id: number, name: string) {
-        let result = await this.prisma.project.findUnique({
-            where: {
-                id: id
-            }
         });
-        return result != null;
+        return users.length > 0;
     }
 
 }
