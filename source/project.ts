@@ -6,21 +6,19 @@ interface IProject {
 }
 
 // @ts-ignore
-export class Project extends Database implements IProject {
+export class Project extends Database implements IProject, I_CRUD {
     private _id: number;
     private _name: string;
 
     get name(): string {
         return this._name;
     }
-
     set name(value: string) {
         this._name = value;
     }
     get id(): number {
         return this._id;
     }
-
     set id(value: number) {
         this._id = value;
     }
@@ -40,29 +38,9 @@ export class Project extends Database implements IProject {
         })
     }
 
-    async delete() {
-        await this.prisma.project.delete({
-            where: {
-                id: this.id
-            }
-        })
-    }
-
-
-
-    public async project_exists_in_db(): Promise<boolean> {
-        const users = await this.prisma.project.findMany({
-            where: {
-                id: this.id,
-                name: this.name
-            }
-        });
-        return users.length > 0;
-    }
-
     async read(id?: number) {
         //read form database if project exists then set this.name = name from db
-         await this.prisma.project.findMany({
+        await this.prisma.project.findMany({
             where: {
                 id: id || this.id
             }
@@ -84,5 +62,24 @@ export class Project extends Database implements IProject {
                 name: this.name
             }
         })
+    }
+
+    async delete() {
+        await this.prisma.project.delete({
+            where: {
+                id: this.id
+            }
+        })
+    }
+
+
+    public async project_exists_in_db(): Promise<boolean> {
+        const users = await this.prisma.project.findMany({
+            where: {
+                id: this.id,
+                name: this.name
+            }
+        });
+        return users.length > 0;
     }
 }
