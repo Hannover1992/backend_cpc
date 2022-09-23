@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 
-export class Database{
+export class Database {
     public prisma: any;
 
     constructor() {

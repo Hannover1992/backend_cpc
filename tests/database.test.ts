@@ -1,9 +1,8 @@
 import {PrismaClient} from "@prisma/client";
 import {describe, expect, test, beforeAll } from '@jest/globals';
-import {Projects} from "../source/projects";
-import {Project} from "../source/project";
+import {Project} from "../source/row/Project";
+import {Database} from "../source/database";
 
 
-describe('CRUD Project Direct', () => {
+describe('Projects', () => {
 });
-

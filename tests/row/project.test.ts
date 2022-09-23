@@ -1,6 +1,6 @@
 import {describe, expect, test, beforeAll, afterEach} from '@jest/globals';
-import {Project} from "../source/project";
-import {Database} from "../source/database";
+import {Project} from "../../source/row/Project";
+import {Database} from "../../source/database";
 import {PrismaClient} from "@prisma/client";
 
 let prisma: PrismaClient  = new PrismaClient();
