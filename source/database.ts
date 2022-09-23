@@ -3,7 +3,7 @@ import {PrismaClient} from "@prisma/client";
 export class Database {
     public prisma: any;
 
-    constructor() {
-        this.prisma = new PrismaClient();
+    constructor(prisma: PrismaClient) {
+        this.prisma = prisma;
         }
     }

@@ -1,4 +1,5 @@
 import {Database} from "../database";
+import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 
 interface IProject {
     id: number;
@@ -23,8 +24,8 @@ export class Project extends Database implements IProject, I_CRUD {
         this._id = value;
     }
 
-    constructor(id: number, name?: string) {
-        super();
+    constructor(prisma: PrismaClient, id: number, name?: string) {
+        super(prisma);
         this.id = id;
         this.name = name || " ";
     }
