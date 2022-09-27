@@ -32,9 +32,11 @@ export  class Projects extends Database implements I_CRUD{
 
     async create(...args: any[]): Promise<any> {
         for (let i = 0; i < this._projects.length; i++) {
-            await this._projects[i].create();
+            await this._projects[i].create()
         }
+        this._length = this._projects.length;
     }
+
 
     async read(...args: any[]) {
         this._projects = [];
@@ -49,12 +51,13 @@ export  class Projects extends Database implements I_CRUD{
     }
 
     async delete(...args: any[]) {
-        await this.prisma.project.deleteMany()
+        return await this.prisma.project.deleteMany()
             .then((result: any) => {
               this._length = 0;
               this.projects = [];
-            });
-        assert(this._length == 0);
+            }).then(() => {
+                assert(this._length == 0);
+        });
     }
 
 
@@ -71,6 +74,7 @@ export  class Projects extends Database implements I_CRUD{
             this._projects.push(project);
         }
         this._length = this._projects.length;
+        console.log("Generated " + this._length + " projects");
     }
 
     print() {
@@ -80,6 +84,7 @@ export  class Projects extends Database implements I_CRUD{
     }
 
     get_project_with_id(number: number) : Project {
+        let length = this.length;
         for (let i = 0; i < this._projects.length; i++) {
             if (this._projects[i].id == number) {
                 return this._projects[i];

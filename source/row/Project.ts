@@ -31,7 +31,7 @@ export class Project extends Database implements IProject, I_CRUD {
     }
 
     async create() {
-        await this.prisma.project.create({
+        return await this.prisma.project.create({
             data: {
                 id: this.id,
                 name: this.name

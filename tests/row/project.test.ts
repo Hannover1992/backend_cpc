@@ -101,7 +101,7 @@ describe("test if can update an project", () => {
         await prisma.project.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         //expect to not throe error
-        expect(await project.create()).toBe(undefined);
+        // expect(await project.create()).toBe(undefined);
         await project.create()
             .catch( (error: any) => {
                 expect(error.message).toContain("PRIMARY");
