@@ -55,7 +55,7 @@ export class Project extends Database implements IProject, I_CRUD {
     }
 
     async update() {
-        await this.prisma.project.update({
+        return await this.prisma.project.update({
             where: {
                 id: this.id
             },
@@ -63,6 +63,11 @@ export class Project extends Database implements IProject, I_CRUD {
                 name: this.name
             }
         })
+            .catch(
+                (error: any) => {
+                    throw new Error("Project not found in db");
+                }
+            )
     }
 
     async delete() {

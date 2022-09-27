@@ -163,7 +163,7 @@ describe("test create funcion", () => {
     });
 });
 
-describe("test create, after insert by second type i should get an erreur", () => {
+describe("test create, delete", () => {
     let projects: Projects = new Projects(prisma);
     beforeAll(async () => {
         await projects.delete();
@@ -181,8 +181,57 @@ describe("test create, after insert by second type i should get an erreur", () =
             expect(e.message).toContain("PRIMARY");
         }
     });
-});
 
+    it("test delete funciton", async () => {
+        await projects.delete()
+            .then(async () => {
+                await expect(projects.projects.length).toBe(0);
+                await prisma.project.findMany()
+                    .then(async (temp) => {
+                        await expect(temp.length).toBe(0);
+                        await expect(projects.length).toBe(0);
+                    });
+            });
+    });
+
+})
+
+describe("read function, update", () => {
+    let projects: Projects = new Projects(prisma);
+    beforeAll(async () => {
+        await projects.delete();
+        projects.generate_array_of_projects(1, 100);
+        await projects.create();
+    });
+
+    it("test read function", async () => {
+        await projects.read();
+        expect(projects.projects.length).toBe(100);
+        expect(projects.projects[0].id).toBe(1);
+        expect(projects.projects[99].id).toBe(100);
+        expect(projects.projects[44].name).toBe("test44");
+    });
+
+    it("test update function", async () => {
+        projects.projects[44].name = "test44_updated";
+        await projects.update();
+        await projects.read();
+        expect(projects.projects[44].name).toBe("test44_updated");
+    });
+
+    it("test update function with id that does not exist", async () => {
+        try{
+            projects.projects[44].id = 133;
+            await projects.update();
+            expect(true).toBe(false);
+        }
+        catch (e) {
+            expect(e).toBeDefined();
+            expect(e.message).toContain("Project not found in db");
+        }
+    });
+
+});
 
 function generate_array_with_numbers(start: number, end: number, array: number[]):number[] {
     for (let i = start; i <= end; i++) {

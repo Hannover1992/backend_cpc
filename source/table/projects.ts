@@ -9,9 +9,11 @@ export  class Projects extends Database implements I_CRUD{
     private _projects: Project[];
     private _length: number;
 
+    // @ts-ignore
     get projects(): Project[] {
         return this._projects;
     }
+    // @ts-ignore
     set projects(value: Project[]) {
         this._projects = value;
     }
@@ -61,9 +63,9 @@ export  class Projects extends Database implements I_CRUD{
     }
 
 
-    update(...args: any[]): any {
+    async update(...args: any[]): Promise<any> {
         for (let i = 0; i < this._projects.length; i++) {
-            this._projects[i].update();
+            await this._projects[i].update();
         }
     }
 
