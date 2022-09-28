@@ -183,13 +183,11 @@ describe("test create, delete", () => {
 
     it("test delete funciton", async () => {
         await projects.delete()
-            .then(async () => {
-                await expect(projects.project.length).toBe(0);
-                await prisma.project.findMany()
-                    .then(async (temp) => {
-                        await expect(temp.length).toBe(0);
-                        await expect(projects.length).toBe(0);
-                    });
+        await expect(projects.project.length).toBe(0);
+        await prisma.project.findMany().then(
+            async (temp) => {
+                expect(temp.length).toBe(0);
+                 expect(projects.length).toBe(0);
             });
     });
 
