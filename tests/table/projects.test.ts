@@ -7,12 +7,12 @@ let prisma: PrismaClient  = new PrismaClient();
 
 describe("Projects", () => {
     it("should be defined", () => {
-        let projects: Projects = new Projects();
+        let projects: Projects = new Projects(prisma);
         expect(projects).toBeDefined();
     });
 
     it("at the beginning the array of project should be empty", () => {
-        let projects: Projects = new Projects();
+        let projects: Projects = new Projects(prisma);
         expect(projects.project.length).toBe(0);
         expect(projects.length).toBe(0);
     });
@@ -20,7 +20,7 @@ describe("Projects", () => {
 
 describe("test the function to check if there exist no project", () => {
     it("should return true if there are no project", async () => {
-        let projects: Projects = new Projects();
+        let projects: Projects = new Projects(prisma);
         await projects.delete();
         expect(projects.project.length).toBe(0);
         let temp = await prisma.project.findMany();
@@ -47,7 +47,7 @@ describe("test test functionjs", () => {
 describe("test generate array of project" , () => {
     let prisma: PrismaClient = new PrismaClient();
 
-    let projects: Projects = new Projects();
+    let projects: Projects = new Projects(prisma);
 
     beforeAll(async () => {
         await prisma.project.deleteMany();
@@ -70,7 +70,7 @@ describe("test generate array of project" , () => {
 
 describe("test create funcion", () => {
     let prisma: PrismaClient = new PrismaClient();
-    let projects: Projects = new Projects();
+    let projects: Projects = new Projects(prisma);
 
     beforeAll(async () => {
         await prisma.project.deleteMany();
@@ -85,7 +85,7 @@ describe("test create funcion", () => {
     });
 
     it("the name of the second project should be test2", async () => {
-        let project: Project = new Project(1, "something");
+        let project: Project = new Project(prisma , 1, "something");
         try{
             await project.read(9)
             expect(true).toBe(false);
@@ -97,7 +97,7 @@ describe("test create funcion", () => {
     });
 
     it("check if the project with id 2 in database , and the name test2" , async () => {
-        let project: Project = new Project( 2, "something");
+        let project: Project = new Project(prisma , 2, "something");
         await project.read(2);
         expect(project.name).toBe("test2");
     });
@@ -115,7 +115,7 @@ describe("test create funcion", () => {
     });
 
     it('test update function', async () => {
-        let projects_big: Projects = new Projects();
+        let projects_big: Projects = new Projects(prisma);
         await projects_big.delete()
             .then(() => {
                 projects_big.generate_array_of_projects(4, 20);
@@ -163,7 +163,7 @@ describe("test create funcion", () => {
 });
 
 describe("test create, delete", () => {
-    let projects: Projects = new Projects();
+    let projects: Projects = new Projects(prisma);
     beforeAll(async () => {
         await projects.delete();
         projects.generate_array_of_projects(1, 3);
@@ -196,7 +196,7 @@ describe("test create, delete", () => {
 })
 
 describe("read function, update", () => {
-    let projects: Projects = new Projects();
+    let projects: Projects = new Projects(prisma);
     beforeAll(async () => {
         await projects.delete();
         projects.generate_array_of_projects(1, 100);
