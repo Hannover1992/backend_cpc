@@ -45,11 +45,7 @@ export class Project implements IProject, I_CRUD {
                 id: this.id,
                 name: this.name
             }
-        }).catch(
-            (error: any) => {
-                throw new Error("PRIMARY");
-            }
-        );
+        })
     }
 
     async read(id?: number) {
@@ -68,7 +64,7 @@ export class Project implements IProject, I_CRUD {
     }
 
     async update() {
-        return await this._prisma.project.update({
+        await this._prisma.project.update({
             where: {
                 id: this.id
             },
@@ -76,11 +72,6 @@ export class Project implements IProject, I_CRUD {
                 name: this.name
             }
         })
-            .catch(
-                (error: any) => {
-                    throw new Error("Project not found in db");
-                }
-            )
     }
 
     async delete() {
