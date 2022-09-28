@@ -199,16 +199,18 @@ describe("read function, update", () => {
     let projects: Projects = new Projects(prisma);
     beforeAll(async () => {
         await projects.delete();
-        projects.generate_array_of_projects(1, 100);
+        projects.generate_array_of_projects(0, 99);
         await projects.create();
     });
 
     it("test read function", async () => {
-        await projects.read();
-        expect(projects.project.length).toBe(100);
-        expect(projects.project[0].id).toBe(1);
-        expect(projects.project[99].id).toBe(100);
-        expect(projects.project[44].name).toBe("test44");
+
+        await projects.read().then(async () => {
+            expect(projects.project.length).toBe(100);
+            expect(projects.project[0].id).toBe(0);
+            expect(projects.project[99].id).toBe(99);
+            expect(projects.project[43].name).toBe("test43");
+        });
     });
 
     it("test update function", async () => {

@@ -5,11 +5,18 @@ import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
 
 //create public class Projects
-export  class Projects extends Database implements I_CRUD{
+export  class Projects implements I_CRUD{
     private _project: Project[];
     private _length: number;
+    private _prisma: PrismaClient;
 
-    // @ts-ignore
+    get prisma(): PrismaClient {
+        return this._prisma;
+    }
+
+    set prisma(value: PrismaClient) {
+        this._prisma = value;
+    }
     get project(): Project[] {
         return this._project;
     }
@@ -26,7 +33,7 @@ export  class Projects extends Database implements I_CRUD{
 
     //create constructor
     constructor(prisma: PrismaClient) {
-        super(prisma);
+        this._prisma = prisma;
         this._project = []
         this._length = 0
 
@@ -42,10 +49,10 @@ export  class Projects extends Database implements I_CRUD{
 
     async read(...args: any[]) {
         this._project = [];
-        await this.prisma.project.findMany()
+        await this._prisma.project.findMany()
             .then((result: any) => {
                 for (let i = 0; i < result.length; i++) {
-                    let project: Project = new Project(this.prisma, result[i].id, result[i].name);
+                    let project: Project = new Project(this._prisma, result[i].id, result[i].name);
                     this._project.push(project);
                 }
                 this._length = this._project.length;
@@ -53,7 +60,7 @@ export  class Projects extends Database implements I_CRUD{
     }
 
     async delete(...args: any[]) {
-        return await this.prisma.project.deleteMany()
+        return await this._prisma.project.deleteMany()
             .then((result: any) => {
               this._length = 0;
               this.project = [];
@@ -72,7 +79,7 @@ export  class Projects extends Database implements I_CRUD{
 
     generate_array_of_projects(start: number, end: number) {
         for (let i = start; i <= end; i++) {
-            let project: Project = new Project(this.prisma, i, "test" + i.toString());
+            let project: Project = new Project(this._prisma, i, "test" + i.toString());
             this._project.push(project);
         }
         this._length = this._project.length;

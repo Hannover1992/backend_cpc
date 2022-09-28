@@ -28,26 +28,22 @@ export class Database {
 
     constructor(prisma: PrismaClient) {
         this.prisma = prisma;
-        this.projects = new Projects(this.prisma);
+        this.projects = new Projects(prisma);
     }
 
-    private async read_tables() {
+    async read() {
         await this.projects.read();
     }
 
-    private setup_express(){
+    setup_express(){
         this._app = require('express')();
         this._PORT = 8080;
     }
 
-    public async start_apis() {
-        this.read_tables()
-            .then(() => {
-                this.setup_express();
-            }).then(() => {
-                this._app.get('/', (req: any, res: any) => {
-                    res.send('Hello World!')
-                })
-            });
+    async start_server() {
+        await this.read()
+        await this.setup_express();
     }
+        
+
 }

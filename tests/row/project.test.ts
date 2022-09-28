@@ -2,11 +2,10 @@ import {describe, expect,  beforeAll } from '@jest/globals';
 import {Project} from "../../source/row/Project";
 import {PrismaClient} from "@prisma/client";
 
-let prisma: PrismaClient;
+let prisma: PrismaClient = new PrismaClient();
 
 describe('Project', () => {
     beforeAll(async () => {
-        let prisma: PrismaClient  = new PrismaClient();
         await prisma.project.deleteMany();
     });
 
@@ -15,38 +14,35 @@ describe('Project', () => {
         //check if id = 1 and test
         expect(project.id).toBe(1);
         expect(project.name).toBe("test");
-        await project.create();
-        expect(await project.project_exists_in_db()).toBe(true);
-    });
-
-    it("i i try to insert an project that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
-        await prisma.project.deleteMany();
-        await prisma.project.create({ data: { id: 1, name: "test" } })
-        await prisma.project.create({ data: { id: 1, name: "test" } })
-            .catch( (error: any) => {
-                    expect(error.message).toContain("PRIMARY");
-                }
-            )
-    });
-    afterAll    (async () => {
-        await prisma.project.deleteMany();
-    });
-});
-
-describe('test if can catch the error of an create inside function, test Promise', () => {
-    it("insert projec with id 1 and name test in db, then try to insert another project with same id, get error", async () => {
-        await prisma.project.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
-        await project.create();
-        expect(await project.project_exists_in_db()).toBe(true);
         await project.create()
-            .catch( (error: any) => {
-                expect(error.message).toContain("PRIMARY");
+            .then(async () => {
+                expect(await project.project_exists_in_db()).toBe(true);
             });
     });
 
-    afterAll(async () => {
-        await prisma.project.deleteMany();
+    it("i i try to insert an project that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
+    });
+});
+
+describe("i i try to insert an project that 123 already exist in database, the have to get an error with message contina PRIMARY", () => {
+    it("i i try to insert an project that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
+        let prisma: PrismaClient = new PrismaClient();
+        await prisma.project.deleteMany()
+        await prisma.project.create({ data: { id: 1, name: "test" } });
+        // await expect( await prisma.project.create({ data: { id: 1, name: "test" } })).toThrowError("123");
+        await prisma.project.create({ data: { id: 1, name: "test" } }).catch(
+            (error: any) => {
+                expect(error.message).toContain("PRIMARY");
+            }
+        )
+        await prisma.project.deleteMany()
+        let project1: Project = new Project(prisma, 1, "test");
+        //expect no error
+        await project1.create().catch((error: any) => { expect(true).toBe(false); });
+        await project1.create().catch((error: any) => {
+            expect(error.message).toContain("PRIMARY");
+        });
+
     });
 });
 
@@ -56,8 +52,15 @@ describe('test if can read the project from db', () => {
         let project: Project = new Project(prisma,1, "test");
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
-        let project2: Project = new Project(prisma,1, "test");
-        expect(await project2.project_exists_in_db()).toBe(true);
+        let project2: Project = new Project(prisma,1, "");
+        expect(await project2.project_exists_in_db()).toBe(false);
+        await project2.read(1);
+        await expect(project2.name).toBe("test");
+        await project2.read(2).catch(
+            (error: any) => {
+                expect(error.message).toContain("not found");
+            }
+        )
     });
 
     afterAll(async () => {
@@ -101,7 +104,7 @@ describe("test if can update an project", () => {
         // expect(await project.create()).toBe(undefined);
         await project.create()
             .catch( (error: any) => {
-                expect(error.message).toContain("PRIMARY");
+                expect(true).toBe(false);
             });
         let project2: Project = new Project(prisma,1);
         expect(await project2.project_exists_in_db()).toBe(false);
@@ -142,32 +145,3 @@ describe("test if can update an project", () => {
             );
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

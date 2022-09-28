@@ -7,9 +7,14 @@ interface IProject {
 }
 
 // @ts-ignore
-export class Project extends Database implements IProject, I_CRUD {
-    private _id: number;
-    private _name: string;
+export class Project implements IProject, I_CRUD {
+
+    get prisma(): PrismaClient {
+        return this._prisma;
+    }
+    set prisma(value: PrismaClient) {
+        this._prisma = value;
+    }
 
     get name(): string {
         return this._name;
@@ -24,24 +29,32 @@ export class Project extends Database implements IProject, I_CRUD {
         this._id = value;
     }
 
-    constructor(prisma: PrismaClient, id: number, name?: string) {
-        super(prisma);
+    private _id: number;
+    private _name: string;
+    private _prisma: PrismaClient;
+
+    constructor(prisma: PrismaClient,id : number, name?: string) {
+        this.prisma = prisma;
         this.id = id;
         this.name = name || " ";
     }
 
     async create() {
-        return await this.prisma.project.create({
+        await this.prisma.project.create({
             data: {
                 id: this.id,
                 name: this.name
             }
-        })
+        }).catch(
+            (error: any) => {
+                throw new Error("PRIMARY");
+            }
+        );
     }
 
     async read(id?: number) {
         //read form database if project exists then set this.name = name from db
-        await this.prisma.project.findMany({
+        await this._prisma.project.findMany({
             where: {
                 id: id || this.id
             }
@@ -55,7 +68,7 @@ export class Project extends Database implements IProject, I_CRUD {
     }
 
     async update() {
-        return await this.prisma.project.update({
+        return await this._prisma.project.update({
             where: {
                 id: this.id
             },
@@ -71,7 +84,7 @@ export class Project extends Database implements IProject, I_CRUD {
     }
 
     async delete() {
-        await this.prisma.project.delete({
+        await this._prisma.project.delete({
             where: {
                 id: this.id
             }
@@ -80,7 +93,7 @@ export class Project extends Database implements IProject, I_CRUD {
 
 
     public async project_exists_in_db(): Promise<boolean> {
-        const users = await this.prisma.project.findMany({
+        const users = await this._prisma.project.findMany({
             where: {
                 id: this.id,
                 name: this.name

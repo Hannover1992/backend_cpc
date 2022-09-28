@@ -1,7 +1,25 @@
 import {Projects} from "./table/projects";
 import {PrismaClient} from "@prisma/client";
-import {Project} from "./row/Project";
+import {Database} from "./database";
+let prisma: PrismaClient = new PrismaClient();
 
+async function temp() {
+    prisma.project.create({
+        data: {
+            id: 1,
+            name: "test"
+        }
+    });
+    prisma.project.create(
+        {
+            data: {
+                id: 1,
+                name: "test"
+            }
+        }
+    ).catch((error: any) => {
+        throw new Error(error);
+    });
+}
 
-const app  = require('express')();
-
+temp();
