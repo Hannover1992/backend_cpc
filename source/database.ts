@@ -26,8 +26,8 @@ export class Database {
     private _app: any;
     private _PORT: number;
 
-    constructor() {
-        this.prisma = new PrismaClient();
+    constructor(prisma: PrismaClient) {
+        this.prisma = prisma;
         this.projects = new Projects(this.prisma);
     }
 

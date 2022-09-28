@@ -7,23 +7,22 @@ let prisma: PrismaClient  = new PrismaClient();
 
 describe("Projects", () => {
     it("should be defined", () => {
-        let projects: Projects = new Projects(prisma);
+        let projects: Projects = new Projects();
         expect(projects).toBeDefined();
     });
 
     it("at the beginning the array of project should be empty", () => {
-        let projects: Projects = new Projects(prisma);
-        //expect project lenght to be 0
-        expect(projects.projects.length).toBe(0);
+        let projects: Projects = new Projects();
+        expect(projects.project.length).toBe(0);
         expect(projects.length).toBe(0);
     });
 });
 
-describe("test the function to check if there exist no projects", () => {
-    it("should return true if there are no projects", async () => {
-        let projects: Projects = new Projects(prisma);
+describe("test the function to check if there exist no project", () => {
+    it("should return true if there are no project", async () => {
+        let projects: Projects = new Projects();
         await projects.delete();
-        expect(projects.projects.length).toBe(0);
+        expect(projects.project.length).toBe(0);
         let temp = await prisma.project.findMany();
         await expect(temp.length).toBe(0);
     });
@@ -45,10 +44,10 @@ describe("test test functionjs", () => {
     });
 });
 
-describe("test generate array of projects" , () => {
+describe("test generate array of project" , () => {
     let prisma: PrismaClient = new PrismaClient();
 
-    let projects: Projects = new Projects(prisma);
+    let projects: Projects = new Projects();
 
     beforeAll(async () => {
         await prisma.project.deleteMany();
@@ -57,21 +56,21 @@ describe("test generate array of projects" , () => {
     });
 
     it("array length should be 3", () => {
-        expect(projects.projects.length).toBe(3);
+        expect(projects.project.length).toBe(3);
     });
 
     it("array should contain 1", () => {
-        expect(projects.projects[0].id).toBe(1);
+        expect(projects.project[0].id).toBe(1);
     });
 
     it("the name of the second project should be test2", () => {
-        expect(projects.projects[1].name).toBe("test2");
+        expect(projects.project[1].name).toBe("test2");
     });
 });
 
 describe("test create funcion", () => {
     let prisma: PrismaClient = new PrismaClient();
-    let projects: Projects = new Projects(prisma);
+    let projects: Projects = new Projects();
 
     beforeAll(async () => {
         await prisma.project.deleteMany();
@@ -79,14 +78,14 @@ describe("test create funcion", () => {
         await projects.create();
     });
     it("the length of the array should be 3", () => {
-        expect(projects.projects.length).toBe(3);
+        expect(projects.project.length).toBe(3);
     });
     it("the name of the second project should be it2", () => {
-        expect(projects.projects[1].name).toBe("test2");
+        expect(projects.project[1].name).toBe("test2");
     });
 
     it("the name of the second project should be test2", async () => {
-        let project: Project = new Project(prisma, 1, "something");
+        let project: Project = new Project(1, "something");
         try{
             await project.read(9)
             expect(true).toBe(false);
@@ -98,30 +97,30 @@ describe("test create funcion", () => {
     });
 
     it("check if the project with id 2 in database , and the name test2" , async () => {
-        let project: Project = new Project(prisma, 2, "something");
+        let project: Project = new Project( 2, "something");
         await project.read(2);
         expect(project.name).toBe("test2");
     });
 
-    it("test if the global projects read funciton, read the project 1,2,3", async () => {
+    it("test if the global project read funciton, read the project 1,2,3", async () => {
         await projects.read()
         expect(projects.length).toBe(3);
     });
 
     it('test delete function', async () => {
         await projects.delete()
-        expect(projects.projects.length).toBe(0);
+        expect(projects.project.length).toBe(0);
         const temp = await prisma.project.findMany();
         expect(temp.length).toBe(0);
     });
 
     it('test update function', async () => {
-        let projects_big: Projects = new Projects(prisma);
+        let projects_big: Projects = new Projects();
         await projects_big.delete()
             .then(() => {
                 projects_big.generate_array_of_projects(4, 20);
-                expect(projects_big.projects.length).toBe(17);
-                expect(projects_big.projects[0].id).toBe(4);
+                expect(projects_big.project.length).toBe(17);
+                expect(projects_big.project[0].id).toBe(4);
             }).then(() => {
                 try {
                     projects_big.create()
@@ -149,11 +148,11 @@ describe("test create funcion", () => {
     }
 
     it('test update of project with id that does not exist', async () => {
-        projects.delete();
+        await projects.delete();
         await projects.generate_array_of_projects(4, 20);
 
         try {
-            let project = await projects.get_project_with_id(5)
+            await projects.get_project_with_id(5)
         }
         catch (e) {
             expect(e).toBeDefined();
@@ -164,7 +163,7 @@ describe("test create funcion", () => {
 });
 
 describe("test create, delete", () => {
-    let projects: Projects = new Projects(prisma);
+    let projects: Projects = new Projects();
     beforeAll(async () => {
         await projects.delete();
         projects.generate_array_of_projects(1, 3);
@@ -185,7 +184,7 @@ describe("test create, delete", () => {
     it("test delete funciton", async () => {
         await projects.delete()
             .then(async () => {
-                await expect(projects.projects.length).toBe(0);
+                await expect(projects.project.length).toBe(0);
                 await prisma.project.findMany()
                     .then(async (temp) => {
                         await expect(temp.length).toBe(0);
@@ -197,7 +196,7 @@ describe("test create, delete", () => {
 })
 
 describe("read function, update", () => {
-    let projects: Projects = new Projects(prisma);
+    let projects: Projects = new Projects();
     beforeAll(async () => {
         await projects.delete();
         projects.generate_array_of_projects(1, 100);
@@ -206,22 +205,22 @@ describe("read function, update", () => {
 
     it("test read function", async () => {
         await projects.read();
-        expect(projects.projects.length).toBe(100);
-        expect(projects.projects[0].id).toBe(1);
-        expect(projects.projects[99].id).toBe(100);
-        expect(projects.projects[44].name).toBe("test44");
+        expect(projects.project.length).toBe(100);
+        expect(projects.project[0].id).toBe(1);
+        expect(projects.project[99].id).toBe(100);
+        expect(projects.project[44].name).toBe("test44");
     });
 
     it("test update function", async () => {
-        projects.projects[44].name = "test44_updated";
+        projects.project[44].name = "test44_updated";
         await projects.update();
         await projects.read();
-        expect(projects.projects[44].name).toBe("test44_updated");
+        expect(projects.project[44].name).toBe("test44_updated");
     });
 
     it("test update function with id that does not exist", async () => {
         try{
-            projects.projects[44].id = 133;
+            projects.project[44].id = 133;
             await projects.update();
             expect(true).toBe(false);
         }

@@ -1,6 +1,5 @@
-import {describe, expect, test, beforeAll, afterEach} from '@jest/globals';
+import {describe, expect,  beforeAll } from '@jest/globals';
 import {Project} from "../../source/row/Project";
-import {Database} from "../../source/database";
 import {PrismaClient} from "@prisma/client";
 
 let prisma: PrismaClient  = new PrismaClient();
@@ -13,7 +12,7 @@ describe('Project', () => {
     });
 
     it("we will test if after insert into db project with id 1 and name 'test' exists in db", async () => {
-        let project: Project = new Project(prisma, 1, "test");
+        let project: Project = new Project( 1, "test");
         //check if id = 1 and test
         expect(project.id).toBe(1);
         expect(project.name).toBe("test");
@@ -39,7 +38,7 @@ describe('Project', () => {
 describe('test if can catch the error of an create inside function, test Promise', () => {
     it("insert projec with id 1 and name test in db, then try to insert another project with same id, get error", async () => {
         await prisma.project.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project = new Project(1, "test");
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
         await project.create()
@@ -56,10 +55,10 @@ describe('test if can catch the error of an create inside function, test Promise
 describe('test if can read the project from db', () => {
     it("insert project with id 1 and name test in db, then read it from db", async () => {
         await prisma.project.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project = new Project(1, "test");
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
-        let project2: Project = new Project(prisma,1, "test");
+        let project2: Project = new Project(1, "test");
         expect(await project2.project_exists_in_db()).toBe(true);
     });
 
@@ -71,7 +70,7 @@ describe('test if can read the project from db', () => {
 describe('after insert an project with id 1, then delete it from db', () => {
     it("insert project with id 1 and name test in db, then delete it from db", async () => {
         await prisma.project.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project = new Project(1, "test");
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
         await project.delete();
@@ -80,7 +79,7 @@ describe('after insert an project with id 1, then delete it from db', () => {
 
     it("test if get error when try to delete an project that does not exist in db", async () => {
         await prisma.project.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project = new Project(1, "test");
         await project.delete()
             .then( () => {
                 expect(false).toBe(true);
@@ -99,14 +98,14 @@ describe('after insert an project with id 1, then delete it from db', () => {
 describe("test if can update an project", () => {
     it('test create and read', async () => {
         await prisma.project.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project = new Project(1, "test");
         //expect to not throe error
         // expect(await project.create()).toBe(undefined);
         await project.create()
             .catch( (error: any) => {
                 expect(error.message).toContain("PRIMARY");
             });
-        let project2: Project = new Project(prisma,1);
+        let project2: Project = new Project(1);
         expect(await project2.project_exists_in_db()).toBe(false);
         await project2.read();
         expect(project2.name).toBe("test");
@@ -117,22 +116,22 @@ describe("test if can update an project", () => {
 describe("test if can update an project", () => {
     it('test if can update an project', async () => {
         await prisma.project.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project = new Project(1, "test");
         //expect to not throe error
         await project.create()
-            .catch( (error: any) => {
+            .catch( () => {
                 expect(true).toBe(false);
             });
         project.name = "test2";
         await project.update()
-            .catch( (error: any) => {
+            .catch( () => {
                 expect(true).toBe(false);
             });
         expect(await project.project_exists_in_db()).toBe(true);
     });
 
     it('test if cant update project that not exist in db', async () => {
-        let project: Project = new Project(prisma,2, "test");
+        let project: Project = new Project(2, "test");
         //expect to not throe error
         await project.update()
             .then( () => {
