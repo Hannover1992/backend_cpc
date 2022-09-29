@@ -1,5 +1,5 @@
 import {describe, expect,  beforeAll } from '@jest/globals';
-import {Project} from "../../source/row/Project";
+import {Project} from "../../source/row/project";
 import {PrismaClient} from "@prisma/client";
 
 let prisma: PrismaClient = new PrismaClient();
@@ -38,7 +38,7 @@ describe("create", () => {
         await prisma.project.deleteMany()
         let project1: Project = new Project(prisma, 1, "test");
         //expect no error
-        await project1.create().catch((error: any) => { expect(true).toBe(false); });
+        await project1.create().catch(() => { expect(true).toBe(false); });
         await project1.create().catch((error: any) => {
             expect(error.message).toContain("PRIMARY");
         });
@@ -53,7 +53,7 @@ describe("test create and read", () => {
         //expect to not throe error
         // expect(await project.create()).toBe(undefined);
         await project.create()
-            .catch( (error: any) => {
+            .catch( () => {
                 expect(true).toBe(false);
             });
         let project2: Project = new Project(prisma,1);

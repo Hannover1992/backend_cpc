@@ -1,6 +1,5 @@
 import {I_CRUD} from "../interface/I_CRUD";
-import {Project} from "../row/Project";
-import {Database} from "../database";
+import {Project} from "../row/project";
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
 
@@ -20,6 +19,7 @@ export  class Projects implements I_CRUD{
     get project(): Project[] {
         return this._project;
     }
+
     // @ts-ignore
     set project(value: Project[]) {
         this._project = value;
@@ -39,6 +39,7 @@ export  class Projects implements I_CRUD{
 
     }
 
+    //toDo: Promise.All
     async create(...args: any[]): Promise<any> {
         for (let i = 0; i < this._project.length; i++) {
             await this._project[i].create()
@@ -61,7 +62,7 @@ export  class Projects implements I_CRUD{
 
     async delete(...args: any[]) {
         return await this._prisma.project.deleteMany()
-            .then((result: any) => {
+            .then(() => {
               this._length = 0;
               this.project = [];
             }).then(() => {
@@ -92,8 +93,7 @@ export  class Projects implements I_CRUD{
         }
     }
 
-    get_project_with_id(number: number) : Project {
-        let length = this.length;
+    get_project(number: number) : Project {
         for (let i = 0; i < this._project.length; i++) {
             if (this._project[i].id == number) {
                 return this._project[i];

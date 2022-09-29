@@ -1,7 +1,7 @@
-import {describe, expect, test, beforeAll, afterEach} from '@jest/globals';
+import {describe, expect, beforeAll } from '@jest/globals';
 import {Projects} from '../../source/table/projects';
 import {PrismaClient} from "@prisma/client";
-import {Project} from "../../source/row/Project";
+import {Project} from "../../source/row/project";
 
 let prisma: PrismaClient  = new PrismaClient();
 
@@ -18,7 +18,7 @@ describe("Projects", () => {
     });
 });
 
-describe("test the function to check if there exist no project", () => {
+describe("project exists?", () => {
     it("should return true if there are no project", async () => {
         let projects: Projects = new Projects(prisma);
         await projects.delete();
@@ -29,7 +29,7 @@ describe("test the function to check if there exist no project", () => {
 
 });
 
-describe("test test functionjs", () => {
+describe("generate function", () => {
     let array: number[] = [];
 
     beforeAll(() => {
@@ -68,7 +68,7 @@ describe("test generate array of project" , () => {
     });
 });
 
-describe("test create funcion", () => {
+describe("create", () => {
     let prisma: PrismaClient = new PrismaClient();
     let projects: Projects = new Projects(prisma);
 
@@ -86,14 +86,7 @@ describe("test create funcion", () => {
 
     it("the name of the second project should be test2", async () => {
         let project: Project = new Project(prisma , 1, "something");
-        try{
-            await project.read(9)
-            expect(true).toBe(false);
-        }
-        catch (e) {
-            expect(e).toBeDefined();
-            expect(e.message).toContain("not found");
-        }
+        await expect(project.read(9)).rejects.toThrowError('not found')
     });
 
     it("check if the project with id 2 in database , and the name test2" , async () => {
@@ -116,48 +109,27 @@ describe("test create funcion", () => {
 
     it('test update function', async () => {
         let projects_big: Projects = new Projects(prisma);
-        await projects_big.delete()
-            .then(() => {
-                projects_big.generate_array_of_projects(4, 20);
-                expect(projects_big.project.length).toBe(17);
-                expect(projects_big.project[0].id).toBe(4);
-            }).then(() => {
-                try {
-                    projects_big.create()
-                        .then(() => {
-                            test_if_the_project_with_id_5_is_in_database(projects_big)
-                        });
-                }
-                catch (e) {
-                    expect(true).toBe(false);
-                }
-        });
-
+        await projects_big.delete();
+        await projects_big.generate_array_of_projects(4, 20);
+        await expect(projects_big.project[0].id).toBe(4);
+        await projects_big.create()
+            .then(async () => {
+                let project = projects_big.get_project(5);
+                await expect(project.name).toBe("test5");
+            });
     });
 
-    function test_if_the_project_with_id_5_is_in_database(projects_big: Projects){
-        let project = projects_big.get_project_with_id(5);
-        expect(project.name).toBe("test5");
-        try{
-            projects_big.get_project_with_id(133);
-        }
-        catch (e) {
-            expect(e).toBeDefined();
-            expect(e.message).toContain("not found");
-        }
-    }
+});
 
+describe("update", () => {
     it('test update of project with id that does not exist', async () => {
+        let projects: Projects = new Projects(prisma);
+
         await projects.delete();
         await projects.generate_array_of_projects(4, 20);
 
-        try {
-            await projects.get_project_with_id(5)
-        }
-        catch (e) {
-            expect(e).toBeDefined();
-            expect(e.message).toContain("something");
-        }
+        let project: Project = await projects.get_project(5);
+        await expect(project.read()).rejects.toThrowError('not found')
 
     });
 });
@@ -171,14 +143,7 @@ describe("test create, delete", () => {
     });
 
     it("should throw an error", async () => {
-        try{
-            await projects.create();
-            expect(true).toBe(false);
-        }
-        catch (e) {
-            expect(e).toBeDefined();
-            expect(e.message).toContain("PRIMARY");
-        }
+        await expect(projects.create()).rejects.toThrowError('PRIMARY');
     });
 
     it("test delete funciton", async () => {
@@ -202,7 +167,6 @@ describe("read function, update", () => {
     });
 
     it("test read function", async () => {
-
         await projects.read().then(async () => {
             expect(projects.project.length).toBe(100);
             expect(projects.project[0].id).toBe(0);
@@ -219,15 +183,8 @@ describe("read function, update", () => {
     });
 
     it("test update function with id that does not exist", async () => {
-        try{
-            projects.project[44].id = 133;
-            await projects.update();
-            expect(true).toBe(false);
-        }
-        catch (e) {
-            expect(e).toBeDefined();
-            expect(e.message).toContain("Project not found in db");
-        }
+        projects.project[44].id = 133;
+        await expect(projects.update()).rejects.toThrowError('not found');
     });
 
 });

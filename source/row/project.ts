@@ -1,4 +1,3 @@
-import {Database} from "../database";
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 
 interface IProject {
@@ -60,7 +59,11 @@ export class Project implements IProject, I_CRUD {
             } else {
                 throw new Error("Project not found in db");
             }
-        })
+        }).catch(
+            () => {
+                throw new Error("Project not found in db");
+            }
+        )
     }
 
     async update() {
