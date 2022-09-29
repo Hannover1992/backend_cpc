@@ -1,5 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 import {Projects} from "./table/projects";
+//test
 
 export class Database {
     get projects(): Projects {
