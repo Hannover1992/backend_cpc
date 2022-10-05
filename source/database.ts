@@ -49,7 +49,7 @@ export class Database {
 
 
     async run_apis() {
-        this.app.liste(this._PORT, () => {
+        this.app.listen(this._PORT, () => {
             console.log(`Example app listening at http://localhost:${this._PORT}`)
         });
     }
