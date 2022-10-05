@@ -79,6 +79,7 @@ export  class Projects implements I_CRUD{
 
 
     generate_array_of_projects(start: number, end: number) {
+        this.project = [];
         for (let i = start; i <= end; i++) {
             let project: Project = new Project(this._prisma, i, "test" + i.toString());
             this._project.push(project);

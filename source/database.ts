@@ -27,9 +27,10 @@ export class Database {
     private _app: any;
     private _PORT: number;
 
-    constructor(prisma: PrismaClient) {
+    constructor(prisma: PrismaClient ) {
         this.prisma = prisma;
         this.projects = new Projects(prisma);
+        this.setup_express();
     }
 
     async read() {
@@ -43,8 +44,13 @@ export class Database {
 
     async start_server() {
         await this.read()
-        await this.setup_express();
+        await this.run_apis();
     }
-        
 
+
+    async run_apis() {
+        this.app.liste(this._PORT, () => {
+            console.log(`Example app listening at http://localhost:${this._PORT}`)
+        });
+    }
 }
