@@ -47,10 +47,40 @@ export class Database {
         await this.run_apis();
     }
 
-
     async run_apis() {
         this.app.listen(this._PORT, () => {
-            console.log(`Example app listening at http://localhost:${this._PORT}`)
+            console.log(`Server running on port ${this._PORT}`);
+        });
+
+        this.projects_CRUD();
+        this.project_CRUD();
+    }
+
+    private projects_CRUD() {
+        this.projects_read()
+    }
+
+    private projects_read() {
+        this.app.get('/projects', (req: any, res: any) => {
+            console.log(this.projects.project);
+            res.status(200).send(this.projects.get_ready_to_send_over_rest_api());
+        });
+    }
+
+    private project_CRUD() {
+        this.project_read();
+    }
+
+    private project_read() {
+        this.app.get('/project/:id', (req: any, res: any) => {
+            const id = req.params.id;
+            const project = this.projects.project[id];
+            //if project undefiend
+            if(project === undefined) {
+                res.status(404).send({"message" : "Project not found"});
+            } else {
+                res.status(200).send(project.get_ready_to_send_over_rest_api());
+            }
         });
     }
 }

@@ -20,6 +20,16 @@ export  class Projects implements I_CRUD{
         return this._project;
     }
 
+    get_project(number: number) : Project {
+        for (let i = 0; i < this._project.length; i++) {
+            if (this._project[i].id == number) {
+                return this._project[i];
+            }
+        }
+        throw new Error("Project not found");
+    }
+    //get project with index 0
+
     // @ts-ignore
     set project(value: Project[]) {
         this._project = value;
@@ -85,7 +95,7 @@ export  class Projects implements I_CRUD{
             this._project.push(project);
         }
         this._length = this._project.length;
-        console.log("Generated " + this._length + " project");
+        // console.log("Generated " + this._length + " project");
     }
 
     print() {
@@ -94,12 +104,12 @@ export  class Projects implements I_CRUD{
         }
     }
 
-    get_project(number: number) : Project {
+    get_ready_to_send_over_rest_api() {
+        let projects_to_send: Projects = new Projects(null);
         for (let i = 0; i < this._project.length; i++) {
-            if (this._project[i].id == number) {
-                return this._project[i];
-            }
+            projects_to_send.project.push(new Project(null, this._project[i].id, this._project[i].name));
+            projects_to_send.length++;
         }
-        throw new Error("Project not found");
+        return projects_to_send
     }
 }

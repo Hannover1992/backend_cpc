@@ -95,4 +95,13 @@ export class Project implements IProject, I_CRUD {
         });
         return users.length > 0;
     }
+
+    get_ready_to_send_over_rest_api(){
+        return {
+            id: this._id,
+            name: this._name,
+            prisma: null
+        }
+    }
+
 }

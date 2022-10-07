@@ -186,8 +186,31 @@ describe("read function, update", () => {
         projects.project[44].id = 133;
         await expect(projects.update()).rejects.toThrowError('not found');
     });
+});
+
+describe("test if the projects are able to get send through the rest api", () => {
+    let projects: Projects;
+    beforeAll(async () => {
+        projects = new Projects(prisma);
+        await projects.delete();
+        projects.generate_array_of_projects(0, 99);
+        await projects.create();
+        await projects.read();
+    });
+
+    it("test if all projects after make ready to send coesn't contain reference to prisma enymore", async () => {
+        projects = projects.get_ready_to_send_over_rest_api()
+        expect(projects.project[0].prisma).toBe(null);
+        expect(projects.project[99].prisma).toBe(null);
+        expect(projects.prisma).toBe(null);
+        expect(projects.project[0].id).toBe(0);
+        expect(projects.project[99].id).toBe(99);
+        expect(projects.project[43].name).toBe("test43");
+    });
 
 });
+
+
 
 function generate_array_with_numbers(start: number, end: number, array: number[]):number[] {
     for (let i = start; i <= end; i++) {

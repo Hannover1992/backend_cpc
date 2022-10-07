@@ -145,4 +145,23 @@ describe('delete', () => {
     });
 });
 
+describe("make project ready to send over rest api ", () => {
+
+    beforeAll(async () => {
+        await prisma.project.deleteMany();
+    });
+
+    it("test if can make project ready to send over rest api", async () => {
+
+        let project: Project = new Project(prisma,1, "test");
+        await project.create();
+        let project2: Project = new Project(prisma,1, "test");
+        await project2.read();
+        expect(project2.name).toBe("test");
+        expect(await project2.project_exists_in_db()).toBe(true);
+        expect(await project2.get_ready_to_send_over_rest_api()).toStrictEqual({id: 1, name: "test", prisma: null});
+    });
+
+});
+
 

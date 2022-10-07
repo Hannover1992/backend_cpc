@@ -1,25 +1,13 @@
-import {Projects} from "./table/projects";
 import {PrismaClient} from "@prisma/client";
 import {Database} from "./database";
 let prisma: PrismaClient = new PrismaClient();
 
-async function temp() {
-    prisma.project.create({
-        data: {
-            id: 1,
-            name: "test"
-        }
-    });
-    prisma.project.create(
-        {
-            data: {
-                id: 1,
-                name: "test"
-            }
-        }
-    ).catch((error: any) => {
-        throw new Error(error);
-    });
-}
+let database: Database = new Database(prisma);
 
-temp();
+async function start() {
+    await database.projects.delete();
+    await database.projects.generate_array_of_projects(0, 9);
+    await database.projects.create();
+    await database.start_server();
+}
+start();
