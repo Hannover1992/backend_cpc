@@ -3,6 +3,13 @@ import {Projects} from "./table/projects";
 //test
 
 export class Database {
+    get cors(): any {
+        return this._cors;
+    }
+
+    set cors(value: any) {
+        this._cors = value;
+    }
     get projects(): Projects {
         return this._projects;
     }
@@ -22,6 +29,7 @@ export class Database {
         this._app = value;
     }
 
+    private _cors: any;
     private _prisma: any;
     private _projects: Projects;
     private _app: any;
@@ -38,8 +46,11 @@ export class Database {
     }
 
     setup_express(){
+        this._cors = require('cors');
         this._app = require('express')();
         this._PORT = 8080;
+
+        this.app.use(this.cors({origin: '*'}));
     }
 
     async start_server() {
@@ -62,7 +73,7 @@ export class Database {
 
     private projects_read() {
         this.app.get('/projects', (req: any, res: any) => {
-            res.setHeader('Access-Control-Allow-Origin', 'http://192.168.30.34:8080');
+            // res.setHeader('Access-Control-Allow-Origin', '*');
             console.log(this.projects.project);
             res.status(200).send(this.projects.get_ready_to_send_over_rest_api());
         });
