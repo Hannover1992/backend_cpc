@@ -62,6 +62,7 @@ export class Database {
 
     private projects_read() {
         this.app.get('/projects', (req: any, res: any) => {
+            res.setHeader('Access-Control-Allow-Origin', 'http://192.168.30.34:8080');
             console.log(this.projects.project);
             res.status(200).send(this.projects.get_ready_to_send_over_rest_api());
         });
@@ -73,6 +74,7 @@ export class Database {
 
     private project_read() {
         this.app.get('/project/:id', (req: any, res: any) => {
+
             const id = req.params.id;
             const project = this.projects.project[id];
             //if project undefiend
