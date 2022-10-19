@@ -49,7 +49,10 @@ export class Database {
         this._cors = require('cors');
         this._app = require('express')();
         this._PORT = 8080;
+        this.allow_any_sites_to_talk_with_this_id();
+    }
 
+    private allow_any_sites_to_talk_with_this_id() {
         this.app.use(this.cors({origin: '*'}));
     }
 
@@ -74,8 +77,8 @@ export class Database {
     private projects_read() {
         this.app.get('/projects', (req: any, res: any) => {
             // res.setHeader('Access-Control-Allow-Origin', '*');
-            console.log(this.projects.project);
             res.status(200).send(this.projects.get_ready_to_send_over_rest_api());
+            console.log(this.projects.get_ready_to_send_over_rest_api());
         });
     }
 

@@ -3,23 +3,23 @@ import {Project} from "../row/project";
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
 
+export interface I_Projects extends I_CRUD{
+    get project(): Project[];
+    get_project(number: number) : Project;
+    set project(value: Project[]);
+    get length(): number ;
+    set length(value: number) ;
+}
+
 //create public class Projects
-export  class Projects implements I_CRUD{
+export  class Projects implements I_Projects{
     private _project: Project[];
     private _length: number;
     private _prisma: PrismaClient;
 
-    get prisma(): PrismaClient {
-        return this._prisma;
-    }
-
-    set prisma(value: PrismaClient) {
-        this._prisma = value;
-    }
     get project(): Project[] {
         return this._project;
     }
-
     get_project(number: number) : Project {
         for (let i = 0; i < this._project.length; i++) {
             if (this._project[i].id == number) {
@@ -28,18 +28,24 @@ export  class Projects implements I_CRUD{
         }
         throw new Error("Project not found");
     }
-    //get project with index 0
-
-    // @ts-ignore
     set project(value: Project[]) {
         this._project = value;
     }
+
     get length(): number {
         return this._length;
     }
     set length(value: number) {
         this._length = value;
     }
+
+    get prisma(): PrismaClient {
+        return this._prisma;
+    }
+    set prisma(value: PrismaClient) {
+        this._prisma = value;
+    }
+
 
     //create constructor
     constructor(prisma: PrismaClient) {
