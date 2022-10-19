@@ -1,5 +1,5 @@
 import {beforeAll, describe} from '@jest/globals';
-import {Database} from "../source/database";
+import {Database} from "../source/Classes/database";
 import {PrismaClient} from "@prisma/client";
 import {request} from "http";
 import {SuperTest} from "supertest";
@@ -63,7 +63,7 @@ describe('express', () => {
             });
     })
 
-    it('gets the endpoint, where the project does not exist',async () => {
+    it('gets the endpoint, where the projects does not exist',async () => {
         await request.get('/project/11')
             .then((response: any) => {
                 expect(response.status).toBe(404);

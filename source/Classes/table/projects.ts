@@ -1,15 +1,16 @@
-import {I_CRUD} from "../interface/I_CRUD";
+import {I_CRUD} from "../../Interface/I_CRUD";
 import {Project} from "../row/project";
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
+import {I_Projects} from "../../Interface/table/I_Projects";
 
-export interface I_Projects extends I_CRUD{
-    get project(): Project[];
-    get_project(number: number) : Project;
-    set project(value: Project[]);
-    get length(): number ;
-    set length(value: number) ;
-}
+// export interface I_Projects extends I_CRUD{
+//     get projects(): Project[];
+//     get_project(number: number) : Project;
+//     set projects(value: Project[]);
+//     get length(): number ;
+//     set length(value: number) ;
+// }
 
 //create public class Projects
 export  class Projects implements I_Projects{
@@ -17,6 +18,7 @@ export  class Projects implements I_Projects{
     private _length: number;
     private _prisma: PrismaClient;
 
+    //toDo: rewrite get projects generic
     get project(): Project[] {
         return this._project;
     }
@@ -101,7 +103,7 @@ export  class Projects implements I_Projects{
             this._project.push(project);
         }
         this._length = this._project.length;
-        // console.log("Generated " + this._length + " project");
+        // console.log("Generated " + this._length + " projects");
     }
 
     print() {

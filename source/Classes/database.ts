@@ -91,7 +91,7 @@ export class Database {
 
             const id = req.params.id;
             const project = this.projects.project[id];
-            //if project undefiend
+            //if projects undefiend
             if(project === undefined) {
                 res.status(404).send({"message" : "Project not found"});
             } else {

@@ -1,7 +1,7 @@
 import {describe, expect, beforeAll } from '@jest/globals';
-import {Projects} from '../../source/table/projects';
+import {Projects} from '../../source/Classes/table/projects';
 import {PrismaClient} from "@prisma/client";
-import {Project} from "../../source/row/project";
+import {Project} from "../../source/Classes/row/project";
 
 let prisma: PrismaClient  = new PrismaClient();
 
@@ -11,15 +11,15 @@ describe("Projects", () => {
         expect(projects).toBeDefined();
     });
 
-    it("at the beginning the array of project should be empty", () => {
+    it("at the beginning the array of projects should be empty", () => {
         let projects: Projects = new Projects(prisma);
         expect(projects.project.length).toBe(0);
         expect(projects.length).toBe(0);
     });
 });
 
-describe("project exists?", () => {
-    it("should return true if there are no project", async () => {
+describe("projects exists?", () => {
+    it("should return true if there are no projects", async () => {
         let projects: Projects = new Projects(prisma);
         await projects.delete();
         expect(projects.project.length).toBe(0);
@@ -44,7 +44,7 @@ describe("generate function", () => {
     });
 });
 
-describe("test generate array of project" , () => {
+describe("test generate array of projects" , () => {
     let prisma: PrismaClient = new PrismaClient();
 
     let projects: Projects = new Projects(prisma);
@@ -63,7 +63,7 @@ describe("test generate array of project" , () => {
         expect(projects.project[0].id).toBe(1);
     });
 
-    it("the name of the second project should be test2", () => {
+    it("the name of the second projects should be test2", () => {
         expect(projects.project[1].name).toBe("test2");
     });
 });
@@ -80,22 +80,22 @@ describe("create", () => {
     it("the length of the array should be 3", () => {
         expect(projects.project.length).toBe(3);
     });
-    it("the name of the second project should be it2", () => {
+    it("the name of the second projects should be it2", () => {
         expect(projects.project[1].name).toBe("test2");
     });
 
-    it("the name of the second project should be test2", async () => {
+    it("the name of the second projects should be test2", async () => {
         let project: Project = new Project(prisma , 1, "something");
         await expect(project.read(9)).rejects.toThrowError('not found')
     });
 
-    it("check if the project with id 2 in database , and the name test2" , async () => {
+    it("check if the projects with id 2 in database , and the name test2" , async () => {
         let project: Project = new Project(prisma , 2, "something");
         await project.read(2);
         expect(project.name).toBe("test2");
     });
 
-    it("test if the global project read funciton, read the project 1,2,3", async () => {
+    it("test if the global projects read funciton, read the projects 1,2,3", async () => {
         await projects.read()
         expect(projects.length).toBe(3);
     });
@@ -122,7 +122,7 @@ describe("create", () => {
 });
 
 describe("update", () => {
-    it('test update of project with id that does not exist', async () => {
+    it('test update of projects with id that does not exist', async () => {
         let projects: Projects = new Projects(prisma);
 
         await projects.delete();

@@ -1,12 +1,8 @@
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
+import {I_CRUD} from "../../Interface/I_CRUD";
+import {I_Project} from "../../Interface/row/I_Project";
 
-interface IProject {
-    id: number;
-    name: string;
-}
-
-// @ts-ignore
-export class Project implements IProject, I_CRUD {
+export class Project implements I_Project, I_CRUD {
 
     get prisma(): PrismaClient {
         return this._prisma;
@@ -14,7 +10,6 @@ export class Project implements IProject, I_CRUD {
     set prisma(value: PrismaClient) {
         this._prisma = value;
     }
-
     get name(): string {
         return this._name;
     }
@@ -48,7 +43,7 @@ export class Project implements IProject, I_CRUD {
     }
 
     async read(id?: number) {
-        //read form database if project exists then set this.name = name from db
+        //read form database if projects exists then set this.name = name from db
         await this._prisma.project.findMany({
             where: {
                 id: id || this.id

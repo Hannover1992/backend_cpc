@@ -9,6 +9,5 @@ async function start() {
     await database.projects.generate_array_of_projects(0, 9);
     await database.projects.create();
     await database.start_server();
-    //run on ip http://192.168.30.34:8080/project/2
 }
 start();

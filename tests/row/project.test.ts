@@ -1,5 +1,5 @@
 import {describe, expect,  beforeAll } from '@jest/globals';
-import {Project} from "../../source/row/project";
+import {Project} from "../../source/Classes/row/project";
 import {PrismaClient} from "@prisma/client";
 
 let prisma: PrismaClient = new PrismaClient();
@@ -9,7 +9,7 @@ describe('Project', () => {
         await prisma.project.deleteMany();
     });
 
-    it("we will test if after insert into db project with id 1 and name 'test' exists in db", async () => {
+    it("we will test if after insert into db projects with id 1 and name 'test' exists in db", async () => {
         let project: Project = new Project(prisma,1, "test");
         //check if id = 1 and test
         expect(project.id).toBe(1);
@@ -20,16 +20,16 @@ describe('Project', () => {
             });
     });
 
-    it("i i try to insert an project that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
+    it("i i try to insert an projects that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
     });
 });
 
 describe("create", () => {
-    it("i i try to insert an project that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
+    it("i i try to insert an projects that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
         let prisma: PrismaClient = new PrismaClient();
         await prisma.project.deleteMany()
         await prisma.project.create({ data: { id: 1, name: "test" } });
-        // await expect( await prisma.project.create({ data: { id: 1, name: "test" } })).toThrowError("123");
+        // await expect( await prisma.projects.create({ data: { id: 1, name: "test" } })).toThrowError("123");
         await prisma.project.create({ data: { id: 1, name: "test" } }).catch(
             (error: any) => {
                 expect(error.message).toContain("PRIMARY");
@@ -51,7 +51,7 @@ describe("test create and read", () => {
         await prisma.project.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         //expect to not throe error
-        // expect(await project.create()).toBe(undefined);
+        // expect(await projects.create()).toBe(undefined);
         await project.create()
             .catch( () => {
                 expect(true).toBe(false);
@@ -65,7 +65,7 @@ describe("test create and read", () => {
 });
 
 describe('read', () => {
-    it("insert project with id 1 and name test in db, then read it from db", async () => {
+    it("insert projects with id 1 and name test in db, then read it from db", async () => {
         await prisma.project.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         await project.create();
@@ -87,7 +87,7 @@ describe('read', () => {
 });
 
 describe("update", () => {
-    it('test if can update an project', async () => {
+    it('test if can update an projects', async () => {
         await prisma.project.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         //expect to not throe error
@@ -103,7 +103,7 @@ describe("update", () => {
         expect(await project.project_exists_in_db()).toBe(true);
     });
 
-    it('test if cant update project that not exist in db', async () => {
+    it('test if cant update projects that not exist in db', async () => {
         let project: Project = new Project(prisma,2, "test");
         //expect to not throe error
         await project.update()
@@ -119,7 +119,7 @@ describe("update", () => {
 });
 
 describe('delete', () => {
-    it("insert project with id 1 and name test in db, then delete it from db", async () => {
+    it("insert projects with id 1 and name test in db, then delete it from db", async () => {
         await prisma.project.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         await project.create();
@@ -128,7 +128,7 @@ describe('delete', () => {
         expect(await project.project_exists_in_db()).toBe(false);
     });
 
-    it("test if get error when try to delete an project that does not exist in db", async () => {
+    it("test if get error when try to delete an projects that does not exist in db", async () => {
         await prisma.project.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         await project.delete()
@@ -145,13 +145,13 @@ describe('delete', () => {
     });
 });
 
-describe("make project ready to send over rest api ", () => {
+describe("make projects ready to send over rest api ", () => {
 
     beforeAll(async () => {
         await prisma.project.deleteMany();
     });
 
-    it("test if can make project ready to send over rest api", async () => {
+    it("test if can make projects ready to send over rest api", async () => {
 
         let project: Project = new Project(prisma,1, "test");
         await project.create();
