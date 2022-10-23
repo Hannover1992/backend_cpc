@@ -23,7 +23,7 @@ model tblacu {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model tblartikel {
-  IoD               Int?
+  ID               Int?
   Artikelkategorie String? @db.VarChar(255)
   Artikeltyp       String? @db.VarChar(255)
   Anlagenummer     String? @db.TinyText
@@ -162,22 +162,21 @@ model tblfunkger_te {
 }
 
 model tblhandy {
-  ID                   Int          @unique
-  Hersteller           String?      @db.VarChar(255)
-  Typ                  String?      @db.VarChar(255)
-  IMEI_1               Float?       @map("IMEI 1") @db.Float
-  Besitzer             String?      @db.VarChar(255)
+  ID                   Int       @unique
+  Hersteller           String?   @db.VarChar(255)
+  Typ                  String?   @db.VarChar(255)
+  IMEI_1               Float?    @map("IMEI 1") @db.Float
+  Besitzer             String?   @db.VarChar(255)
   Projekt              Int?
-  Bemerkungen          String?      @db.VarChar(255)
-  Hinweis              String?      @db.VarChar(255)
-  SIM_Karten_Nummer    Float?       @map("SIM-Karten-Nummer") @db.Float
-  Seriennummer         String?      @db.VarChar(255)
-  Baterriezustand      Float?       @db.Float
-  Bildschirmsperre_Pin Int?         @map("Bildschirmsperre Pin")
-  SSMA_TimeStamp       Boolean?     @db.Bit(1)
-  Anlagenummer         String?      @db.TinyText
-  Datum                DateTime?    @db.Timestamp(0)
-  tblprojekte          tblprojekte? @relation(fields: [Projekt], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblhandy_tblprojekte_ID_fk")
+  Bemerkungen          String?   @db.VarChar(255)
+  Hinweis              String?   @db.VarChar(255)
+  SIM_Karten_Nummer    Float?    @map("SIM-Karten-Nummer") @db.Float
+  Seriennummer         String?   @db.VarChar(255)
+  Baterriezustand      Float?    @db.Float
+  Bildschirmsperre_Pin Int?      @map("Bildschirmsperre Pin")
+  SSMA_TimeStamp       Boolean?  @db.Bit(1)
+  Anlagenummer         String?   @db.TinyText
+  Datum                DateTime? @db.Timestamp(0)
 
   @@index([Projekt], map: "tblhandy_tblprojekte_ID_fk")
 }
@@ -241,26 +240,25 @@ model tbllogistikkoordinatoren {
 }
 
 model tblnotebook {
-  ID                    Int          @unique
-  Hersteller            String?      @db.VarChar(255)
-  Typ                   String?      @db.VarChar(255)
-  Seriennummer          String?      @db.VarChar(255)
-  Betriebssystem        String?      @db.VarChar(255)
-  installierte_Software String?      @map("installierte Software") @db.VarChar(255)
-  Adminkonto_Name       String?      @map("Adminkonto Name") @db.VarChar(255)
-  Adminkonto_Password   String?      @map("Adminkonto Password") @db.VarChar(255)
-  Userkonto_Name        String?      @map("Userkonto Name") @db.VarChar(255)
-  Userkonto_Password    String?      @map("Userkonto Password") @db.VarChar(255)
-  Teamviewer_ID         String?      @map("Teamviewer ID") @db.VarChar(255)
-  Teamviewer_Passwort   String?      @map("Teamviewer Passwort") @db.VarChar(255)
-  Router                String?      @db.VarChar(255)
+  ID                    Int       @unique
+  Hersteller            String?   @db.VarChar(255)
+  Typ                   String?   @db.VarChar(255)
+  Seriennummer          String?   @db.VarChar(255)
+  Betriebssystem        String?   @db.VarChar(255)
+  installierte_Software String?   @map("installierte Software") @db.VarChar(255)
+  Adminkonto_Name       String?   @map("Adminkonto Name") @db.VarChar(255)
+  Adminkonto_Password   String?   @map("Adminkonto Password") @db.VarChar(255)
+  Userkonto_Name        String?   @map("Userkonto Name") @db.VarChar(255)
+  Userkonto_Password    String?   @map("Userkonto Password") @db.VarChar(255)
+  Teamviewer_ID         String?   @map("Teamviewer ID") @db.VarChar(255)
+  Teamviewer_Passwort   String?   @map("Teamviewer Passwort") @db.VarChar(255)
+  Router                String?   @db.VarChar(255)
   Projekt               Int?
-  Bemerkungen           String?      @db.VarChar(255)
-  Bilder                String?      @db.VarChar(255)
-  Ger_t                 String?      @map("Gerät") @db.VarChar(255)
-  Anlagenummer          String?      @db.TinyText
-  Datum                 DateTime?    @db.Timestamp(0)
-  tblprojekte           tblprojekte? @relation(fields: [Projekt], references: [ID], onDelete: NoAction, map: "tblnotebook_tblprojekte_ID_fk")
+  Bemerkungen           String?   @db.VarChar(255)
+  Bilder                String?   @db.VarChar(255)
+  Ger_t                 String?   @map("Gerät") @db.VarChar(255)
+  Anlagenummer          String?   @db.TinyText
+  Datum                 DateTime? @db.Timestamp(0)
 
   @@index([Projekt], map: "tblnotebook_tblprojekte_ID_fk")
 }
@@ -291,26 +289,23 @@ model tblnotebook_1 {
 }
 
 model tblprojekte {
-  ID                     Int           @unique
-  Standort               String?       @db.TinyText
-  Niederlassung          String?       @db.VarChar(255)
-  Auftragsart            String?       @db.VarChar(255)
-  Status                 String?       @db.VarChar(255)
-  Logistikkoordinator    String?       @db.VarChar(255)
-  LK_1                   String?       @db.VarChar(255)
-  LK_2                   String?       @db.VarChar(255)
-  ZuKo                   String?       @db.VarChar(255)
-  Auftragsdatum          String?       @db.VarChar(255)
-  Startdatum             String?       @db.VarChar(255)
-  voraussichtl_Endtermin String?       @map("voraussichtl Endtermin") @db.VarChar(255)
-  Netto_Auftragswert     String?       @map("Netto-Auftragswert") @db.VarChar(255)
-  Kommentar              String?       @db.VarChar(255)
-  Anlagenummer           String?       @db.VarChar(255)
-  SSMA_TimeStamp         Boolean?      @db.Bit(1)
-  PM_1                   String?       @db.VarChar(255)
-  PM_2                   String?       @db.VarChar(255)
-  tblhandy               tblhandy[]
-  tblnotebook            tblnotebook[]
+  ID                  Int     @unique
+  Standort            String? @db.TinyText
+  Niederlassung       String? @db.VarChar(255)
+  Auftragsart         String? @db.VarChar(255)
+  Status              String? @db.VarChar(255)
+  Logistikkoordinator String? @db.VarChar(255)
+  LK_1                String? @db.VarChar(255)
+  LK_2                String? @db.VarChar(255)
+  ZuKo                String? @db.VarChar(255)
+  Auftragsdatum       String? @db.VarChar(255)
+  Startdatum          String? @db.VarChar(255)
+  Kommentar           String? @db.VarChar(255)
+  Anlagenummer        String? @db.VarChar(255)
+  PM_1                String? @db.VarChar(255)
+  PM_2                String? @db.VarChar(255)
+  Endtermin           String? @db.VarChar(255)
+  Netto_Auftragswert  String? @db.VarChar(255)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.

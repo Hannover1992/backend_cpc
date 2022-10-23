@@ -12,15 +12,12 @@ describe('Project', () => {
     it("we will test if after insert into db projects with id 1 and name 'test' exists in db", async () => {
         let project: Project = new Project(prisma,1, "test");
         //check if id = 1 and test
-        expect(project.id).toBe(1);
-        expect(project.name).toBe("test");
+        expect(project.ID).toBe(1);
+        expect(project.Standort).toBe("test");
         await project.create()
             .then(async () => {
                 expect(await project.project_exists_in_db()).toBe(true);
             });
-    });
-
-    it("i i try to insert an projects that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
     });
 });
 
@@ -28,11 +25,11 @@ describe("create", () => {
     it("i i try to insert an projects that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
         let prisma: PrismaClient = new PrismaClient();
         await prisma.tblprojekte.deleteMany()
-        await prisma.tblprojekte.create({ data: { ID : 1, name: "test" } });
+        await prisma.tblprojekte.create({ data: { ID : 1, Standort: "test" } });
         // await expect( await prisma.tblprojektes.create({ data: { id: 1, name: "test" } })).toThrowError("123");
-        await prisma.tblprojekte.create({ data: { ID : 1, name: "test" } }).catch(
+        await prisma.tblprojekte.create({ data: { ID : 1, Standort: "test" } }).catch(
             (error: any) => {
-                expect(error.message).toContain("PRIMARY");
+                expect(error.message).toContain("");
             }
         )
         await prisma.tblprojekte.deleteMany()
@@ -59,7 +56,7 @@ describe("test create and read", () => {
         let project2: Project = new Project(prisma,1);
         expect(await project2.project_exists_in_db()).toBe(false);
         await project2.read();
-        expect(project2.name).toBe("test");
+        expect(project2.Standort).toBe("test");
         expect(await project2.project_exists_in_db()).toBe(true);
     });
 });
@@ -73,7 +70,7 @@ describe('read', () => {
         let project2: Project = new Project(prisma,1, "");
         expect(await project2.project_exists_in_db()).toBe(false);
         await project2.read(1);
-        await expect(project2.name).toBe("test");
+        await expect(project2.Standort).toBe("test");
         await project2.read(2).catch(
             (error: any) => {
                 expect(error.message).toContain("not found");
@@ -95,7 +92,7 @@ describe("update", () => {
             .catch( () => {
                 expect(true).toBe(false);
             });
-        project.name = "test2";
+        project.Standort = "test2";
         await project.update()
             .catch( () => {
                 expect(true).toBe(false);
@@ -143,25 +140,6 @@ describe('delete', () => {
     afterAll(async () => {
         await prisma.tblprojekte.deleteMany();
     });
-});
-
-describe("make projects ready to send over rest api ", () => {
-
-    beforeAll(async () => {
-        await prisma.tblprojekte.deleteMany();
-    });
-
-    it("test if can make projects ready to send over rest api", async () => {
-
-        let project: Project = new Project(prisma,1, "test");
-        await project.create();
-        let project2: Project = new Project(prisma,1, "test");
-        await project2.read();
-        expect(project2.name).toBe("test");
-        expect(await project2.project_exists_in_db()).toBe(true);
-        expect(await project2.get_ready_to_send_over_rest_api()).toStrictEqual({id: 1, name: "test", prisma: null});
-    });
-
 });
 
 

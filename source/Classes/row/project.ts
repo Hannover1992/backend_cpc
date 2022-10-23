@@ -3,41 +3,177 @@ import {I_CRUD} from "../../Interface/I_CRUD";
 import {I_Project} from "../../Interface/row/I_Project";
 
 export class Project implements I_Project, I_CRUD {
+    get Endtermin(): Date {
+        return this._Endtermin;
+    }
 
+    set Endtermin(value: Date) {
+        this._Endtermin = value;
+    }
+    get PM_2(): String {
+        return this._PM_2;
+    }
+    set PM_2(value: String) {
+        this._PM_2 = value;
+    }
+    get PM_1(): String {
+        return this._PM_1;
+    }
+    set PM_1(value: String) {
+        this._PM_1 = value;
+    }
+    get Anlagenummer(): number {
+        return this._Anlagenummer;
+    }
+    set Anlagenummer(value: number) {
+        this._Anlagenummer = value;
+    }
+    get Kommentar(): String {
+        return this._Kommentar;
+    }
+    set Kommentar(value: String) {
+        this._Kommentar = value;
+    }
+    get Netto_Auftragswert(): String {
+        return this._Netto_Auftragswert;
+    }
+    set Netto_Auftragswert(value: String) {
+        this._Netto_Auftragswert = value;
+    }
+    get Startdatum(): Date {
+        return this._Startdatum;
+    }
+    set Startdatum(value: Date) {
+        this._Startdatum = value;
+    }
+    get Auftragsdatum(): Date {
+        return this._Auftragsdatum;
+    }
+    set Auftragsdatum(value: Date) {
+        this._Auftragsdatum = value;
+    }
+    get ZuKo(): String {
+        return this._ZuKo;
+    }
+    set ZuKo(value: String) {
+        this._ZuKo = value;
+    }
+    get LK_2(): String {
+        return this._LK_2;
+    }
+    set LK_2(value: String) {
+        this._LK_2 = value;
+    }
+    get LK_1(): String {
+        return this._LK_1;
+    }
+    set LK_1(value: String) {
+        this._LK_1 = value;
+    }
+    get Logistikkoordinator(): String {
+        return this._Logistikkoordinator;
+    }
+    set Logistikkoordinator(value: String) {
+        this._Logistikkoordinator = value;
+    }
+    get Status(): String {
+        return this._Status;
+    }
+    set Status(value: String) {
+        this._Status = value;
+    }
+    get Auftragsart(): String {
+        return this._Auftragsart;
+    }
+    set Auftragsart(value: String) {
+        this._Auftragsart = value;
+    }
+    get Niederlassung(): String {
+        return this._Niederlassung;
+    }
+    set Niederlassung(value: String) {
+        this._Niederlassung = value;
+    }
+    get Standort(): String {
+        return this._Standort;
+    }
+    set Standort(value: String) {
+        this._Standort = value;
+    }
+    get ID(): number {
+        return this._ID;
+    }
+    set ID(value: number) {
+        this._ID = value;
+    }
     get prisma(): PrismaClient {
         return this._prisma;
     }
     set prisma(value: PrismaClient) {
         this._prisma = value;
     }
-    get name(): string {
-        return this._name;
-    }
-    set name(value: string) {
-        this._name = value;
-    }
-    get id(): number {
-        return this._id;
-    }
-    set id(value: number) {
-        this._id = value;
-    }
 
-    private _id: number;
-    private _name: string;
     private _prisma: PrismaClient;
+    private _ID:                     number;
+    private _Standort:               String;
+    private _Niederlassung:          String;
+    private _Auftragsart:            String;
+    private _Status:                 String;
+    private _Logistikkoordinator:    String;
+    private _LK_1:                   String;
+    private _LK_2:                   String;
+    private _ZuKo:                   String;
+    private _Auftragsdatum:          Date;
+    private _Startdatum:             Date;
+    private _Endtermin:              Date;
+    private _Netto_Auftragswert:     String;
+    private _Kommentar:              String;
+    private _Anlagenummer:           number;
+    private _PM_1:                   String;
+    private _PM_2:                   String;
 
-    constructor(prisma: PrismaClient,id : number, name?: string) {
+    constructor(prisma: PrismaClient, ID: number,   Standort?: String, Niederlassung?: String, Auftragsart?: String, Status?: String, Logistikkoordinator?: String, LK_1?: String, LK_2?: String, ZuKo?: String, Auftragsdatum?: Date, Startdatum?: Date, Endtermin?: Date, Netto_Auftragswert?: String, Kommentar?: String, Anlagenummer?: number, PM_1?: String, PM_2?: String) {
+        this.ID = ID;
         this.prisma = prisma;
-        this.id = id;
-        this.name = name || " ";
+        this.Standort = Standort || "";
+        this.Niederlassung = Niederlassung || "";
+        this.Auftragsart = Auftragsart || "";
+        this.Status = Status || "";
+        this.Logistikkoordinator = Logistikkoordinator || "";
+        this.LK_1 = LK_1 || "";
+        this.LK_2 = LK_2 || "";
+        this.ZuKo = ZuKo || "";
+        //date fill with zero
+        this.Auftragsdatum = Auftragsdatum || new Date(0);
+        this.Startdatum = Startdatum || new Date(0);
+        this.Endtermin = Endtermin || new Date(0);
+        this.Netto_Auftragswert = Netto_Auftragswert || "";
+        this.Kommentar = Kommentar || "";
+        this.Anlagenummer = Anlagenummer || 0;
+        this.PM_1 = PM_1 || "";
+        this.PM_2 = PM_2 || "";
     }
 
     async create() {
         await this.prisma.tblprojekte.create({
             data: {
-                id: this.id,
-                name: this.name
+                ID: this.ID,
+                Standort: this.Standort || "",
+                Niederlassung: this.Niederlassung || "",
+                Auftragsart: this.Auftragsart || "",
+                Status: this.Status || "",
+                Logistikkoordinator: this.Logistikkoordinator || "",
+                LK_1: this.LK_1 || "",
+                LK_2: this.LK_2 || "",
+                ZuKo: this.ZuKo || "",
+                Auftragsdatum: this.Auftragsdatum || "",
+                Startdatum: this.Startdatum || "",
+                Endtermin: this.Endtermin || "",
+                Netto_Auftragswert: this.Netto_Auftragswert || "",
+                Kommentar: this.Kommentar || "",
+                Anlagenummer: this.Anlagenummer || "",
+                PM_1: this.PM_1 || "",
+                PM_2: this.PM_2 || "",
             }
         })
     }
@@ -46,11 +182,27 @@ export class Project implements I_Project, I_CRUD {
         //read form database if projects exists then set this.name = name from db
         await this._prisma.tblprojekte.findMany({
             where: {
-                id: id || this.id
+                ID: id || this.ID
             }
         }).then((result: any) => {
             if(result.length > 0) {
-                this.name = result[0].name;
+                // this.Standort = result[0].Standort;
+                this.Standort = result[0].Standort;
+                this.Niederlassung = result[0].Niederlassung;
+                this.Auftragsart = result[0].Auftragsart;
+                this.Status = result[0].Status;
+                this.Logistikkoordinator = result[0].Logistikkoordinator;
+                this.LK_1 = result[0].LK_1;
+                this.LK_2 = result[0].LK_2;
+                this.ZuKo = result[0].ZuKo;
+                this.Auftragsdatum = result[0].Auftragsdatum;
+                this.Startdatum = result[0].Startdatum;
+                this.Endtermin = result[0].Endtermin;
+                this.Netto_Auftragswert = result[0].Netto_Auftragswert;
+                this.Kommentar = result[0].Kommentar;
+                this.Anlagenummer = result[0].Anlagenummer;
+                this.PM_1 = result[0].PM_1;
+                this.PM_2 = result[0].PM_2;
             } else {
                 throw new Error("Project not found in db");
             }
@@ -64,10 +216,25 @@ export class Project implements I_Project, I_CRUD {
     async update() {
         await this._prisma.tblprojekte.update({
             where: {
-                id: this.id
+                id: this.ID
             },
             data: {
-                name: this.name
+                Standort: this.Standort,
+                Niederlassung: this.Niederlassung,
+                Auftragsart: this.Auftragsart,
+                Status: this.Status,
+                Logistikkoordinator: this.Logistikkoordinator,
+                LK_1: this.LK_1,
+                LK_2: this.LK_2,
+                ZuKo: this.ZuKo,
+                Auftragsdatum: this.Auftragsdatum,
+                Startdatum: this.Startdatum,
+                Endtermin: this.Endtermin,
+                Netto_Auftragswert: this.Netto_Auftragswert,
+                Kommentar: this.Kommentar,
+                Anlagenummer: this.Anlagenummer,
+                PM_1: this.PM_1,
+                PM_2: this.PM_2,
             }
         })
     }
@@ -75,27 +242,60 @@ export class Project implements I_Project, I_CRUD {
     async delete() {
         await this._prisma.tblprojekte.delete({
             where: {
-                id: this.id
+                id: this.ID
             }
         })
     }
 
 
     public async project_exists_in_db(): Promise<boolean> {
-        const users = await this._prisma.tblprojekte.findMany({
-            where: {
-                id: this.id,
-                name: this.name
+        const users = await this._prisma.tblprojekte.findMany
+        (
+            {
+                where: {
+                    ID: this.ID,
+                    Standort: this.Standort,
+                    Niederlassung: this.Niederlassung,
+                    Auftragsart: this.Auftragsart,
+                    Status: this.Status,
+                    Logistikkoordinator: this.Logistikkoordinator,
+                    LK_1: this.LK_1,
+                    LK_2: this.LK_2,
+                    ZuKo: this.ZuKo,
+                    Auftragsdatum: this.Auftragsdatum,
+                    Startdatum: this.Startdatum,
+                    Endtermin: this.Endtermin,
+                    Netto_Auftragswert: this.Netto_Auftragswert,
+                    Kommentar: this.Kommentar,
+                    // Anlagenummer: this.Anlagenummer,
+                    // PM_1: this.PM_1,
+                    // PM_2: this.PM_2,
+                }
             }
-        });
+        );
         return users.length > 0;
     }
 
-    get_ready_to_send_over_rest_api(){
+    get_ready_to_send_over_rest_api(): any {
         return {
-            id: this._id,
-            name: this._name,
-            prisma: null
+            Prisma: null,
+            ID: this.ID,
+            Standort: this.Standort,
+            Niederlassung: this.Niederlassung,
+            Auftragsart: this.Auftragsart,
+            Status: this.Status,
+            Logistikkoordinator: this.Logistikkoordinator,
+            LK_1: this.LK_1,
+            LK_2: this.LK_2,
+            ZuKo: this.ZuKo,
+            Auftragsdatum: this.Auftragsdatum,
+            Startdatum: this.Startdatum,
+            Endtermin: this.Endtermin,
+            Netto_Auftragswert: this.Netto_Auftragswert,
+            Kommentar: this.Kommentar,
+            Anlagenummer: this.Anlagenummer,
+            PM_1: this.PM_1,
+            PM_2: this.PM_2,
         }
     }
 

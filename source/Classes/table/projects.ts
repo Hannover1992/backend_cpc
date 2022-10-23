@@ -1,16 +1,7 @@
-import {I_CRUD} from "../../Interface/I_CRUD";
 import {Project} from "../row/project";
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
 import {I_Projects} from "../../Interface/table/I_Projects";
-
-// export interface I_Projects extends I_CRUD{
-//     get projects(): Project[];
-//     get_project(number: number) : Project;
-//     set projects(value: Project[]);
-//     get length(): number ;
-//     set length(value: number) ;
-// }
 
 //create public class Projects
 export  class Projects implements I_Projects{
@@ -24,7 +15,7 @@ export  class Projects implements I_Projects{
     }
     get_project(number: number) : Project {
         for (let i = 0; i < this._project.length; i++) {
-            if (this._project[i].id == number) {
+            if (this._project[i].ID == number) {
                 return this._project[i];
             }
         }
@@ -71,7 +62,26 @@ export  class Projects implements I_Projects{
         await this._prisma.project.findMany()
             .then((result: any) => {
                 for (let i = 0; i < result.length; i++) {
-                    let project: Project = new Project(this._prisma, result[i].id, result[i].name);
+                    let project: Project = new Project(
+                        this._prisma,
+                        result[i].ID,
+                        result[i].Niederlassung,
+                        result[i].Standort,
+                        result[i].Auftragsart,
+                        result[i].Status,
+                        result[i].Logistikkoordinator,
+                        result[i].LK_1,
+                        result[i].LK_2,
+                        result[i].ZuKo,
+                        result[i].Auftragsdatum,
+                        result[i].Startdatum,
+                        result[i].Endtermin,
+                        result[i].Netto_Auftragswert,
+                        result[i].Kommentar,
+                        result[i].Anlagenummer,
+                        result[i].PM_1,
+                        result[i].PM_2
+                    );
                     this._project.push(project);
                 }
                 this._length = this._project.length;
@@ -99,7 +109,26 @@ export  class Projects implements I_Projects{
     generate_array_of_projects(start: number, end: number) {
         this.project = [];
         for (let i = start; i <= end; i++) {
-            let project: Project = new Project(this._prisma, i, "test" + i.toString());
+            let project: Project = new Project(
+                this._prisma,
+                i,
+                "Standort" + i.toString(),
+                "Niederlassung" + i.toString(),
+                "Auftragsart" + i.toString(),
+                "Status" + i.toString(),
+                "Logistikkoordinator" + i.toString(),
+                "LK_1" + i.toString(),
+                "LK_2" + i.toString(),
+                "ZuKo" + i.toString(),
+                new Date(),
+                new Date(),
+                new Date(),
+                "Netto_Auftragswert" + i.toString(),
+                "Kommentar" + i.toString(),
+                i,
+                "PM_1" + i.toString(),
+                "PM_2" + i.toString()
+            );
             this._project.push(project);
         }
         this._length = this._project.length;
@@ -108,14 +137,51 @@ export  class Projects implements I_Projects{
 
     print() {
         for (let i = 0; i < this._project.length; i++) {
-            console.log("Id:" + this._project[i].id + " Name:" + this._project[i].name);
+            console.log("Id:" + this._project[i].ID +
+                " Standort:" + this._project[i].Standort +
+                " Niederlassung:" + this._project[i].Niederlassung +
+                " Auftragsart:" + this._project[i].Auftragsart +
+                " Status:" + this._project[i].Status +
+                " Logistikkoordinator:" + this._project[i].Logistikkoordinator +
+                " LK_1:" + this._project[i].LK_1 +
+                " LK_2:" + this._project[i].LK_2 +
+                " ZuKo:" + this._project[i].ZuKo +
+                " Auftragsdatum:" + this._project[i].Auftragsdatum +
+                " Startdatum:" + this._project[i].Startdatum +
+                " Endtermin:" + this._project[i].Endtermin +
+                " Netto_Auftragswert:" + this._project[i].Netto_Auftragswert +
+                " Kommentar:" + this._project[i].Kommentar +
+                " Anlagenummer:" + this._project[i].Anlagenummer +
+                " PM_1:" + this._project[i].PM_1 +
+                " PM_2:" + this._project[i].PM_2
+            );
         }
     }
 
     get_ready_to_send_over_rest_api() {
         let projects_to_send: Projects = new Projects(null);
         for (let i = 0; i < this._project.length; i++) {
-            projects_to_send.project.push(new Project(null, this._project[i].id, this._project[i].name));
+            projects_to_send.project.push(new Project(
+                null,
+                this._project[i].ID,
+                this._project[i].Standort,
+                this._project[i].Niederlassung,
+                this._project[i].Auftragsart,
+                this._project[i].Status,
+                this._project[i].Logistikkoordinator,
+                this._project[i].LK_1,
+                this._project[i].LK_2,
+                this._project[i].ZuKo,
+                this._project[i].Auftragsdatum,
+                this._project[i].Startdatum,
+                this._project[i].Endtermin,
+                this._project[i].Netto_Auftragswert,
+                this._project[i].Kommentar,
+                this._project[i].Anlagenummer,
+                this._project[i].PM_1,
+                this._project[i].PM_2
+                )
+            );
             projects_to_send.length++;
         }
         return projects_to_send
