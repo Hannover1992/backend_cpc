@@ -6,7 +6,7 @@ let prisma: PrismaClient = new PrismaClient();
 
 describe('Project', () => {
     beforeAll(async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
     });
 
     it("we will test if after insert into db projects with id 1 and name 'test' exists in db", async () => {
@@ -27,15 +27,15 @@ describe('Project', () => {
 describe("create", () => {
     it("i i try to insert an projects that 123 already exist in database, the have to get an error with message contina PRIMARY", async () => {
         let prisma: PrismaClient = new PrismaClient();
-        await prisma.project.deleteMany()
-        await prisma.project.create({ data: { id: 1, name: "test" } });
-        // await expect( await prisma.projects.create({ data: { id: 1, name: "test" } })).toThrowError("123");
-        await prisma.project.create({ data: { id: 1, name: "test" } }).catch(
+        await prisma.tblprojekte.deleteMany()
+        await prisma.tblprojekte.create({ data: { ID : 1, name: "test" } });
+        // await expect( await prisma.tblprojektes.create({ data: { id: 1, name: "test" } })).toThrowError("123");
+        await prisma.tblprojekte.create({ data: { ID : 1, name: "test" } }).catch(
             (error: any) => {
                 expect(error.message).toContain("PRIMARY");
             }
         )
-        await prisma.project.deleteMany()
+        await prisma.tblprojekte.deleteMany()
         let project1: Project = new Project(prisma, 1, "test");
         //expect no error
         await project1.create().catch(() => { expect(true).toBe(false); });
@@ -48,7 +48,7 @@ describe("create", () => {
 
 describe("test create and read", () => {
     it('test create and read', async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         //expect to not throe error
         // expect(await projects.create()).toBe(undefined);
@@ -66,7 +66,7 @@ describe("test create and read", () => {
 
 describe('read', () => {
     it("insert projects with id 1 and name test in db, then read it from db", async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
@@ -82,13 +82,13 @@ describe('read', () => {
     });
 
     afterAll(async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
     });
 });
 
 describe("update", () => {
     it('test if can update an projects', async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         //expect to not throe error
         await project.create()
@@ -120,7 +120,7 @@ describe("update", () => {
 
 describe('delete', () => {
     it("insert projects with id 1 and name test in db, then delete it from db", async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
@@ -129,7 +129,7 @@ describe('delete', () => {
     });
 
     it("test if get error when try to delete an projects that does not exist in db", async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
         let project: Project = new Project(prisma,1, "test");
         await project.delete()
             .then( () => {
@@ -141,14 +141,14 @@ describe('delete', () => {
     });
 
     afterAll(async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
     });
 });
 
 describe("make projects ready to send over rest api ", () => {
 
     beforeAll(async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
     });
 
     it("test if can make projects ready to send over rest api", async () => {

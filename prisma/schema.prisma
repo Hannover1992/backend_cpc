@@ -7,12 +7,420 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model product {
-  id   Int    @id @default(autoincrement())
-  name String
+model tblacu {
+  Hersteller        String? @db.VarChar(255)
+  Typ               String? @db.VarChar(255)
+  Seriennummer      Int     @id @unique(map: "tblacu_Seriennummer_uindex")
+  MAC_Adresse       String? @map("MAC-Adresse") @db.VarChar(255)
+  IP_Adresse_ACU    String? @map("IP-Adresse ACU") @db.VarChar(256)
+  Projekt           Int?
+  Bemerkungen       String? @db.VarChar(255)
+  Router            String? @db.VarChar(255)
+  IP_Adresse_Router String? @map("IP-Adresse Router") @db.VarChar(255)
+  Datum             String? @db.VarChar(255)
+  Anlagenummer      String? @db.TinyText
 }
 
-model project {
-  id   Int     @id @unique(map: "Project_Id_key")
-  name String?
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblartikel {
+  IoD               Int?
+  Artikelkategorie String? @db.VarChar(255)
+  Artikeltyp       String? @db.VarChar(255)
+  Anlagenummer     String? @db.TinyText
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblartikelkategorie {
+  ID               Int?
+  Artikelkategorie String? @db.VarChar(255)
+  Anlagenummer     String? @db.TinyText
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblartikelzustand {
+  ID           Int?
+  Zustand      String? @db.VarChar(255)
+  Anlagenummer String? @db.TinyText
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblbe_assets {
+  ID                         Int?
+  Inventarnummer             Int?
+  Projekt                    Int?
+  Artikel                    String?   @db.VarChar(255)
+  Hersteller                 String?   @db.VarChar(255)
+  Typ                        String?   @db.VarChar(255)
+  Seriennummer               String?   @db.VarChar(255)
+  Beschreibung               String?   @db.VarChar(255)
+  Anschaffung_Jahr           String?   @map("Anschaffung Jahr") @db.VarChar(255)
+  Lieferant                  Int?
+  Anschaffung_Lieferant      String?   @map("Anschaffung Lieferant") @db.VarChar(255)
+  Anschaffung_EK_pro_Einheit String?   @map("Anschaffung EK pro Einheit") @db.VarChar(255)
+  Garantie                   String?   @db.VarChar(255)
+  Zustand                    Int?
+  Zustand_alt                String?   @map("Zustand alt") @db.VarChar(255)
+  Menge                      Float?    @db.Float
+  Artikelwert                Decimal?  @db.Decimal(19, 4)
+  Gesamtwert                 Decimal?  @db.Decimal(19, 4)
+  Bemerkungen                String?   @db.VarChar(256)
+  Bild                       String?   @db.VarChar(255)
+  SSMA_TimeStamp             Boolean?  @db.Bit(1)
+  Anlagenummer               String?   @db.TinyText
+  Datum                      DateTime? @db.Timestamp(0)
+
+  @@map("tblbe-assets")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tbldrucker {
+  ID                Int?
+  Hersteller        String?   @db.VarChar(255)
+  Typ               String?   @db.VarChar(255)
+  Seriennummer      String?   @db.VarChar(255)
+  Bemerkung_Zustand String?   @map("Bemerkung Zustand") @db.VarChar(255)
+  Zustand           Float?    @db.Float
+  Projekt           Int?
+  Kommentar         String?   @db.VarChar(255)
+  Anlagenummer      String?   @db.TinyText
+  Datum             DateTime? @db.Timestamp(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblempfadressen {
+  ID                     Int?
+  EmpfangsbestaetigungID Int?
+  SenderFirmenName       String? @db.TinyText
+  SenderName             String? @db.TinyText
+  SenderStrasse          String? @db.TinyText
+  SenderStrasseNummer    Int?
+  SenderStadt            String? @db.TinyText
+  SenderPostleitzahl     Int?
+  EmpfangerFirmenName    String? @db.TinyText
+  EmpfangerName          String? @db.TinyText
+  EmpfangerStrasse       String? @db.TinyText
+  EmpfangerStrasseNummer Int?
+  EmpfangerStadt         String? @db.TinyText
+  EmpfangerPostleitzahl  Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblempfangsbestaetigung {
+  ID                     Int?
+  EmpfangsbestaetigungID Int?
+  TabelName              String?   @db.TinyText
+  Beschreibung           String?   @db.TinyText
+  Anzahl                 Int?
+  ProjektID              Int?
+  Anlagenummer           String?   @db.TinyText
+  TableID                Int?
+  Datum                  DateTime? @db.Timestamp(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblersatzteile {
+  ID             Int?
+  Typ            String?   @db.VarChar(255)
+  Bezeichnung    String?   @db.VarChar(255)
+  Anzahl         Float?    @db.Float
+  Zustand        Int?
+  Firma          String?   @db.VarChar(255)
+  Bemerkungen    String?   @db.VarChar(255)
+  Hinweis        String?   @db.VarChar(255)
+  SSMA_TimeStamp Boolean?  @db.Bit(1)
+  Anlagenummer   String?   @db.TinyText
+  Datum          DateTime? @db.Timestamp(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblfunkger_te {
+  ID           Int?
+  Bezeichnung  String?   @db.VarChar(255)
+  Typ          String?   @db.VarChar(255)
+  Seriennummer String?   @db.VarChar(255)
+  Projekt      Int?
+  Anlagenummer String?   @db.TinyText
+  Datum        DateTime? @db.Timestamp(0)
+
+  @@map("tblfunkgeräte")
+  @@ignore
+}
+
+model tblhandy {
+  ID                   Int          @unique
+  Hersteller           String?      @db.VarChar(255)
+  Typ                  String?      @db.VarChar(255)
+  IMEI_1               Float?       @map("IMEI 1") @db.Float
+  Besitzer             String?      @db.VarChar(255)
+  Projekt              Int?
+  Bemerkungen          String?      @db.VarChar(255)
+  Hinweis              String?      @db.VarChar(255)
+  SIM_Karten_Nummer    Float?       @map("SIM-Karten-Nummer") @db.Float
+  Seriennummer         String?      @db.VarChar(255)
+  Baterriezustand      Float?       @db.Float
+  Bildschirmsperre_Pin Int?         @map("Bildschirmsperre Pin")
+  SSMA_TimeStamp       Boolean?     @db.Bit(1)
+  Anlagenummer         String?      @db.TinyText
+  Datum                DateTime?    @db.Timestamp(0)
+  tblprojekte          tblprojekte? @relation(fields: [Projekt], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblhandy_tblprojekte_ID_fk")
+
+  @@index([Projekt], map: "tblhandy_tblprojekte_ID_fk")
+}
+
+model tblkabel {
+  ID           Int       @unique
+  Art          String?   @db.VarChar(255)
+  Beschreibung String?   @db.VarChar(255)
+  Anzahl_      Int?      @map("Anzahl:")
+  Zustand      Int?
+  Kommentar    String?   @db.VarChar(255)
+  Bemerkungen  String?   @db.VarChar(255)
+  Hinweis      String?   @db.VarChar(255)
+  Firma        String?   @db.VarChar(255)
+  Anlagenummer String?   @db.TinyText
+  Datum        DateTime? @db.Timestamp(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblkleidung {
+  ID           Int?
+  Bezeichnung  String?   @db.VarChar(255)
+  Farbe        String?   @db.VarChar(255)
+  Gr__e        String?   @map("Größe") @db.VarChar(255)
+  St_ck        Float?    @map("Stück") @db.Float
+  Projekt      Float?    @db.Float
+  Besitzer     String?   @db.VarChar(255)
+  Datum        DateTime? @db.Timestamp(0)
+  Anlagenummer String?   @db.TinyText
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tbllieferschein {
+  ID               Int?
+  LieferscheinID   Int?
+  TabelName        String? @db.TinyText
+  Beschreibung     String? @db.TinyText
+  Anzahl           Int?
+  ProjektID        Int?
+  empfangerAdresse String? @db.TinyText
+  AbsenderAdresse  String? @db.TinyText
+  Anlagenummer     String? @db.TinyText
+  TableID          Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tbllogistikkoordinatoren {
+  ID           Int?
+  Nachname     String? @db.VarChar(255)
+  Vorname      String? @db.VarChar(255)
+  Kurzzeichen  String? @db.VarChar(255)
+  B_ro         String? @map("Büro") @db.VarChar(255)
+  Foto         String? @db.VarChar(255)
+  Anlagenummer String? @db.TinyText
+
+  @@ignore
+}
+
+model tblnotebook {
+  ID                    Int          @unique
+  Hersteller            String?      @db.VarChar(255)
+  Typ                   String?      @db.VarChar(255)
+  Seriennummer          String?      @db.VarChar(255)
+  Betriebssystem        String?      @db.VarChar(255)
+  installierte_Software String?      @map("installierte Software") @db.VarChar(255)
+  Adminkonto_Name       String?      @map("Adminkonto Name") @db.VarChar(255)
+  Adminkonto_Password   String?      @map("Adminkonto Password") @db.VarChar(255)
+  Userkonto_Name        String?      @map("Userkonto Name") @db.VarChar(255)
+  Userkonto_Password    String?      @map("Userkonto Password") @db.VarChar(255)
+  Teamviewer_ID         String?      @map("Teamviewer ID") @db.VarChar(255)
+  Teamviewer_Passwort   String?      @map("Teamviewer Passwort") @db.VarChar(255)
+  Router                String?      @db.VarChar(255)
+  Projekt               Int?
+  Bemerkungen           String?      @db.VarChar(255)
+  Bilder                String?      @db.VarChar(255)
+  Ger_t                 String?      @map("Gerät") @db.VarChar(255)
+  Anlagenummer          String?      @db.TinyText
+  Datum                 DateTime?    @db.Timestamp(0)
+  tblprojekte           tblprojekte? @relation(fields: [Projekt], references: [ID], onDelete: NoAction, map: "tblnotebook_tblprojekte_ID_fk")
+
+  @@index([Projekt], map: "tblnotebook_tblprojekte_ID_fk")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblnotebook_1 {
+  ID                    Int?
+  Hersteller            String?   @db.VarChar(255)
+  Typ                   String?   @db.VarChar(255)
+  Seriennummer          String?   @db.VarChar(255)
+  Betriebssystem        String?   @db.VarChar(255)
+  installierte_Software String?   @map("installierte Software") @db.VarChar(255)
+  Adminkonto_Name       String?   @map("Adminkonto Name") @db.VarChar(255)
+  Adminkonto_Password   String?   @map("Adminkonto Password") @db.VarChar(255)
+  Userkonto_Name        String?   @map("Userkonto Name") @db.VarChar(255)
+  Userkonto_Password    String?   @map("Userkonto Password") @db.VarChar(255)
+  Teamviewer_ID         String?   @map("Teamviewer ID") @db.VarChar(255)
+  Teamviewer_Passwort   String?   @map("Teamviewer Passwort") @db.VarChar(255)
+  Router                String?   @db.VarChar(255)
+  Projekt               Int?
+  Bemerkungen           String?   @db.VarChar(255)
+  Bilder                String?   @db.VarChar(255)
+  Ger_t                 String?   @map("Gerät") @db.VarChar(255)
+  Anlagenummer          String?   @db.TinyText
+  Datum                 DateTime? @db.Timestamp(0)
+
+  @@ignore
+}
+
+model tblprojekte {
+  ID                     Int           @unique
+  Standort               String?       @db.TinyText
+  Niederlassung          String?       @db.VarChar(255)
+  Auftragsart            String?       @db.VarChar(255)
+  Status                 String?       @db.VarChar(255)
+  Logistikkoordinator    String?       @db.VarChar(255)
+  LK_1                   String?       @db.VarChar(255)
+  LK_2                   String?       @db.VarChar(255)
+  ZuKo                   String?       @db.VarChar(255)
+  Auftragsdatum          String?       @db.VarChar(255)
+  Startdatum             String?       @db.VarChar(255)
+  voraussichtl_Endtermin String?       @map("voraussichtl Endtermin") @db.VarChar(255)
+  Netto_Auftragswert     String?       @map("Netto-Auftragswert") @db.VarChar(255)
+  Kommentar              String?       @db.VarChar(255)
+  Anlagenummer           String?       @db.VarChar(255)
+  SSMA_TimeStamp         Boolean?      @db.Bit(1)
+  PM_1                   String?       @db.VarChar(255)
+  PM_2                   String?       @db.VarChar(255)
+  tblhandy               tblhandy[]
+  tblnotebook            tblnotebook[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblprojektmanager {
+  ID             Int?
+  Nachname       String?  @db.VarChar(255)
+  Vorname        String?  @db.VarChar(255)
+  Kurzzeichen    String?  @db.VarChar(255)
+  B_ro           String?  @map("Büro") @db.VarChar(255)
+  Feld1          String?  @db.VarChar(256)
+  SSMA_TimeStamp Boolean? @db.Bit(1)
+  Anlagenummer   String?  @db.TinyText
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblrouter {
+  ID             Int?
+  Hersteller     String?   @db.VarChar(255)
+  Typ            String?   @db.VarChar(255)
+  IMEI           String?   @db.VarChar(255)
+  Seriennummer   String?   @db.VarChar(255)
+  IP_Adresse     String?   @map("IP-Adresse") @db.VarChar(255)
+  Benutzername   String?   @db.VarChar(255)
+  Passwort       String?   @db.VarChar(255)
+  ICCID          String?   @db.VarChar(255)
+  PIN            String?   @db.VarChar(255)
+  PUK            String?   @db.VarChar(255)
+  Projekt        Int?
+  Bemerkungen    String?   @db.VarChar(255)
+  Hinweis        String?   @db.VarChar(255)
+  Kommentar      String?   @db.VarChar(255)
+  Router_aktuell String?   @map("Router aktuell") @db.VarChar(255)
+  Anlagenummer   String?   @db.TinyText
+  WLAN           String?   @db.TinyText
+  SSID           String?   @db.TinyText
+  Datum          DateTime? @db.Timestamp(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblsimkarten {
+  ID                 Int?
+  Provider           String?   @db.VarChar(255)
+  Kundennummer       Float?    @db.Float
+  Rufnummer          String?   @db.VarChar(255)
+  Kartenseriennummer String?   @db.VarChar(255)
+  Tarif              String?   @db.VarChar(255)
+  Vertragsende       DateTime? @db.Timestamp(0)
+  gek_ndigt_am       String?   @map("gekündigt am") @db.VarChar(255)
+  Kuendigung_zum     DateTime? @map("Kuendigung zum") @db.Timestamp(0)
+  PIN                String?   @db.VarChar(255)
+  PUK                String?   @db.VarChar(255)
+  Einsatzort         String?   @db.VarChar(255)
+  eigene_Infos       String?   @map("eigene Infos") @db.VarChar(255)
+  aktiv_             String?   @map("aktiv?") @db.VarChar(255)
+  SSMA_TimeStamp     Boolean?  @db.Bit(1)
+  Anlagenummer       String?   @db.TinyText
+  Datum              DateTime? @db.Timestamp(0)
+  Projekt            Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblsoftware {
+  ID           Int?
+  Software     String? @db.VarChar(255)
+  Beschreibung String? @db.VarChar(255)
+  Anlagenummer String? @db.TinyText
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblusrzugangsdaten {
+  ID           Int?
+  Vorname      String?   @db.VarChar(255)
+  Nachname     String?   @db.VarChar(255)
+  E_Mail       String?   @map("E-Mail") @db.VarChar(255)
+  Passwort     String?   @db.VarChar(255)
+  Anlagenummer String?   @db.TinyText
+  Datum        DateTime? @db.Timestamp(0)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tblzubeh_r {
+  ID                  Int?
+  Typ                 String?   @db.VarChar(255)
+  Seriennummer        String?   @db.VarChar(255)
+  Besitzer            String?   @db.VarChar(255)
+  Bemerkungen         String?   @db.VarChar(255)
+  Hinweis             String?   @db.VarChar(255)
+  Bezeichnung         String?   @db.VarChar(255)
+  Projekt             Int?
+  Userkonto_Name      String?   @map("Userkonto Name") @db.VarChar(255)
+  Userkonto_Password  String?   @map("Userkonto Password") @db.VarChar(255)
+  Teamviewer_ID       String?   @map("Teamviewer ID") @db.VarChar(255)
+  Teamviewer_Passwort String?   @map("Teamviewer Passwort") @db.VarChar(255)
+  Router              Int?
+  Projekt1            Int?
+  Bemerkungen1        String?   @db.VarChar(255)
+  Bilder              String?   @db.VarChar(255)
+  Anlagenummer        String?   @db.TinyText
+  Datum               DateTime? @db.Timestamp(0)
+
+  @@map("tblzubehör")
+  @@ignore
 }

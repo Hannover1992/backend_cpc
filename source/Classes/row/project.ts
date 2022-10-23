@@ -34,7 +34,7 @@ export class Project implements I_Project, I_CRUD {
     }
 
     async create() {
-        await this.prisma.project.create({
+        await this.prisma.tblprojekte.create({
             data: {
                 id: this.id,
                 name: this.name
@@ -44,7 +44,7 @@ export class Project implements I_Project, I_CRUD {
 
     async read(id?: number) {
         //read form database if projects exists then set this.name = name from db
-        await this._prisma.project.findMany({
+        await this._prisma.tblprojekte.findMany({
             where: {
                 id: id || this.id
             }
@@ -62,7 +62,7 @@ export class Project implements I_Project, I_CRUD {
     }
 
     async update() {
-        await this._prisma.project.update({
+        await this._prisma.tblprojekte.update({
             where: {
                 id: this.id
             },
@@ -73,7 +73,7 @@ export class Project implements I_Project, I_CRUD {
     }
 
     async delete() {
-        await this._prisma.project.delete({
+        await this._prisma.tblprojekte.delete({
             where: {
                 id: this.id
             }
@@ -82,7 +82,7 @@ export class Project implements I_Project, I_CRUD {
 
 
     public async project_exists_in_db(): Promise<boolean> {
-        const users = await this._prisma.project.findMany({
+        const users = await this._prisma.tblprojekte.findMany({
             where: {
                 id: this.id,
                 name: this.name

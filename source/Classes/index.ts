@@ -10,4 +10,12 @@ async function start() {
     await database.projects.create();
     await database.start_server();
 }
-start();
+// start();
+
+prisma.tblprojekte.findMany().then((result: any) => {
+    console.log(result);
+});
+
+prisma.tblnotebook.findMany().then((result: any) => {
+    console.log(result);
+});
