@@ -31,12 +31,12 @@ async function test_create_read_update_delete(database: Database) {
     await expect(database.projects.length).toBe(10);
     await database.projects.read();
     await expect(database.projects.length).toBe(10);
-    database.projects.project[2].name = "foo";
+    database.projects.project[2].Standort = "foo";
     await database.projects.update();
     await database.projects.generate_array_of_projects(0, 9);
-    await expect(database.projects.project[2].name).toBe("test2");
+    await expect(database.projects.project[2].Standort).toBe("test2");
     await database.projects.read();
-    await expect(database.projects.project[2].name).toBe("foo");
+    await expect(database.projects.project[2].Standort).toBe("foo");
 }
 
 describe('express', () => {

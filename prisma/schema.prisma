@@ -289,7 +289,7 @@ model tblnotebook_1 {
 }
 
 model tblprojekte {
-  ID                  Int     @unique
+  ID                  Int     @unique(map: "tblprojekte_pk_PRIMARY")
   Standort            String? @db.TinyText
   Niederlassung       String? @db.VarChar(255)
   Auftragsart         String? @db.VarChar(255)
@@ -301,7 +301,7 @@ model tblprojekte {
   Auftragsdatum       String? @db.VarChar(255)
   Startdatum          String? @db.VarChar(255)
   Kommentar           String? @db.VarChar(255)
-  Anlagenummer        String? @db.VarChar(255)
+  Anlagenummer        Int?
   PM_1                String? @db.VarChar(255)
   PM_2                String? @db.VarChar(255)
   Endtermin           String? @db.VarChar(255)

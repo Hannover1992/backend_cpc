@@ -133,8 +133,8 @@ export class Project implements I_Project, I_CRUD {
     private _PM_2:                   String;
 
     constructor(prisma: PrismaClient, ID: number,   Standort?: String, Niederlassung?: String, Auftragsart?: String, Status?: String, Logistikkoordinator?: String, LK_1?: String, LK_2?: String, ZuKo?: String, Auftragsdatum?: Date, Startdatum?: Date, Endtermin?: Date, Netto_Auftragswert?: String, Kommentar?: String, Anlagenummer?: number, PM_1?: String, PM_2?: String) {
-        this.ID = ID;
         this.prisma = prisma;
+        this.ID = ID;
         this.Standort = Standort || "";
         this.Niederlassung = Niederlassung || "";
         this.Auftragsart = Auftragsart || "";
@@ -143,7 +143,6 @@ export class Project implements I_Project, I_CRUD {
         this.LK_1 = LK_1 || "";
         this.LK_2 = LK_2 || "";
         this.ZuKo = ZuKo || "";
-        //date fill with zero
         this.Auftragsdatum = Auftragsdatum || new Date(0);
         this.Startdatum = Startdatum || new Date(0);
         this.Endtermin = Endtermin || new Date(0);
@@ -171,7 +170,7 @@ export class Project implements I_Project, I_CRUD {
                 Endtermin: this.Endtermin || "",
                 Netto_Auftragswert: this.Netto_Auftragswert || "",
                 Kommentar: this.Kommentar || "",
-                Anlagenummer: this.Anlagenummer || "",
+                Anlagenummer: this.Anlagenummer || 0,
                 PM_1: this.PM_1 || "",
                 PM_2: this.PM_2 || "",
             }
@@ -186,7 +185,6 @@ export class Project implements I_Project, I_CRUD {
             }
         }).then((result: any) => {
             if(result.length > 0) {
-                // this.Standort = result[0].Standort;
                 this.Standort = result[0].Standort;
                 this.Niederlassung = result[0].Niederlassung;
                 this.Auftragsart = result[0].Auftragsart;
@@ -216,7 +214,7 @@ export class Project implements I_Project, I_CRUD {
     async update() {
         await this._prisma.tblprojekte.update({
             where: {
-                id: this.ID
+                ID: this.ID
             },
             data: {
                 Standort: this.Standort,
@@ -236,13 +234,15 @@ export class Project implements I_Project, I_CRUD {
                 PM_1: this.PM_1,
                 PM_2: this.PM_2,
             }
+        }).then((result: any) => {
+            console.log("updated");
         })
     }
 
     async delete() {
         await this._prisma.tblprojekte.delete({
             where: {
-                id: this.ID
+                ID: this.ID
             }
         })
     }
@@ -267,9 +267,9 @@ export class Project implements I_Project, I_CRUD {
                     Endtermin: this.Endtermin,
                     Netto_Auftragswert: this.Netto_Auftragswert,
                     Kommentar: this.Kommentar,
-                    // Anlagenummer: this.Anlagenummer,
-                    // PM_1: this.PM_1,
-                    // PM_2: this.PM_2,
+                    Anlagenummer: this.Anlagenummer,
+                    PM_1: this.PM_1,
+                    PM_2: this.PM_2,
                 }
             }
         );
@@ -299,4 +299,26 @@ export class Project implements I_Project, I_CRUD {
         }
     }
 
+}
+
+
+export function generate_test_project(prisma: PrismaClient, i: number): Project {
+    let project = new Project(prisma,  i);
+    project.Standort = "Standort" + i;
+    project.Niederlassung = "Niederlassung" + i;
+    project.Auftragsart = "Auftragsart" + i;
+    project.Status = "Status" + i;
+    project.Logistikkoordinator = "Logistikkoordinator" + i;
+    project.LK_1 = "LK_1" + i;
+    project.LK_2 = "LK_2" + i;
+    project.ZuKo = "ZuKo" + i;
+    project.Auftragsdatum = new Date(i);
+    project.Startdatum = new Date(i);
+    project.Endtermin = new Date(i)
+    project.Netto_Auftragswert = "Netto_Auftragswert" + i;
+    project.Kommentar = "Kommentar" + i;
+    project.Anlagenummer = i;
+    project.PM_1 = "PM_1" + i;
+    project.PM_2 = "PM_2" + i;
+    return project;
 }

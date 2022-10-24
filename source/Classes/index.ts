@@ -11,14 +11,3 @@ async function start() {
     await database.start_server();
 }
 
-// start();
-
-prisma.tblprojekte.findMany(
-    {
-        where: {
-            ID: 1
-        }
-    }
-).then((result: any) => {
-    console.log(result);
-});

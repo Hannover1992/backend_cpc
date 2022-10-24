@@ -1,8 +1,50 @@
 import {describe, expect,  beforeAll } from '@jest/globals';
-import {Project} from "../../source/Classes/row/project";
+import {generate_test_project, Project} from "../../source/Classes/row/project";
 import {PrismaClient} from "@prisma/client";
 
 let prisma: PrismaClient = new PrismaClient();
+
+describe('test Prisma', () => {
+    beforeAll(async () => {
+        await prisma.tblprojekte.deleteMany();
+    });
+
+    it("it should create an project with id 0", async () => {
+        await prisma.tblprojekte.create({
+            data: {
+                ID: 0,
+                Standort: "test",
+            }
+        })
+        let project : any = await prisma.tblprojekte.findMany({
+            where: {
+                ID: 0
+            }
+        })
+        expect(project[0].Standort).toBe("test");
+    });
+
+    it("it should create an project with id anlagenummer = 1, and id = 2", async () => {
+        await prisma.tblprojekte.create({
+            data: {
+                ID: 2,
+                Anlagenummer: 1,
+                Standort: "test",
+            }
+        })
+        let project : any = await prisma.tblprojekte.findMany({
+            where: {
+                ID: 2
+            }
+        })
+        expect(project[0].Standort).toBe("test");
+        expect(project[0].Anlagenummer).toBe(1);
+    });
+
+    afterAll(async () => {
+        await prisma.tblprojekte.deleteMany();
+    });
+});
 
 describe('Project', () => {
     beforeAll(async () => {
@@ -14,10 +56,25 @@ describe('Project', () => {
         //check if id = 1 and test
         expect(project.ID).toBe(1);
         expect(project.Standort).toBe("test");
+        expect(project.Anlagenummer).toBe(0);
         await project.create()
             .then(async () => {
                 expect(await project.project_exists_in_db()).toBe(true);
             });
+    });
+});
+
+describe('Test creating and saving a random project', () => {
+    beforeEach(async () => {
+        await prisma.tblprojekte.deleteMany();
+    });
+
+    it("schould create a random project and save it in db", async () => {
+        let project: Project;
+        let prisma = new PrismaClient();
+        project = generate_test_project(prisma, 0);
+        await project.create();
+        expect(await project.project_exists_in_db()).toBe(true);
     });
 });
 
@@ -94,10 +151,18 @@ describe("update", () => {
             });
         project.Standort = "test2";
         await project.update()
-            .catch( () => {
-                expect(true).toBe(false);
+            .catch( (error: any) => {
+                console.log(error);
+                expect(true).toBe(false)
             });
         expect(await project.project_exists_in_db()).toBe(true);
+    });
+
+});
+
+describe("try to update project that does not exist", () => {
+    beforeAll(async () => {
+        await prisma.tblprojekte.deleteMany();
     });
 
     it('test if cant update projects that not exist in db', async () => {
