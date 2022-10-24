@@ -303,7 +303,7 @@ export class Project implements I_Project, I_CRUD {
 
 
 export function generate_test_project(prisma: PrismaClient, i: number): Project {
-    let project = new Project(prisma,  i);
+    let project = new Project(prisma, i);
     project.Standort = "Standort" + i;
     project.Niederlassung = "Niederlassung" + i;
     project.Auftragsart = "Auftragsart" + i;

@@ -208,3 +208,98 @@ describe('delete', () => {
 });
 
 
+describe("test complexe constructor", () => {
+   beforeAll(async () => {
+         await prisma.tblprojekte.deleteMany();
+   });
+
+   it("test if can create a project with complexe constructor", async () => {
+        let project: Project = new Project(prisma, 1, "test");
+        project.LK_2 = "Stefan";
+        await project.create();
+        expect(await project.project_exists_in_db()).toBe(true);
+        expect(project.LK_2).toBe("Stefan");
+        project.LK_1 = "Bob";
+        await project.update();
+        expect(project.LK_1).toBe("Bob");
+        expect(project.LK_2).toBe("Stefan");
+        expect(await project.project_exists_in_db()).toBe(true);
+   });
+
+   afterAll(async () => {
+       prisma.tblprojekte.deleteMany();
+   });
+})
+
+
+
+describe("test date", () => {
+    beforeAll(async () => {
+        await prisma.tblprojekte.deleteMany();
+    });
+
+    it("test if can create a project with complexe constructor", async () => {
+        let project: Project = new Project(prisma, 1, "test");
+        project.Auftragsdatum = new Date(10);
+        await project.create();
+        expect(await project.project_exists_in_db()).toBe(true);
+    });
+
+    afterAll(async () => {
+        prisma.tblprojekte.deleteMany();
+    });
+})
+
+describe("test PRIMARY KEY", () => {
+
+    beforeAll(async () => {
+        await prisma.tblprojekte.deleteMany();
+    });
+
+    it("when i create 2 times the same project i have to get the PRIMARY error", async () => {
+        let project: Project = new Project(prisma, 1, "test");
+        await project.create();
+        await project.create()
+            .then( () => {
+                expect(false).toBe(true);
+            })
+            .catch( (error: any) => {
+                expect(error.message).toContain("PRIMARY");
+            });
+    });
+
+    afterAll(async () => {
+        prisma.tblprojekte.deleteMany();
+    });
+});
+
+
+
+describe("test generate project function", () => {
+
+    beforeAll(async () => {
+        await prisma.tblprojekte.deleteMany();
+    });
+
+    it("generate project with number = 7 then test it", async () => {
+        let project_generatet : Project = generate_test_project(prisma, 7);
+        expect(project_generatet).not.toBe(null);
+        expect(project_generatet.Auftragsdatum).not.toBe(null);
+        expect(project_generatet.Standort).toBe("Standort7");
+        project_generatet.create()
+            .then   ( () => {
+                let project_compare_to: Project = new Project(prisma, 7, "Standort7", "Niederlassung7");
+                project_compare_to.LK_1 = "LK_17";
+                project_compare_to.LK_2 = "LK_27";
+                project_compare_to.Auftragsdatum = new Date(7);
+                expect(project_generatet).toEqual(new Project(prisma, 7, "Standort7", "Niederlassung7"));
+            });
+    });
+
+    afterAll(async () => {
+        prisma.tblprojekte.deleteMany();
+    });
+});
+
+
+
