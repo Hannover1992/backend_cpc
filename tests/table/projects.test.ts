@@ -23,7 +23,7 @@ describe("projects exists?", () => {
         let projects: Projects = new Projects(prisma);
         await projects.delete();
         expect(projects.project.length).toBe(0);
-        let temp = await prisma.project.findMany();
+        let temp = await prisma.tblprojekte.findMany();
         await expect(temp.length).toBe(0);
     });
 
@@ -50,7 +50,7 @@ describe("test generate array of projects" , () => {
     let projects: Projects = new Projects(prisma);
 
     beforeAll(async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
         projects.generate_array_of_projects(1, 3);
         await projects.create();
     });
@@ -60,11 +60,11 @@ describe("test generate array of projects" , () => {
     });
 
     it("array should contain 1", () => {
-        expect(projects.project[0].id).toBe(1);
+        expect(projects.project[0].ID).toBe(1);
     });
 
-    it("the name of the second projects should be test2", () => {
-        expect(projects.project[1].name).toBe("test2");
+    it("the name of the second projects should be Standort2", () => {
+        expect(projects.project[1].Standort).toBe("Standort2");
     });
 });
 
@@ -73,7 +73,7 @@ describe("create", () => {
     let projects: Projects = new Projects(prisma);
 
     beforeAll(async () => {
-        await prisma.project.deleteMany();
+        await prisma.tblprojekte.deleteMany();
         projects.generate_array_of_projects(1, 3);
         await projects.create();
     });
@@ -81,18 +81,18 @@ describe("create", () => {
         expect(projects.project.length).toBe(3);
     });
     it("the name of the second projects should be it2", () => {
-        expect(projects.project[1].name).toBe("test2");
+        expect(projects.project[1].Standort).toBe("Standort2");
     });
 
-    it("the name of the second projects should be test2", async () => {
+    it("the.Standort of the second projects should be Standort2", async () => {
         let project: Project = new Project(prisma , 1, "something");
         await expect(project.read(9)).rejects.toThrowError('not found')
     });
 
-    it("check if the projects with id 2 in database , and the name test2" , async () => {
+    it("check if the projects with id 2 in database , and the.Standort Standort2" , async () => {
         let project: Project = new Project(prisma , 2, "something");
         await project.read(2);
-        expect(project.name).toBe("test2");
+        expect(project.Standort).toBe("Standort2");
     });
 
     it("test if the global projects read funciton, read the projects 1,2,3", async () => {
@@ -103,7 +103,7 @@ describe("create", () => {
     it('test delete function', async () => {
         await projects.delete()
         expect(projects.project.length).toBe(0);
-        const temp = await prisma.project.findMany();
+        const temp = await prisma.tblprojekte.findMany();
         expect(temp.length).toBe(0);
     });
 
@@ -111,11 +111,11 @@ describe("create", () => {
         let projects_big: Projects = new Projects(prisma);
         await projects_big.delete();
         await projects_big.generate_array_of_projects(4, 20);
-        await expect(projects_big.project[0].id).toBe(4);
+        await expect(projects_big.project[0].ID).toBe(4);
         await projects_big.create()
             .then(async () => {
                 let project = projects_big.get_project(5);
-                await expect(project.name).toBe("test5");
+                await expect(project.Standort).toBe("Standort5");
             });
     });
 
@@ -149,7 +149,7 @@ describe("test create, delete", () => {
     it("test delete funciton", async () => {
         await projects.delete()
         await expect(projects.project.length).toBe(0);
-        await prisma.project.findMany().then(
+        await prisma.tblprojekte.findMany().then(
             async (temp) => {
                 expect(temp.length).toBe(0);
                  expect(projects.length).toBe(0);
@@ -161,29 +161,29 @@ describe("test create, delete", () => {
 describe("read function, update", () => {
     let projects: Projects = new Projects(prisma);
     beforeAll(async () => {
-        await projects.delete();
-        projects.generate_array_of_projects(0, 99);
-        await projects.create();
     });
 
     it("test read function", async () => {
+        await projects.delete();
+        await projects.generate_array_of_projects(0, 99);
+        await projects.create();
         await projects.read().then(async () => {
             expect(projects.project.length).toBe(100);
-            expect(projects.project[0].id).toBe(0);
-            expect(projects.project[99].id).toBe(99);
-            expect(projects.project[43].name).toBe("test43");
+            expect(projects.project[0].ID).toBe(0);
+            expect(projects.project[99].ID).toBe(99);
+            expect(projects.project[43].Standort).toBe("Standort43");
         });
     });
 
     it("test update function", async () => {
-        projects.project[44].name = "test44_updated";
+        projects.project[44].Standort = "test44_updated";
         await projects.update();
         await projects.read();
-        expect(projects.project[44].name).toBe("test44_updated");
+        expect(projects.project[44].Standort).toBe("test44_updated");
     });
 
     it("test update function with id that does not exist", async () => {
-        projects.project[44].id = 133;
+        projects.project[44].ID = 133;
         await expect(projects.update()).rejects.toThrowError('not found');
     });
 });
@@ -203,9 +203,9 @@ describe("test if the projects are able to get send through the rest api", () =>
         expect(projects.project[0].prisma).toBe(null);
         expect(projects.project[99].prisma).toBe(null);
         expect(projects.prisma).toBe(null);
-        expect(projects.project[0].id).toBe(0);
-        expect(projects.project[99].id).toBe(99);
-        expect(projects.project[43].name).toBe("test43");
+        expect(projects.project[0].ID).toBe(0);
+        expect(projects.project[99].ID).toBe(99);
+        expect(projects.project[43].Standort).toBe("Standort43");
     });
 
 });

@@ -1,4 +1,4 @@
-import {Project} from "../row/project";
+import {generate_test_project, Project} from "../row/project";
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
 import {I_Projects} from "../../Interface/table/I_Projects";
@@ -59,14 +59,14 @@ export  class Projects implements I_Projects{
 
     async read(...args: any[]) {
         this._project = [];
-        await this._prisma.project.findMany()
+        await this._prisma.tblprojekte.findMany()
             .then((result: any) => {
                 for (let i = 0; i < result.length; i++) {
                     let project: Project = new Project(
                         this._prisma,
                         result[i].ID,
-                        result[i].Niederlassung,
                         result[i].Standort,
+                        result[i].Niederlassung,
                         result[i].Auftragsart,
                         result[i].Status,
                         result[i].Logistikkoordinator,
@@ -89,7 +89,7 @@ export  class Projects implements I_Projects{
     }
 
     async delete(...args: any[]) {
-        return await this._prisma.project.deleteMany()
+        return await this._prisma.tblprojekte.deleteMany()
             .then(() => {
               this._length = 0;
               this.project = [];
@@ -109,26 +109,7 @@ export  class Projects implements I_Projects{
     generate_array_of_projects(start: number, end: number) {
         this.project = [];
         for (let i = start; i <= end; i++) {
-            let project: Project = new Project(
-                this._prisma,
-                i,
-                "Standort" + i.toString(),
-                "Niederlassung" + i.toString(),
-                "Auftragsart" + i.toString(),
-                "Status" + i.toString(),
-                "Logistikkoordinator" + i.toString(),
-                "LK_1" + i.toString(),
-                "LK_2" + i.toString(),
-                "ZuKo" + i.toString(),
-                new Date(),
-                new Date(),
-                new Date(),
-                "Netto_Auftragswert" + i.toString(),
-                "Kommentar" + i.toString(),
-                i,
-                "PM_1" + i.toString(),
-                "PM_2" + i.toString()
-            );
+            let project: Project = generate_test_project(this._prisma, i);
             this._project.push(project);
         }
         this._length = this._project.length;
