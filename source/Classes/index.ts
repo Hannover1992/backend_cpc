@@ -11,3 +11,4 @@ async function start() {
     await database.start_server();
 }
 
+start();

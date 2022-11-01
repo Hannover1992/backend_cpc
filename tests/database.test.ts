@@ -34,7 +34,7 @@ async function test_create_read_update_delete(database: Database) {
     database.projects.project[2].Standort = "foo";
     await database.projects.update();
     await database.projects.generate_array_of_projects(0, 9);
-    await expect(database.projects.project[2].Standort).toBe("test2");
+    await expect(database.projects.project[2].Standort).toBe("Standort2");
     await database.projects.read();
     await expect(database.projects.project[2].Standort).toBe("foo");
 }
@@ -58,7 +58,7 @@ describe('express', () => {
         await request.get('/project/0')
             .then((response: any) => {
                 expect(response.status).toBe(200);
-                expect(response.body.name).toBe("test0");
+                expect(response.body.name).toBe("Standort0");
                 expect(response.body.id).toBe(0);
             });
     })
