@@ -3,10 +3,31 @@ import {I_CRUD} from "../../Interface/I_CRUD";
 import {I_Project} from "../../Interface/row/I_Project";
 
 export class Project implements I_Project, I_CRUD {
+
+    private _prisma: PrismaClient;
+
+    //toDo: fuhre LK, Zuko und Pm zu einer Tabelle zusammen
+    private _ID:                     number;
+    private _Standort:               String;
+    private _Niederlassung:          String;
+    private _Auftragsart:            String;
+    private _Status:                 String;
+    private _Logistikkoordinator:    String;
+    private _LK_1:                   String;
+    private _LK_2:                   String;
+    private _ZuKo:                   String;
+    private _Auftragsdatum:          Date;
+    private _Startdatum:             Date;
+    private _Endtermin:              Date;
+    private _Netto_Auftragswert:     String;
+    private _Kommentar:              String;
+    private _Anlagenummer:           number;
+    private _PM_1:                   String;
+    private _PM_2:                   String;
+
     get Endtermin(): Date {
         return this._Endtermin;
     }
-
     set Endtermin(value: Date) {
         this._Endtermin = value;
     }
@@ -113,24 +134,6 @@ export class Project implements I_Project, I_CRUD {
         this._prisma = value;
     }
 
-    private _prisma: PrismaClient;
-    private _ID:                     number;
-    private _Standort:               String;
-    private _Niederlassung:          String;
-    private _Auftragsart:            String;
-    private _Status:                 String;
-    private _Logistikkoordinator:    String;
-    private _LK_1:                   String;
-    private _LK_2:                   String;
-    private _ZuKo:                   String;
-    private _Auftragsdatum:          Date;
-    private _Startdatum:             Date;
-    private _Endtermin:              Date;
-    private _Netto_Auftragswert:     String;
-    private _Kommentar:              String;
-    private _Anlagenummer:           number;
-    private _PM_1:                   String;
-    private _PM_2:                   String;
 
     constructor(prisma: PrismaClient, ID: number,   Standort?: String, Niederlassung?: String, Auftragsart?: String, Status?: String, Logistikkoordinator?: String, LK_1?: String, LK_2?: String, ZuKo?: String, Auftragsdatum?: Date, Startdatum?: Date, Endtermin?: Date, Netto_Auftragswert?: String, Kommentar?: String, Anlagenummer?: number, PM_1?: String, PM_2?: String) {
         this.prisma = prisma;
