@@ -1,12 +1,22 @@
 import {PrismaClient} from "@prisma/client";
 import {Projects} from "./table/projects";
-//test
 
 export class Database {
+    private _cors: any;
+    private _prisma: any;
+    private _projects: Projects;
+    private _app: any;
+    private _PORT: number;
+
+    constructor(prisma: PrismaClient ) {
+        this.prisma = prisma;
+        this.projects = new Projects(prisma);
+        this.setup_express();
+    }
+
     get cors(): any {
         return this._cors;
     }
-
     set cors(value: any) {
         this._cors = value;
     }
@@ -27,18 +37,6 @@ export class Database {
     }
     set app(value: any) {
         this._app = value;
-    }
-
-    private _cors: any;
-    private _prisma: any;
-    private _projects: Projects;
-    private _app: any;
-    private _PORT: number;
-
-    constructor(prisma: PrismaClient ) {
-        this.prisma = prisma;
-        this.projects = new Projects(prisma);
-        this.setup_express();
     }
 
     async read() {

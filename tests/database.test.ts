@@ -58,8 +58,8 @@ describe('express', () => {
         await request.get('/project/0')
             .then((response: any) => {
                 expect(response.status).toBe(200);
-                expect(response.body.name).toBe("Standort0");
-                expect(response.body.id).toBe(0);
+                expect(response.body.Standort).toBe("Standort0");
+                expect(response.body.ID).toBe(0);
             });
     })
 
