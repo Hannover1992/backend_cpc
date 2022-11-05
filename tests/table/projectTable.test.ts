@@ -1,5 +1,5 @@
 import {describe, expect, beforeAll } from '@jest/globals';
-import {Projects} from '../../source/Classes/table/projects';
+import {ProjectTable} from '../../source/Classes/table/projectTable';
 import {PrismaClient} from "@prisma/client";
 import {Project} from "../../source/Classes/row/project";
 
@@ -7,12 +7,12 @@ let prisma: PrismaClient  = new PrismaClient();
 
 describe("Projects", () => {
     it("should be defined", () => {
-        let projects: Projects = new Projects(prisma);
+        let projects: ProjectTable = new ProjectTable(prisma);
         expect(projects).toBeDefined();
     });
 
     it("at the beginning the array of projects should be empty", () => {
-        let projects: Projects = new Projects(prisma);
+        let projects: ProjectTable = new ProjectTable(prisma);
         expect(projects.project.length).toBe(0);
         expect(projects.length).toBe(0);
     });
@@ -20,7 +20,7 @@ describe("Projects", () => {
 
 describe("projects exists?", () => {
     it("should return true if there are no projects", async () => {
-        let projects: Projects = new Projects(prisma);
+        let projects: ProjectTable = new ProjectTable(prisma);
         await projects.delete();
         expect(projects.project.length).toBe(0);
         let temp = await prisma.tblprojekte.findMany();
@@ -47,7 +47,7 @@ describe("generate function", () => {
 describe("test generate array of projects" , () => {
     let prisma: PrismaClient = new PrismaClient();
 
-    let projects: Projects = new Projects(prisma);
+    let projects: ProjectTable = new ProjectTable(prisma);
 
     beforeAll(async () => {
         await prisma.tblprojekte.deleteMany();
@@ -70,7 +70,7 @@ describe("test generate array of projects" , () => {
 
 describe("create", () => {
     let prisma: PrismaClient = new PrismaClient();
-    let projects: Projects = new Projects(prisma);
+    let projects: ProjectTable = new ProjectTable(prisma);
 
     beforeAll(async () => {
         await prisma.tblprojekte.deleteMany();
@@ -108,7 +108,7 @@ describe("create", () => {
     });
 
     it('test update function', async () => {
-        let projects_big: Projects = new Projects(prisma);
+        let projects_big: ProjectTable = new ProjectTable(prisma);
         await projects_big.delete();
         await projects_big.generate_array_of_projects(4, 20);
         await expect(projects_big.project[0].ID).toBe(4);
@@ -123,7 +123,7 @@ describe("create", () => {
 
 describe("update", () => {
     it('test update of projects with id that does not exist', async () => {
-        let projects: Projects = new Projects(prisma);
+        let projects: ProjectTable = new ProjectTable(prisma);
 
         await projects.delete();
         await projects.generate_array_of_projects(4, 20);
@@ -135,7 +135,7 @@ describe("update", () => {
 });
 
 describe("test create, delete", () => {
-    let projects: Projects = new Projects(prisma);
+    let projects: ProjectTable = new ProjectTable(prisma);
     beforeAll(async () => {
         await projects.delete();
         projects.generate_array_of_projects(1, 3);
@@ -159,7 +159,7 @@ describe("test create, delete", () => {
 })
 
 describe("read function, update", () => {
-    let projects: Projects = new Projects(prisma);
+    let projects: ProjectTable = new ProjectTable(prisma);
     beforeAll(async () => {
     });
 
@@ -189,9 +189,9 @@ describe("read function, update", () => {
 });
 
 describe("test if the projects are able to get send through the rest api", () => {
-    let projects: Projects;
+    let projects: ProjectTable;
     beforeAll(async () => {
-        projects = new Projects(prisma);
+        projects = new ProjectTable(prisma);
         await projects.delete();
         projects.generate_array_of_projects(0, 99);
         await projects.create();

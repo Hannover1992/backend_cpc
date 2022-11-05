@@ -3,8 +3,8 @@ import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
 import {I_Projects} from "../../Interface/table/I_Projects";
 
-//create public class Projects
-export  class Projects implements I_Projects{
+//create public class ProjectTable
+export  class ProjectTable implements I_Projects{
     private _project: Project[];
     private _length: number;
     private _prisma: PrismaClient;
@@ -55,8 +55,6 @@ export  class Projects implements I_Projects{
         }
         this._length = this._project.length;
     }
-
-
     async read(...args: any[]) {
         this._project = [];
         await this._prisma.tblprojekte.findMany()
@@ -140,7 +138,7 @@ export  class Projects implements I_Projects{
     }
 
     get_ready_to_send_over_rest_api() {
-        let projects_to_send: Projects = new Projects(null);
+        let projects_to_send: ProjectTable = new ProjectTable(null);
         for (let i = 0; i < this._project.length; i++) {
             projects_to_send.project.push(new Project(
                 null,

@@ -1,16 +1,16 @@
 import {PrismaClient} from "@prisma/client";
-import {Projects} from "./table/projects";
+import {ProjectTable} from "./table/projectTable";
 
 export class Database {
     private _cors: any;
     private _prisma: any;
-    private _projects: Projects;
+    private _projects: ProjectTable;
     private _app: any;
     private _PORT: number;
 
     constructor(prisma: PrismaClient ) {
         this.prisma = prisma;
-        this.projects = new Projects(prisma);
+        this.projects = new ProjectTable(prisma);
         this.setup_express();
     }
 
@@ -20,10 +20,10 @@ export class Database {
     set cors(value: any) {
         this._cors = value;
     }
-    get projects(): Projects {
+    get projects(): ProjectTable {
         return this._projects;
     }
-    set projects(value: Projects) {
+    set projects(value: ProjectTable) {
         this._projects = value;
     }
     get prisma(): any {
@@ -51,6 +51,9 @@ export class Database {
     }
 
     private allow_any_sites_to_talk_with_this_id() {
+        // toDo: ?
+        // this.app.use(express.json());
+        // this.app.use(express.urlencoded({ extended: true }));
         this.app.use(this.cors({origin: '*'}));
     }
 
@@ -77,6 +80,8 @@ export class Database {
             // res.setHeader('Access-Control-Allow-Origin', '*');
             res.status(200).send(this.projects.get_ready_to_send_over_rest_api());
             console.log(this.projects.get_ready_to_send_over_rest_api());
+            //console log time
+            console.log(new Date().toLocaleTimeString());
         });
     }
 

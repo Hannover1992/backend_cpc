@@ -72,5 +72,16 @@ describe('express', () => {
                 expect(response.body.message).toBe("Project not found");
             });
     });
+
+    it('test if sites with other ip adress can gain access',async () => {
+        await request.get('/project/0')
+            .set('Origin', 'http://localhost:8080')
+            .then((response: any) => {
+                expect(response.status).toBe(200);
+                expect(response.body.Standort).toBe("Standort0");
+                expect(response.body.ID).toBe(0);
+            }
+        );
+    });
 });
 
