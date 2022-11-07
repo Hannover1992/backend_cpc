@@ -2,11 +2,19 @@ import {PrismaClient} from "@prisma/client";
 import {ProjectTable} from "./table/projectTable";
 
 export class Database {
+    get bodyParser(): any {
+        return this._bodyParser;
+    }
+
+    set bodyParser(value: any) {
+        this._bodyParser = value;
+    }
     private _cors: any;
     private _prisma: any;
     private _projects: ProjectTable;
     private _app: any;
     private _PORT: number;
+    private _bodyParser: any;
 
     constructor(prisma: PrismaClient ) {
         this.prisma = prisma;
@@ -46,6 +54,8 @@ export class Database {
     setup_express(){
         this._cors = require('cors');
         this._app = require('express')();
+        this._bodyParser = require('body-parser');
+        this.app.use(this.bodyParser.json());
         this._PORT = 8080;
         this.allow_any_sites_to_talk_with_this_id();
     }
@@ -69,6 +79,8 @@ export class Database {
 
         this.projects_CRUD();
         this.project_CRUD();
+
+        this.test_rest_api();
     }
 
     private projects_CRUD() {
@@ -78,7 +90,8 @@ export class Database {
     private projects_read() {
         this.app.get('/projects', (req: any, res: any) => {
             // res.setHeader('Access-Control-Allow-Origin', '*');
-            res.status(200).send(this.projects.get_ready_to_send_over_rest_api());
+            res.status(200).send(res.json(this.projects.get_ready_to_send_over_rest_api()));
+            //parse the object to json
             console.log(this.projects.get_ready_to_send_over_rest_api());
             //console log time
             console.log(new Date().toLocaleTimeString());
@@ -100,6 +113,14 @@ export class Database {
             } else {
                 res.status(200).send(project.get_ready_to_send_over_rest_api());
             }
+        });
+    }
+
+    private test_rest_api() {
+        this.app.get('/test', (req: any, res: any) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.status(200).send(( {"message" : "Hello World"} ));
+            console.log(new Date().toLocaleTimeString());
         });
     }
 }
