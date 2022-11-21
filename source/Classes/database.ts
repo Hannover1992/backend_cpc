@@ -111,6 +111,8 @@ export class Database {
             } else {
                 res.status(200).send(project.get_ready_to_send_over_rest_api());
             }
+            console.log(new Date().toLocaleTimeString());
+            console.log(project.get_ready_to_send_over_rest_api());
         });
     }
 
