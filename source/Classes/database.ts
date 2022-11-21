@@ -104,9 +104,7 @@ export class Database {
 
     private project_read() {
         this.app.get('/project/:id', (req: any, res: any) => {
-
-            const id = req.params.id;
-            const project = this.projects.project[id];
+            const project = this.get_current_project(req);
             //if projects undefiend
             if(project === undefined) {
                 res.status(404).send({"message" : "Project not found"});
@@ -114,6 +112,12 @@ export class Database {
                 res.status(200).send(project.get_ready_to_send_over_rest_api());
             }
         });
+    }
+
+    private get_current_project(req: any) {
+        const id = req.params.id;
+        const project = this.projects.project[id];
+        return project;
     }
 
     private test_rest_api() {

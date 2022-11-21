@@ -2,7 +2,7 @@ import {beforeAll, describe} from '@jest/globals';
 import {Database} from "../source/Classes/database";
 import {PrismaClient} from "@prisma/client";
 import {request} from "http";
-import {SuperTest} from "supertest";
+import supertest, {SuperTest} from "supertest";
 import {waitForDebugger} from "inspector";
 
 
@@ -39,19 +39,23 @@ async function test_create_read_update_delete(database: Database) {
     await expect(database.projects.project[2].Standort).toBe("foo");
 }
 
+async function setup_database_for_testing(database: Database) {
+    database = new Database(new PrismaClient());
+    await database.projects.delete();
+    await database.projects.generate_array_of_projects(0, 9);
+    await database.projects.create()
+    await database.projects.read();
+    await database.start_server()
+    const supertest = require('supertest')
+    return supertest(database.app)
+}
+
 describe('express', () => {
     let database: Database;
     let request: any;
 
     beforeAll(async () => {
-        database = new Database(new PrismaClient());
-        await database.projects.delete();
-        await database.projects.generate_array_of_projects(0, 9);
-        await database.projects.create()
-        await database.projects.read();
-        await database.start_server()
-        const supertest = require('supertest')
-        request = supertest(database.app)
+        request = await setup_database_for_testing(database);
     });
 
     it('gets the test endpoint',async () => {
@@ -75,7 +79,7 @@ describe('express', () => {
 
     it('test if sites with other ip adress can gain access',async () => {
         await request.get('/project/0')
-            .set('Origin', 'http://localhost:8080')
+            .set('Origin', 'http://192.168.192.1:8080')
             .then((response: any) => {
                 expect(response.status).toBe(200);
                 expect(response.body.Standort).toBe("Standort0");
@@ -83,5 +87,31 @@ describe('express', () => {
             }
         );
     });
+});
+
+describe('test test', () => {
+    let database: Database;
+    let request: any;
+
+    beforeAll(async () => {
+            database = new Database(new PrismaClient());
+            await database.projects.delete();
+            await database.projects.generate_array_of_projects(0, 9);
+            await database.projects.create()
+            await database.projects.read();
+            await database.start_server()
+            const supertest = require('supertest')
+            request = supertest(database.app)
+    });
+
+    it('gets the test endpoint',async () => {
+        await request.get('/project/0')
+            .then((response: any) => {
+                expect(response.status).toBe(200);
+                expect(response.body.Standort).toBe("Standort0");
+                expect(response.body.ID).toBe(0);
+            });
+    })
+
 });
 
