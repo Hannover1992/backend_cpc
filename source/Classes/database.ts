@@ -104,6 +104,7 @@ export class Database {
 
     private project_read() {
         this.app.get('/project/:id', (req: any, res: any) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
             const project = this.get_current_project(req);
             //if projects undefiend
             if(project === undefined) {
