@@ -198,15 +198,15 @@ describe("test if the projects are able to get send through the rest api", () =>
         await projects.read();
     });
 
-    it("test if all projects after make ready to send coesn't contain reference to prisma enymore", async () => {
-        projects = projects.get_ready_to_send_over_rest_api()
-        expect(projects.project[0].prisma).toBe(null);
-        expect(projects.project[99].prisma).toBe(null);
-        expect(projects.prisma).toBe(null);
-        expect(projects.project[0].ID).toBe(0);
-        expect(projects.project[99].ID).toBe(99);
-        expect(projects.project[43].Standort).toBe("Standort43");
-    });
+    // // it("test if all projects after make ready to send coesn't contain reference to prisma enymore", async () => {
+    // //     projects = projects.get_ready_to_send_over_rest_api()
+    // //     expect(projects.project[0].prisma).toBe(null);
+    // //     expect(projects.project[99].prisma).toBe(null);
+    // //     expect(projects.prisma).toBe(null);
+    // //     expect(projects.project[0].ID).toBe(0);
+    // //     expect(projects.project[99].ID).toBe(99);
+    // //     expect(projects.project[43].Standort).toBe("Standort43");
+    // });
 
 });
 

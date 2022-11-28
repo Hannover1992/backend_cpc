@@ -2,7 +2,7 @@ import {beforeAll, describe} from '@jest/globals';
 import {Database} from "../source/Classes/database";
 import {PrismaClient} from "@prisma/client";
 import {request} from "http";
-import supertest, {SuperTest} from "supertest";
+// import supertest, {SuperTest} from "supertest";
 import {waitForDebugger} from "inspector";
 
 
@@ -104,14 +104,14 @@ describe('test test', () => {
             request = supertest(database.app)
     });
 
-    it('gets the test endpoint',async () => {
-        await request.get('/project/0')
-            .then((response: any) => {
-                expect(response.status).toBe(200);
-                expect(response.body.Standort).toBe("Standort0");
-                expect(response.body.ID).toBe(0);
-            });
-    })
+    // it('gets the test endpoint',async () => {
+    //     await request.get('/project/0')
+    //         .then((response: any) => {
+    //             expect(response.status).toBe(200);
+    //             expect(response.body.Standort).toBe("Standort0");
+    //             expect(response.body.ID).toBe(0);
+    //         });
+    // })
 
 });
 

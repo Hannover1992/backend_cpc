@@ -2,6 +2,7 @@ import {generate_test_project, Project} from "../row/project";
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
 import {I_Projects} from "../../Interface/table/I_Projects";
+import {I_CRUD} from "../../Interface/I_CRUD";
 
 //create public class ProjectTable
 export  class ProjectTable implements I_Projects{
@@ -138,10 +139,9 @@ export  class ProjectTable implements I_Projects{
     }
 
     get_ready_to_send_over_rest_api() {
-        let projects_to_send: ProjectTable = new ProjectTable(null);
+        let projects_to_send: any[] = [];
         for (let i = 0; i < this._project.length; i++) {
-            projects_to_send.project.push(new Project(
-                null,
+            projects_to_send.push(new Project_to_send(
                 this._project[i].ID,
                 this._project[i].Standort,
                 this._project[i].Niederlassung,
@@ -161,8 +161,73 @@ export  class ProjectTable implements I_Projects{
                 this._project[i].PM_2
                 )
             );
-            projects_to_send.length++;
         }
         return projects_to_send
     }
+}
+
+//toDo: implenet this as a sub class of Project
+//create project send interface
+export class Project_to_send implements Project_send {
+    ID:                     number;
+    Standort:               String;
+    Niederlassung:          String;
+    Auftragsart:            String;
+    Status:                 String;
+    Logistikkoordinator:    String;
+    LK_1:                   String;
+    LK_2:                   String;
+    ZuKo:                   String;
+    Auftragsdatum:          Date;
+    Startdatum:             Date;
+    Endtermin:              Date;
+    Netto_Auftragswert:     String;
+    Kommentar:              String;
+    Anlagenummer:           number;
+    PM_1:                   String;
+    PM_2:                   String;
+
+    constructor(
+         ID: any, Standort: any, Niederlassung: any, Auftragsart: any, Status: any, Logistikkoordinator: any,
+         LK_1: any, LK_2: any, ZuKo: any, Auftragsdatum: any, Startdatum: any,
+         Endtermin: any, Netto_Auftragswert: any, Kommentar: any, Anlagenummer: any, PM_1: any, PM_2: any
+    ) {
+        this.ID = ID;
+        this.Standort = Standort;
+        this.Niederlassung = Niederlassung;
+        this.Auftragsart = Auftragsart;
+        this.Status = Status;
+        this.Logistikkoordinator = Logistikkoordinator;
+        this.LK_1 = LK_1;
+        this.LK_2 = LK_2;
+        this.ZuKo = ZuKo;
+        this.Auftragsdatum = Auftragsdatum;
+        this.Startdatum = Startdatum;
+        this.Endtermin = Endtermin;
+        this.Netto_Auftragswert = Netto_Auftragswert;
+        this.Kommentar = Kommentar;
+        this.Anlagenummer = Anlagenummer;
+        this.PM_1 = PM_1;
+        this.PM_2 = PM_2;
+    }
+}
+
+export interface Project_send {
+    ID:                     number;
+    Standort:               String;
+    Niederlassung:          String;
+    Auftragsart:            String;
+    Status:                 String;
+    Logistikkoordinator:    String;
+    LK_1:                   String;
+    LK_2:                   String;
+    ZuKo:                   String;
+    Auftragsdatum:          Date;
+    Startdatum:             Date;
+    Endtermin:              Date;
+    Netto_Auftragswert:     String;
+    Kommentar:              String;
+    Anlagenummer:           number;
+    PM_1:                   String;
+    PM_2:                   String;
 }
