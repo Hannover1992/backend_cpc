@@ -1,5 +1,5 @@
 import {PrismaClient} from "@prisma/client";
-import {Database} from "./database";
+import {Database} from "./Classes/database";
 let prisma: PrismaClient = new PrismaClient();
 
 let database: Database = new Database(prisma);
