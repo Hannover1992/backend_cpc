@@ -61,9 +61,6 @@ export class Database {
     }
 
     private allow_any_sites_to_talk_with_this_id() {
-        // toDo: ?
-        // this.app.use(express.json());
-        // this.app.use(express.urlencoded({ extended: true }));
         this.app.use(this.cors({origin: '*'}));
     }
 

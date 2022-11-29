@@ -10,7 +10,6 @@ export  class ProjectTable implements I_Projects{
     private _length: number;
     private _prisma: PrismaClient;
 
-    //toDo: rewrite get projects generic
     get project(): Project[] {
         return this._project;
     }
@@ -112,7 +111,6 @@ export  class ProjectTable implements I_Projects{
             this._project.push(project);
         }
         this._length = this._project.length;
-        // console.log("Generated " + this._length + " projects");
     }
 
     print() {
