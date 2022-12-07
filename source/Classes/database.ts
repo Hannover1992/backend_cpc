@@ -67,7 +67,12 @@ export class Database {
     async start_server() {
         await this.read()
         await this.run_apis();
+    //    runt he code every 2 seconds
+        setInterval(async () => {
+            await this.read()
+        }, 2000);
     }
+
 
     async run_apis() {
         this.app.listen(this._PORT, () => {
@@ -76,7 +81,6 @@ export class Database {
 
         this.projects_CRUD();
         this.project_CRUD();
-
         this.test_rest_api();
     }
 
