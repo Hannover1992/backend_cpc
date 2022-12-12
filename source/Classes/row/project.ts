@@ -135,7 +135,26 @@ export class Project implements I_Project, I_CRUD {
     }
 
 
-    constructor(prisma: PrismaClient, ID: number,   Standort?: String, Niederlassung?: String, Auftragsart?: String, Status?: String, Logistikkoordinator?: String, LK_1?: String, LK_2?: String, ZuKo?: String, Auftragsdatum?: Date, Startdatum?: Date, Endtermin?: Date, Netto_Auftragswert?: String, Kommentar?: String, Anlagenummer?: number, PM_1?: String, PM_2?: String) {
+    constructor(
+        prisma: PrismaClient,
+                ID: number,
+                Standort?: String,
+                Niederlassung?: String,
+                Auftragsart?: String,
+                Status?: String,
+                Logistikkoordinator?: String,
+                LK_1?: String,
+                LK_2?: String,
+                ZuKo?: String,
+                Auftragsdatum?: Date,
+                Startdatum?: Date,
+                Endtermin?: Date,
+                Netto_Auftragswert?: String,
+                Kommentar?: String,
+                Anlagenummer?: number,
+                PM_1?: String,
+                PM_2?: String
+    ) {
         this.prisma = prisma;
         this.ID = ID;
         this.Standort = Standort || "";

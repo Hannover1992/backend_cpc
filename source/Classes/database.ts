@@ -1,14 +1,8 @@
 import {PrismaClient} from "@prisma/client";
 import {ProjectTable} from "./table/projectTable";
+import {Project} from "./row/project";
 
 export class Database {
-    get bodyParser(): any {
-        return this._bodyParser;
-    }
-
-    set bodyParser(value: any) {
-        this._bodyParser = value;
-    }
     private _cors: any;
     private _prisma: any;
     private _projects: ProjectTable;
@@ -20,6 +14,14 @@ export class Database {
         this.prisma = prisma;
         this.projects = new ProjectTable(prisma);
         this.setup_express();
+    }
+
+
+    get bodyParser(): any { return this._bodyParser;
+    }
+
+    set bodyParser(value: any) {
+        this._bodyParser = value;
     }
 
     get cors(): any {
@@ -81,11 +83,11 @@ export class Database {
 
         this.projects_CRUD();
         this.project_CRUD();
-        this.test_rest_api();
     }
 
     private projects_CRUD() {
-        this.projects_read()
+        this.projects_read();
+        this.project_create();
     }
 
     private projects_read() {
@@ -118,17 +120,22 @@ export class Database {
         });
     }
 
+    private project_create() {
+        this.app.post('/project/:id', (req: any, res: any) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            console.log(req.body);
+            const project = this.get_current_project(req);
+            if(project === undefined) {
+                res.status(200).send({"message" : "OK"});
+            }
+        });
+    }
+
     private get_current_project(req: any) {
         const id = req.params.id;
         const project = this.projects.project[id];
         return project;
     }
 
-    private test_rest_api() {
-        this.app.get('/test', (req: any, res: any) => {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.status(200).send(( {"message" : "Hello World"} ));
-            console.log(new Date().toLocaleTimeString());
-        });
-    }
+
 }

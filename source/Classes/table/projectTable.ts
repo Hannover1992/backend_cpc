@@ -45,7 +45,6 @@ export  class ProjectTable implements I_Projects{
         this._prisma = prisma;
         this._project = []
         this._length = 0
-
     }
 
     //toDo: Promise.All
@@ -162,6 +161,18 @@ export  class ProjectTable implements I_Projects{
         }
         return projects_to_send
     }
+
+    async create_project(project: Project) {
+        try {
+            this.get_project(project.ID)
+        } catch ( error )
+        {
+            this._project.push(project);
+            this._length = this._project.length;
+            return await project.create();
+        }
+        throw  new Error("Project already exists");
+    }
 }
 
 //toDo: implenet this as a sub class of Project
@@ -186,9 +197,9 @@ export class Project_to_send implements Project_send {
     PM_2:                   String;
 
     constructor(
-         ID: any, Standort: any, Niederlassung: any, Auftragsart: any, Status: any, Logistikkoordinator: any,
-         LK_1: any, LK_2: any, ZuKo: any, Auftragsdatum: any, Startdatum: any,
-         Endtermin: any, Netto_Auftragswert: any, Kommentar: any, Anlagenummer: any, PM_1: any, PM_2: any
+        ID: any, Standort: any, Niederlassung: any, Auftragsart: any, Status: any, Logistikkoordinator: any,
+        LK_1: any, LK_2: any, ZuKo: any, Auftragsdatum: any, Startdatum: any,
+        Endtermin: any, Netto_Auftragswert: any, Kommentar: any, Anlagenummer: any, PM_1: any, PM_2: any
     ) {
         this.ID = ID;
         this.Standort = Standort;
