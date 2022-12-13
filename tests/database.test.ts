@@ -24,43 +24,6 @@ describe('Projects', () => {
         await test_create_read_update_delete(database);
     });
 
-    it('creat an function that can build an Project form body data',
-        async () => {
-            let body = {
-                ID: 11,
-                Anlagenummer: 11,
-                Auftragsart: "Auftragsart11",
-                Standort: "Standort11",
-                Niederlassung: "Niederlassung11",
-                Status: "Status11",
-                Auftragsdatum: new Date(),
-                Startdatum: new Date(),
-                Endtermin: new Date(),
-                Netto_Auftragswert: "Netto_Auftragswert11",
-                Kommentar: "",
-                Logistikkoordinator: "Logistikkoordinator11",
-                LK_1: "LK_111",
-                LK_2: "LK_211",
-                ZuKo: "ZuKo11",
-                PM_1: "PM_111",
-                PM_2: "PM_211"
-            };
-
-            let project = new Project(database.prisma, body.ID, body.Standort, body.Niederlassung, body.Auftragsart, body.Status, body.Logistikkoordinator, body.LK_1, body.LK_2, body.ZuKo, body.Auftragsdatum, body.Startdatum, body.Endtermin, body.Netto_Auftragswert, body.Kommentar, body.Anlagenummer, body.PM_1, body.PM_2);
-            expect(project.ID).toBe(11);
-            expect(project.Standort).toBe("Standort11");
-            expect(project.Niederlassung).toBe("Niederlassung11");
-            //expect to throw an error
-            expect(() => {
-                database.projects.get_project(11)
-            } ).toThrow();
-
-            await database.projects.create_project(project);
-
-            expect(() => {
-                database.projects.get_project(11)
-            } ).not.toThrow();
-        });
 });
 
 
@@ -94,6 +57,7 @@ describe('express', () => {
     let request: any;
 
     beforeAll(async () => {
+        database = new Database(new PrismaClient());
         request = await setup_database_for_testing(database);
     });
 
@@ -127,6 +91,46 @@ describe('express', () => {
         );
     });
 
+    it('creat an function that can build an Project form body data',
+        async () => {
+            let body = {
+                ID: 12,
+                Anlagenummer: 12,
+                Auftragsart: "Auftragsart12",
+                Standort: "Standort12",
+                Niederlassung: "Niederlassung12",
+                Status: "Status12",
+                Auftragsdatum: new Date(),
+                Startdatum: new Date(),
+                Endtermin: new Date(),
+                Netto_Auftragswert: "Netto_Auftragswert12",
+                Kommentar: "",
+                Logistikkoordinator: "Logistikkoordinator12",
+                LK_1: "LK_121",
+                LK_2: "LK_212",
+                ZuKo: "ZuKo12",
+                PM_1: "PM_121",
+                PM_2: "PM_212"
+            };
+
+            let project = new Project(database.prisma, body.ID, body.Standort, body.Niederlassung, body.Auftragsart, body.Status, body.Logistikkoordinator, body.LK_1, body.LK_2, body.ZuKo, body.Auftragsdatum, body.Startdatum, body.Endtermin, body.Netto_Auftragswert, body.Kommentar, body.Anlagenummer, body.PM_1, body.PM_2);
+            expect(project.ID).toBe(12);
+            expect(project.Standort).toBe("Standort12");
+            expect(project.Niederlassung).toBe("Niederlassung12");
+            //expect to throw an error
+            expect(() => {
+                database.projects.get_project(12)
+            } ).toThrow();
+
+            await database.projects.create_project(project);
+
+            expect(() => {
+                database.projects.get_project(12)
+            } ).not.toThrow();
+
+
+        });
+
     it('should be able to send a project with the post method',async () => {
         let body = {
             ID: 11,
@@ -155,6 +159,7 @@ describe('express', () => {
                 expect(response.body.message).toBe("Project created");
             });
     });
+
 
 });
 
