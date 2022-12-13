@@ -121,39 +121,47 @@ export class Database {
     }
 
     private project_create() {
-        //toDo; when wrong id the server should'nt crasch
-        this.app.post('/project/:id', async (req: any, res: any) => {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            const id = req.params.id;
-            req.body
-            const project = new Project(
-                this.prisma,
-                req.body.ID,
-                req.body.Standort,
-                req.body.Niederlassung,
-                req.body.Auftragsart,
-                req.body.Status,
-                req.body.Logistikkoordinator,
-                req.body.LK_1,
-                req.body.LK_2,
-                req.body.ZuKo,
-                req.body.Auftragsdatum,
-                req.body.Startdatum,
-                req.body.Endtermin,
-                req.body.Netto_Auftragswert,
-                req.body.Kommentar,
-                req.body.Anlagenummer,
-                req.body.PM_1,
-                req.body.PM_2
-            );
-            //toDo: hier
-            await this.projects.create_project(project)
-                .then   (async () => {
+        this.app.post('/project', async (req: any, res: any) => {
+            this.allow_acces_for_every_ip(res);
+            const project_recieved_from_client = this.create_project_using(req);
+            this.projects.create_project(project_recieved_from_client)
+                .then(async () => {
+                    console.log("Project created");
                     res.status(200).send({"message" : "Project created"});
-                    await this.read();
+                    this.read();
+                })
+                .catch((error: any) => {
+                    res.status(400).send({"message" : error.message});
                 });
-            // res.status(200).send("project created");
         });
+    }
+
+    private allow_acces_for_every_ip(res: any) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    private create_project_using(req: any) {
+        const project = new Project(
+            this.prisma,
+            req.body.ID,
+            req.body.Standort,
+            req.body.Niederlassung,
+            req.body.Auftragsart,
+            req.body.Status,
+            req.body.Logistikkoordinator,
+            req.body.LK_1,
+            req.body.LK_2,
+            req.body.ZuKo,
+            req.body.Auftragsdatum,
+            req.body.Startdatum,
+            req.body.Endtermin,
+            req.body.Netto_Auftragswert,
+            req.body.Kommentar,
+            req.body.Anlagenummer,
+            req.body.PM_1,
+            req.body.PM_2
+        );
+        return project;
     }
 
     private get_current_project(req: any) {

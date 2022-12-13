@@ -152,11 +152,19 @@ describe('express', () => {
             PM_2: "PM_211"
         };
 
-        await request.post('/project/11')
+        await request.post('/project')
             .send(body)
             .then((response: any) => {
                 expect(response.status).toBe(200);
                 expect(response.body.message).toBe("Project created");
+
+                //project should be foudn in database
+                expect(() => {
+                    database.projects.read()
+                        .then(() => {
+                            database.projects.get_project(12)
+                        });
+                } ).not.toThrow();
             });
     });
 
