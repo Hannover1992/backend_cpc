@@ -1,18 +1,34 @@
-// noinspection JSDeprecatedSymbols
+//date struction Shape
+interface Shape {
+    color: string;
+    name: string;
+}
 
-import {Observable} from "rxjs";
+interface PaintOptions {
+    shape: Shape;
+    xPos?: number;
+    yPos?: number;
+}
 
-// Create observable that will publish a single value, 42
-var observable = Observable.create((observer:any) => {
-    observer.next(42);
-    //set timout too 2 seconds
-    setTimeout(() => {
-        observer.next(43);
-        observer.complete();
-    }, 2000);
-});
+function paintShape(opts: PaintOptions) {
+    //print if defined
+    if(opts.shape) {
+        console.log(opts.shape.color);
+    }
+    if (opts.xPos) {
+        console.log(opts.xPos);
+    }
+    if (opts.yPos) {
+        console.log(opts.yPos);
+    }
+}
 
-// Subscribe to begin publishing values
-observable.subscribe((x:any) => {
-    console.log(x);
-});
+function getShape() {
+    return { color: "blue", name: "circle" };
+}
+
+const shape = getShape();
+paintShape({ shape });
+paintShape({ shape, xPos: 100 });
+paintShape({ shape, yPos: 100 });
+paintShape({ shape, xPos: 100, yPos: 100 });

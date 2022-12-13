@@ -121,13 +121,38 @@ export class Database {
     }
 
     private project_create() {
-        this.app.post('/project/:id', (req: any, res: any) => {
+        //toDo; when wrong id the server should'nt crasch
+        this.app.post('/project/:id', async (req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
-            console.log(req.body);
-            const project = this.get_current_project(req);
-            if(project === undefined) {
-                res.status(200).send({"message" : "OK"});
-            }
+            const id = req.params.id;
+            req.body
+            const project = new Project(
+                this.prisma,
+                req.body.ID,
+                req.body.Standort,
+                req.body.Niederlassung,
+                req.body.Auftragsart,
+                req.body.Status,
+                req.body.Logistikkoordinator,
+                req.body.LK_1,
+                req.body.LK_2,
+                req.body.ZuKo,
+                req.body.Auftragsdatum,
+                req.body.Startdatum,
+                req.body.Endtermin,
+                req.body.Netto_Auftragswert,
+                req.body.Kommentar,
+                req.body.Anlagenummer,
+                req.body.PM_1,
+                req.body.PM_2
+            );
+            //toDo: hier
+            await this.projects.create_project(project)
+                .then   (async () => {
+                    res.status(200).send({"message" : "Project created"});
+                    await this.read();
+                });
+            // res.status(200).send("project created");
         });
     }
 

@@ -300,6 +300,3 @@ describe("test generate project function", () => {
         prisma.tblprojekte.deleteMany();
     });
 });
-
-
-

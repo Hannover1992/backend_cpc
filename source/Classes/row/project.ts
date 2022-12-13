@@ -4,9 +4,8 @@ import {I_Project} from "../../Interface/row/I_Project";
 
 export class Project implements I_Project, I_CRUD {
 
-    private _prisma: PrismaClient;
-
     //toDo: fuhre LK, Zuko und Pm zu einer Tabelle zusammen
+    private _prisma: PrismaClient;
     private _ID:                     number;
     private _Standort:               String;
     private _Niederlassung:          String;

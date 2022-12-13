@@ -126,16 +126,36 @@ describe('express', () => {
             }
         );
     });
-});
 
-describe('test test', () => {
-    let database: Database;
-    let request: any;
+    it('should be able to send a project with the post method',async () => {
+        let body = {
+            ID: 11,
+            Anlagenummer: 11,
+            Auftragsart: "Auftragsart11",
+            Standort: "Standort11",
+            Niederlassung: "Niederlassung11",
+            Status: "Status11",
+            Auftragsdatum: new Date(),
+            Startdatum: new Date(),
+            Endtermin: new Date(),
+            Netto_Auftragswert: "Netto",
+            Kommentar: "",
+            Logistikkoordinator: "Logistikkoordinator11",
+            LK_1: "LK_111",
+            LK_2: "LK_211",
+            ZuKo: "ZuKo11",
+            PM_1: "PM_111",
+            PM_2: "PM_211"
+        };
 
-    beforeAll(async () => {
-        request = await setup_database_for_testing(database);
+        await request.post('/project/11')
+            .send(body)
+            .then((response: any) => {
+                expect(response.status).toBe(200);
+                expect(response.body.message).toBe("Project created");
+            });
     });
 
-
 });
+
 
