@@ -127,7 +127,7 @@ export  class ProjectTable implements I_Projects{
                 " Startdatum:" + this._project[i].Startdatum +
                 " Endtermin:" + this._project[i].Endtermin +
                 " Netto_Auftragswert:" + this._project[i].Netto_Auftragswert +
-                " Kommentar:" + this._project[i].Kommentar +
+                " Kommentar:"  + this._project[i].Kommentar +
                 " Anlagenummer:" + this._project[i].Anlagenummer +
                 " PM_1:" + this._project[i].PM_1 +
                 " PM_2:" + this._project[i].PM_2

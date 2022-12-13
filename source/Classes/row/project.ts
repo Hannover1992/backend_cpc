@@ -324,6 +324,18 @@ export class Project implements I_Project, I_CRUD {
 
 
 export function generate_test_project(prisma: PrismaClient, i: number): Project {
+
+    let random_komments_rick_and_morty = [
+        "I'm Pickle Rick!",
+        "Wubba Lubba Dub Dub!",
+        "I'm Mr. Meeseeks, look at me!",
+        "Sometimes science is a lot more art, than science. A lot of people don't get that.",
+        " I'm not a scientist. I'm a mad scientist.",
+        "I did it. Your parents are going to do it. Break the cycle Morty, rise above, focus on science.",
+        "Having a family doesn't mean that you stop being an individual.",
+        "Great, now I have to take over an entire planet because of your stupid boobs.",
+    ]
+
     let project = new Project(prisma, i);
     project.Standort = "Standort" + i;
     project.Niederlassung = "Niederlassung" + i;
@@ -337,7 +349,7 @@ export function generate_test_project(prisma: PrismaClient, i: number): Project 
     project.Startdatum = new Date(i);
     project.Endtermin = new Date(i)
     project.Netto_Auftragswert = "Netto_Auftragswert" + i;
-    project.Kommentar = "Kommentar" + i;
+    project.Kommentar = random_komments_rick_and_morty[i % random_komments_rick_and_morty.length]
     project.Anlagenummer = i;
     project.PM_1 = "PM_1" + i;
     project.PM_2 = "PM_2" + i;
