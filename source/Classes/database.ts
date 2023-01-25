@@ -77,10 +77,7 @@ export class Database {
 
 
     async run_apis() {
-        this.app.listen(this._PORT, () => {
-            console.log(`Server running on port ${this._PORT}`);
-        });
-
+        this.start_listen();
         this.projects_CRUD();
         this.project_CRUD();
     }
@@ -171,4 +168,9 @@ export class Database {
     }
 
 
+    private start_listen() {
+        this.app.listen(this._PORT, () => {
+            console.log(`Server running on port ${this._PORT}`);
+        });
+    }
 }
