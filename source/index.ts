@@ -12,6 +12,7 @@ async function start() {
     let prisma_1 = new PrismaClient();
     prisma_1.tblprojekte.findMany();
 }
-// test git
+// test
 
 start();
+
