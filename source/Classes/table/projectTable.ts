@@ -171,8 +171,6 @@ export  class ProjectTable implements I_Projects{
             this._length = this._project.length;
             return await project.create();
         }
-        throw  new Error("Project already exists");
-        console.log("Project already exists");
     }
 }
 

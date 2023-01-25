@@ -138,7 +138,7 @@ export class Database {
     }
 
     private create_project_using(req: any) {
-        const project = new Project(
+        let project = new Project(
             this.prisma,
             req.body.ID,
             req.body.Standort,
