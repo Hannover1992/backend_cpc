@@ -131,7 +131,7 @@ describe('express', () => {
 
         });
 
-    it('should be able to send a project with the post method',async () => {
+    it('should be able to send a project with the post method',async (done) => {
         let body = {
             ID: 11,
             Anlagenummer: 11,
@@ -165,6 +165,7 @@ describe('express', () => {
                             database.projects.get_project(12)
                         });
                 } ).not.toThrow();
+                done();
             });
     });
 

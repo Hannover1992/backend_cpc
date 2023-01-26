@@ -84,7 +84,6 @@ export class Database {
 
     private projects_CRUD() {
         this.projects_read();
-        this.project_create();
     }
 
     private projects_read() {
@@ -100,6 +99,7 @@ export class Database {
 
     private project_CRUD() {
         this.project_read();
+        this.project_create();
     }
 
     private project_read() {
@@ -120,7 +120,7 @@ export class Database {
     private project_create() {
         this.app.post('/project', async (req: any, res: any) => {
             this.allow_acces_for_every_ip(res);
-            const project_recieved_from_client = this.create_project_using(req);
+            const project_recieved_from_client = this.create_project_using(res);
             this.projects.create_project(project_recieved_from_client)
                 .then(async () => {
                     console.log("Project created");
@@ -138,6 +138,7 @@ export class Database {
     }
 
     private create_project_using(req: any) {
+        const request = req.body;
         let project = new Project(
             this.prisma,
             req.body.ID,
