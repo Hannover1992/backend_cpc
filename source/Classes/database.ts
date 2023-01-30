@@ -128,7 +128,7 @@ export class Database {
                         res.status(200).send({"message" : "Project created"});
                         this.read();
                     }).catch((error: any) => {
-                    console.log(error);
+                    console.log("Someone tryed to creat a project with an existing ID");
                     res.status(500).send({"message": "PRIMARY"});
                 });
         });
