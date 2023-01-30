@@ -163,14 +163,21 @@ export  class ProjectTable implements I_Projects{
     }
 
     async create_project(project: Project) {
-        try {
-            this.get_project(project.ID)
-        } catch ( error )
-        {
-            this._project.push(project);
-            this._length = this._project.length;
-            return await project.create();
+        if(this.project_with_this_number_already_exists(project.ID)) {
+            throw new Error("PRIMARY");
         }
+        this._project.push(project);
+        this._length = this._project.length;
+        return await project.create();
+    }
+
+    project_with_this_number_already_exists(ID: number) : boolean {
+        for (let i = 0; i < this._project.length; i++) {
+            if(this._project[i].ID == ID) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

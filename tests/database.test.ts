@@ -131,7 +131,7 @@ describe('express', () => {
 
         });
 
-    it('should be able to send a project with the post method',async (done) => {
+    it('should be able to send a project with the post method',async () => {
         let body = {
             ID: 11,
             Anlagenummer: 11,
@@ -157,15 +157,12 @@ describe('express', () => {
             .then((response: any) => {
                 expect(response.status).toBe(200);
                 expect(response.body.message).toBe("Project created");
-
-                //project should be foudn in database
-                expect(() => {
-                    database.projects.read()
-                        .then(() => {
-                            database.projects.get_project(12)
-                        });
-                } ).not.toThrow();
-                done();
+            });
+        await request.post('/project')
+            .send(body)
+            .then((response: any) => {
+                expect(response.status).toBe(500);
+                expect(response.body.message).toBe("PRIMARY");
             });
     });
 

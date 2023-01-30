@@ -120,15 +120,16 @@ export class Database {
     private project_create() {
         this.app.post('/project', async (req: any, res: any) => {
             this.allow_acces_for_every_ip(res);
-            const project_recieved_from_client = this.create_project_using(res);
-            this.projects.create_project(project_recieved_from_client)
-                .then(async () => {
-                    console.log("Project created");
-                    res.status(200).send({"message" : "Project created"});
-                    this.read();
-                })
-                .catch((error: any) => {
-                    res.status(400).send({"message" : error.message});
+            const project_recieved_from_client = this.create_project_using(req);
+
+                this.projects.create_project(project_recieved_from_client)
+                    .then(async () => {
+                        console.log("Project created");
+                        res.status(200).send({"message" : "Project created"});
+                        this.read();
+                    }).catch((error: any) => {
+                    console.log(error);
+                    res.status(500).send({"message": "PRIMARY"});
                 });
         });
     }
@@ -138,7 +139,6 @@ export class Database {
     }
 
     private create_project_using(req: any) {
-        const request = req.body;
         let project = new Project(
             this.prisma,
             req.body.ID,
@@ -175,3 +175,5 @@ export class Database {
         });
     }
 }
+
+//toDo: delte length, we have to use onlye the this.projects.length

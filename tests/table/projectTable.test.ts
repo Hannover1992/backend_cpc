@@ -190,12 +190,26 @@ describe("read function, update", () => {
 
 describe("test if the projects are able to get send through the rest api", () => {
     let projects: ProjectTable;
-    beforeAll(async () => {
+    beforeEach(async () => {
         projects = new ProjectTable(prisma);
         await projects.delete();
         projects.generate_array_of_projects(0, 10);
         await projects.create();
         await projects.read();
+    });
+
+    it(" check if table check if the project exist work ", async () => {
+        await expect(projects.project_with_this_number_already_exists(0)).toBe(true);
+        await expect(projects.project_with_this_number_already_exists(11)).toBe(false);
+    });
+
+    it(" i wont to check if when i run the function create an Project, the project will get created" , async () => {
+        let project: Project = new Project(prisma , 11, "something");
+        projects.create_project(project);
+        await expect(projects.project_with_this_number_already_exists(11)).toBe(true);
+
+        //expect projects.create_project to throw an error
+        await expect(projects.create_project(project)).rejects.toThrowError('PRIMARY');
     });
 
 
