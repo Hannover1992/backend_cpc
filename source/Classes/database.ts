@@ -121,6 +121,7 @@ export class Database {
         this.app.post('/project', async (req: any, res: any) => {
             this.allow_acces_for_every_ip(res);
             const project_recieved_from_client = this.create_project_using(req);
+            console.log(project_recieved_from_client);
 
                 this.projects.create_project(project_recieved_from_client)
                     .then(async () => {
