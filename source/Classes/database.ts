@@ -100,6 +100,7 @@ export class Database {
     private project_CRUD() {
         this.project_read();
         this.project_create();
+        this.project_update();
     }
 
     private project_read() {
@@ -120,7 +121,7 @@ export class Database {
     private project_create() {
         this.app.post('/project', async (req: any, res: any) => {
             this.allow_acces_for_every_ip(res);
-            const project_recieved_from_client = this.create_project_using(req);
+            const project_recieved_from_client = this.create_project_using_request(req);
             console.log(project_recieved_from_client);
 
                 this.projects.create_project(project_recieved_from_client)
@@ -139,7 +140,7 @@ export class Database {
         res.setHeader('Access-Control-Allow-Origin', '*');
     }
 
-    private create_project_using(req: any) {
+    private create_project_using_request(req: any) {
         let project = new Project(
             this.prisma,
             req.body.ID,
@@ -164,8 +165,11 @@ export class Database {
     }
 
     private get_current_project(req: any) {
-        const id = req.params.id;
-        const project = this.projects.project[id];
+        const id = req.body.ID;
+        let project : Project = this.projects.project[id];
+        if (project === undefined) {
+            throw new Error("Project not found");
+        }
         return project;
     }
 
@@ -174,6 +178,37 @@ export class Database {
         this.app.listen(this._PORT, () => {
             console.log(`Server running on port ${this._PORT}`);
         });
+    }
+
+    private project_update() {
+        let request_project : Project;
+
+        this.app.put('/project', (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            try{
+                request_project = this.create_project_using_request(req);
+                this.projects.get_project(request_project.ID);
+                this.projects.update_project(request_project);
+                res.status(200).send({"message" : "Project updated"});
+            } catch (e) {
+                res.status(404).send({"message" : e.message});
+            }
+        });
+
+        // res.setHeader('Access-Control-Allow-Origin', '*');
+        // const project = this.get_current_project(req);
+        // if(project === undefined) {
+        //     res.status(404).send({"message" : "Project not found"});
+        // } else {
+        //     project.update(req.body);
+        //     res.status(200).send({"message" : "Project updated"});
+        // }
+        // console.log(new Date().toLocaleTimeString());
+        // console.log(project.get_ready_to_send_over_rest_api());
+    }
+
+    private allow_communikation_from_all_ip_adress(res: any) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
     }
 }
 

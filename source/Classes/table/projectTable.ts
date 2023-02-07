@@ -179,6 +179,12 @@ export  class ProjectTable implements I_Projects{
         }
         return false;
     }
+
+    update_project(project: Project) {
+
+        this.project[project.ID] = project;
+        this._project[project.ID].update()
+    }
 }
 
 //toDo: implenet this as a sub class of Project

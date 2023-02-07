@@ -166,6 +166,43 @@ describe('express', () => {
             });
     });
 
+    it('should be able to update a project with the put method', async () => {
+        let body = {
+            ID: 9,
+            Anlagenummer: 9,
+            Auftragsart: "Auftragsart11",
+            Standort: "Standort11",
+            Niederlassung: "Niederlassung11",
+            Status: "Status11",
+            Auftragsdatum: new Date(),
+            Startdatum: new Date(),
+            Endtermin: new Date(),
+            Netto_Auftragswert: "Netto",
+            Kommentar: "",
+            Logistikkoordinator: "Logistikkoordinator11",
+            LK_1: "LK_111",
+            LK_2: "LK_211",
+            ZuKo: "ZuKo11",
+            PM_1: "PM_111",
+            PM_2: "PM_211"
+        };
+
+        await request.put('/project')
+            .send(body)
+            .then((response: any) => {
+                expect(response.status).toBe(200);
+                expect(response.body.message).toBe("Project updated");
+
+                body.ID = 10;
+                request.put('/project')
+                    .send(body)
+                    .then((response: any) => {
+                        expect(response.status).toBe(404);
+                        expect(response.body.message).toBe("Project not found");
+                    });
+            });
+    });
+
 
 });
 
