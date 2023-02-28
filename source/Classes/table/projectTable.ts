@@ -185,6 +185,17 @@ export  class ProjectTable implements I_Projects{
         this.project[project.ID] = project;
         this._project[project.ID].update()
     }
+
+    async delete_project(id: number) {
+        if (this.project_with_this_number_already_exists(id)) {
+            await this._project[id].delete()
+            this._project.splice(id, 1);
+            this._project.filter((project) => project.ID !== id);
+            this._length = this._project.length;
+        } else {
+            throw new Error("Don't exist");
+        }
+    }
 }
 
 //toDo: implenet this as a sub class of Project

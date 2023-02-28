@@ -265,7 +265,7 @@ export class Project implements I_Project, I_CRUD {
             where: {
                 ID: this.ID
             }
-        })
+        });
     }
 
 

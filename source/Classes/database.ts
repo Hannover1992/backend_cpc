@@ -67,7 +67,7 @@ export class Database {
     }
 
     async start_server() {
-        await this.read()
+        await this.read();
         await this.run_apis();
     //    runt he code every 2 seconds
         setInterval(async () => {
@@ -101,6 +101,7 @@ export class Database {
         this.project_read();
         this.project_create();
         this.project_update();
+        this.project_delete();
     }
 
     private project_read() {
@@ -182,7 +183,6 @@ export class Database {
 
     private project_update() {
         let request_project : Project;
-
         this.app.put('/project', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             try{
@@ -194,21 +194,30 @@ export class Database {
                 res.status(404).send({"message" : e.message});
             }
         });
-
-        // res.setHeader('Access-Control-Allow-Origin', '*');
-        // const project = this.get_current_project(req);
-        // if(project === undefined) {
-        //     res.status(404).send({"message" : "Project not found"});
-        // } else {
-        //     project.update(req.body);
-        //     res.status(200).send({"message" : "Project updated"});
-        // }
-        // console.log(new Date().toLocaleTimeString());
-        // console.log(project.get_ready_to_send_over_rest_api());
     }
 
     private allow_communikation_from_all_ip_adress(res: any) {
         res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    private project_delete() {
+this.app.delete('/project/:id', (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+
+    function get_id() {
+        let id = req.params.id;
+        return parseInt(id);
+    }
+
+//i have to get the id from the /project/:id
+    let id = get_id();
+    this.projects.delete_project(id)
+        .then(() => {
+            res.status(200).send({"message" : "Project deleted"});
+        }).catch((error: any) => {
+            res.status(404).send({"message" : error.message});
+        });
+    });
     }
 }
 

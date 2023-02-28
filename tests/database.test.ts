@@ -192,10 +192,22 @@ describe('express', () => {
             .then((response: any) => {
                 expect(response.status).toBe(200);
                 expect(response.body.message).toBe("Project updated");
-
                 body.ID = 10;
                 request.put('/project')
                     .send(body)
+                    .then((response: any) => {
+                        expect(response.status).toBe(404);
+                        expect(response.body.message).toBe("Project not found");
+                    });
+            });
+    });
+
+    it('should be able to delete a project with the delete method', async () => {
+        await request.delete('/project/9')
+            .then((response: any) => {
+                expect(response.status).toBe(200);
+                expect(response.body.message).toBe("Project deleted");
+                request.delete('/project/9')
                     .then((response: any) => {
                         expect(response.status).toBe(404);
                         expect(response.body.message).toBe("Project not found");
