@@ -215,6 +215,7 @@ export class Database {
         this.projects.delete_project(id)
             .then(() => {
                 res.status(200).send({"message" : "Project deleted"});
+                this.projects.read();
             }).catch((error: any) => {
                 res.status(404).send({"message" : error.message});
             });
