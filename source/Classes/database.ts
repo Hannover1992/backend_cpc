@@ -127,6 +127,7 @@ export class Database {
 
                 this.projects.create_project(project_recieved_from_client)
                     .then(async () => {
+                        console.log(this.projects);
                         console.log("Project created");
                         res.status(200).send({"message" : "Project created"});
                         this.read();
@@ -201,23 +202,23 @@ export class Database {
     }
 
     private project_delete() {
-this.app.delete('/project/:id', (req: any, res: any) => {
+        this.app.delete('/project/:id', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
 
-    function get_id() {
-        let id = req.params.id;
-        return parseInt(id);
-    }
+        function get_id() {
+            let id = req.params.id;
+            return parseInt(id);
+        }
 
-//i have to get the id from the /project/:id
-    let id = get_id();
-    this.projects.delete_project(id)
-        .then(() => {
-            res.status(200).send({"message" : "Project deleted"});
-        }).catch((error: any) => {
-            res.status(404).send({"message" : error.message});
+        //i have to get the id from the /project/:id
+        let id = get_id();
+        this.projects.delete_project(id)
+            .then(() => {
+                res.status(200).send({"message" : "Project deleted"});
+            }).catch((error: any) => {
+                res.status(404).send({"message" : error.message});
+            });
         });
-    });
     }
 }
 

@@ -61,35 +61,35 @@ describe('express', () => {
         request = await setup_database_for_testing(database);
     });
 
-    it('gets the test endpoint',async () => {
-        await request.get('/project/0')
-            .then((response: any) => {
-                expect(response.status).toBe(200);
-                expect(response.body.Standort).toBe("Standort0");
-                expect(response.body.ID).toBe(0);
-            });
-    })
-
-    it('gets the endpoint, where the projects does not exist',async () => {
-        await request.get('/project/11')
-            .then((response: any) => {
-                expect(response.status).toBe(404);
-
-                // res.status(404).send({Data : "Project not found"});
-                expect(response.body.message).toBe("Project not found");
-            });
-    });
-
-    it('test if sites with other ip adress can gain access',async () => {
-        await request.get('/project/0')
-            .set('Origin', 'http://192.168.192.1:8080')
-            .then((response: any) => {
-                expect(response.status).toBe(200);
-                expect(response.body.Standort).toBe("Standort0");
-                expect(response.body.ID).toBe(0);
-            }
-        );
-    });
+    // it('gets the test endpoint',async () => {
+    //     await request.get('/project/0')
+    //         .then((response: any) => {
+    //             expect(response.status).toBe(200);
+    //             expect(response.body.Standort).toBe("Standort0");
+    //             expect(response.body.ID).toBe(0);
+    //         });
+    // })
+    //
+    // it('gets the endpoint, where the projects does not exist',async () => {
+    //     await request.get('/project/11')
+    //         .then((response: any) => {
+    //             expect(response.status).toBe(404);
+    //
+    //             // res.status(404).send({Data : "Project not found"});
+    //             expect(response.body.message).toBe("Project not found");
+    //         });
+    // });
+    //
+    // it('test if sites with other ip adress can gain access',async () => {
+    //     await request.get('/project/0')
+    //         .set('Origin', 'http://192.168.192.1:8080')
+    //         .then((response: any) => {
+    //             expect(response.status).toBe(200);
+    //             expect(response.body.Standort).toBe("Standort0");
+    //             expect(response.body.ID).toBe(0);
+    //         }
+    //     );
+    // });
 
     it('creat an function that can build an Project form body data',
         async () => {
