@@ -188,10 +188,17 @@ export  class ProjectTable implements I_Projects{
 
     async delete_project(id: number) {
         if (this.project_with_this_number_already_exists(id)) {
-            await this._project[id].delete()
-            this._project.splice(id, 1);
-            this._project.filter((project) => project.ID !== id);
-            this._length = this._project.length;
+            for (let i = 0; i < this._project.length; i++) {
+                if(this._project[i].ID == id) {
+                    this._project[i].delete()
+                        .then(
+                            () => {
+                                this._project.splice(i, 1);
+                                this._length = this._project.length;
+                            }
+                        )
+                }
+            }
         } else {
             throw new Error("Don't exist");
         }

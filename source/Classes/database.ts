@@ -210,7 +210,6 @@ export class Database {
             return parseInt(id);
         }
 
-        //i have to get the id from the /project/:id
         let id = get_id();
         this.projects.delete_project(id)
             .then(() => {

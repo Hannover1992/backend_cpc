@@ -158,6 +158,22 @@ describe("test create, delete", () => {
 
 })
 
+describe("test if can delete single project", () => {
+    let projects: ProjectTable = new ProjectTable(prisma);
+    beforeAll(async () => {
+        await projects.delete();
+        projects.generate_array_of_projects(1, 3);
+        await projects.create();
+    });
+
+    it("should delete the project with id 2", async () => {
+        await projects.delete_project(2);
+        await expect(projects.length).toBe(2);
+        await expect(projects.project[0].ID).toBe(1);
+        await expect(projects.project[1].ID).toBe(3);
+    });
+})
+
 describe("read function, update", () => {
     let projects: ProjectTable = new ProjectTable(prisma);
     beforeAll(async () => {
