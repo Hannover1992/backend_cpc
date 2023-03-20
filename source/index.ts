@@ -10,7 +10,6 @@ async function start() {
         await database.projects.generate_array_of_projects(0, 9);
         await database.projects.create();
     }
-
     // await create_test_enviroment();
     await database.start_server();
 }
