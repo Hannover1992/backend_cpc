@@ -4,7 +4,9 @@
   "main": "source/index.js",
   "scripts": {
     "test": "jest --watchAll --verbose",
-    "start": "start node ."
+    "start": "start node .",
+    "db_pull": "npx prisma db pull --force",
+    "generate_client": "npx prisma generate"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",

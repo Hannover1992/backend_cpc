@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model tbl_notebook_bestellung {
+  ID              Int         @id @unique(map: "tblnotebookbestellung_ID_uindex")
+  ProjektID       Int
+  NotebookID      Int
+  Beauftragt_von  String?     @db.VarChar(50)
+  BestellungDatum DateTime?   @default(now()) @db.DateTime(0)
+  Menga           Int?        @default(1)
+  tblnotebook     tblnotebook @relation(fields: [NotebookID], references: [NotebookID], onDelete: NoAction, onUpdate: NoAction, map: "tbl_notebook_bestellung_tblnotebook_NotebookID_fk")
+  tblprojekte     tblprojekte @relation(fields: [ProjektID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tbl_notebook_bestellung_tblprojekte_ID_fk")
+
+  @@index([NotebookID], map: "tbl_notebook_bestellung_tblnotebook_NotebookID_fk")
+  @@index([ProjektID], map: "tbl_notebook_bestellung_tblprojekte_ID_fk")
+}
+
 model tblacu {
   Hersteller        String? @db.VarChar(255)
   Typ               String? @db.VarChar(255)
@@ -240,72 +254,51 @@ model tbllogistikkoordinatoren {
 }
 
 model tblnotebook {
-  ID                    Int       @unique
-  Hersteller            String?   @db.VarChar(255)
-  Typ                   String?   @db.VarChar(255)
-  Seriennummer          String?   @db.VarChar(255)
-  Betriebssystem        String?   @db.VarChar(255)
-  installierte_Software String?   @map("installierte Software") @db.VarChar(255)
-  Adminkonto_Name       String?   @map("Adminkonto Name") @db.VarChar(255)
-  Adminkonto_Password   String?   @map("Adminkonto Password") @db.VarChar(255)
-  Userkonto_Name        String?   @map("Userkonto Name") @db.VarChar(255)
-  Userkonto_Password    String?   @map("Userkonto Password") @db.VarChar(255)
-  Teamviewer_ID         String?   @map("Teamviewer ID") @db.VarChar(255)
-  Teamviewer_Passwort   String?   @map("Teamviewer Passwort") @db.VarChar(255)
-  Router                String?   @db.VarChar(255)
-  Projekt               Int?
-  Bemerkungen           String?   @db.VarChar(255)
-  Bilder                String?   @db.VarChar(255)
-  Ger_t                 String?   @map("Gerät") @db.VarChar(255)
-  Anlagenummer          String?   @db.TinyText
-  Datum                 DateTime? @db.Timestamp(0)
+  NotebookID                                                       Int                       @id @unique(map: "tblnotebook_Notebook_ID_uindex")
+  Typ                                                              String?                   @db.VarChar(50)
+  Hersteller                                                       String?                   @db.VarChar(50)
+  Admin                                                            Int?
+  Userkonto                                                        Int?
+  Teamviewer_ID                                                    Int?
+  Projekt                                                          Int?
+  Bemerkung                                                        String?                   @db.VarChar(255)
+  Anlagenummer                                                     String?                   @db.TinyText
+  EinkaufsDatum                                                    DateTime?                 @default(now()) @db.Timestamp(0)
+  EditDatum                                                        DateTime?                 @default(now()) @db.Timestamp(0)
+  Wert                                                             Decimal?                  @default(0.00) @db.Decimal(10, 2)
+  Seriennummer                                                     String                    @db.VarChar(50)
+  tblusrzugangsdaten_tblnotebook_UserkontoTotblusrzugangsdaten     tblusrzugangsdaten?       @relation("tblnotebook_UserkontoTotblusrzugangsdaten", fields: [Userkonto], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook___fk_")
+  tblusrzugangsdaten_tblnotebook_Teamviewer_IDTotblusrzugangsdaten tblusrzugangsdaten?       @relation("tblnotebook_Teamviewer_IDTotblusrzugangsdaten", fields: [Teamviewer_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook_tblusrzugangsdaten_ID_fk")
+  tblusrzugangsdaten_tblnotebook_AdminTotblusrzugangsdaten         tblusrzugangsdaten?       @relation("tblnotebook_AdminTotblusrzugangsdaten", fields: [Admin], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook_tblusrzugangsdaten_ID_fk_2")
+  tbl_notebook_bestellung                                          tbl_notebook_bestellung[]
 
+  @@unique([Seriennummer, Typ, Hersteller], map: "tblnotebook_")
+  @@index([Userkonto], map: "tblnotebook___fk_")
   @@index([Projekt], map: "tblnotebook_tblprojekte_ID_fk")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblnotebook_1 {
-  ID                    Int?
-  Hersteller            String?   @db.VarChar(255)
-  Typ                   String?   @db.VarChar(255)
-  Seriennummer          String?   @db.VarChar(255)
-  Betriebssystem        String?   @db.VarChar(255)
-  installierte_Software String?   @map("installierte Software") @db.VarChar(255)
-  Adminkonto_Name       String?   @map("Adminkonto Name") @db.VarChar(255)
-  Adminkonto_Password   String?   @map("Adminkonto Password") @db.VarChar(255)
-  Userkonto_Name        String?   @map("Userkonto Name") @db.VarChar(255)
-  Userkonto_Password    String?   @map("Userkonto Password") @db.VarChar(255)
-  Teamviewer_ID         String?   @map("Teamviewer ID") @db.VarChar(255)
-  Teamviewer_Passwort   String?   @map("Teamviewer Passwort") @db.VarChar(255)
-  Router                String?   @db.VarChar(255)
-  Projekt               Int?
-  Bemerkungen           String?   @db.VarChar(255)
-  Bilder                String?   @db.VarChar(255)
-  Ger_t                 String?   @map("Gerät") @db.VarChar(255)
-  Anlagenummer          String?   @db.TinyText
-  Datum                 DateTime? @db.Timestamp(0)
-
-  @@ignore
+  @@index([Teamviewer_ID], map: "tblnotebook_tblusrzugangsdaten_ID_fk")
+  @@index([Admin], map: "tblnotebook_tblusrzugangsdaten_ID_fk_2")
 }
 
 model tblprojekte {
-  ID                  Int     @unique(map: "tblprojekte_pk_PRIMARY")
-  Standort            String? @db.TinyText
-  Niederlassung       String? @db.VarChar(255)
-  Auftragsart         String? @db.VarChar(255)
-  Status              String? @db.VarChar(255)
-  Logistikkoordinator String? @db.VarChar(255)
-  LK_1                String? @db.VarChar(255)
-  LK_2                String? @db.VarChar(255)
-  ZuKo                String? @db.VarChar(255)
-  Auftragsdatum       String? @db.VarChar(255)
-  Startdatum          String? @db.VarChar(255)
-  Kommentar           String? @db.VarChar(255)
-  Anlagenummer        Int?
-  PM_1                String? @db.VarChar(255)
-  PM_2                String? @db.VarChar(255)
-  Endtermin           String? @db.VarChar(255)
-  Netto_Auftragswert  String? @db.VarChar(255)
+  ID                      Int                       @id
+  Standort                String?                   @db.TinyText
+  Niederlassung           String?                   @db.VarChar(255)
+  Auftragsart             String?                   @db.VarChar(255)
+  Status                  String?                   @db.VarChar(255)
+  Logistikkoordinator     String?                   @db.VarChar(255)
+  LK_1                    String?                   @db.VarChar(255)
+  LK_2                    String?                   @db.VarChar(255)
+  ZuKo                    String?                   @db.VarChar(255)
+  Auftragsdatum           String?                   @db.VarChar(255)
+  Startdatum              String?                   @db.VarChar(255)
+  Kommentar               String?                   @db.VarChar(255)
+  Anlagenummer            Int?
+  PM_1                    String?                   @db.VarChar(255)
+  PM_2                    String?                   @db.VarChar(255)
+  Endtermin               String?                   @db.VarChar(255)
+  Netto_Auftragswert      String?                   @db.VarChar(255)
+  test                    Int?
+  tbl_notebook_bestellung tbl_notebook_bestellung[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -382,17 +375,15 @@ model tblsoftware {
   @@ignore
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model tblusrzugangsdaten {
-  ID           Int?
-  Vorname      String?   @db.VarChar(255)
-  Nachname     String?   @db.VarChar(255)
-  E_Mail       String?   @map("E-Mail") @db.VarChar(255)
-  Passwort     String?   @db.VarChar(255)
-  Anlagenummer String?   @db.TinyText
-  Datum        DateTime? @db.Timestamp(0)
-
-  @@ignore
+  ID                                                        Int           @id @default(autoincrement())
+  Programm                                                  String        @db.VarChar(50)
+  UserName                                                  String        @db.VarChar(50)
+  Password                                                  String        @db.VarChar(50)
+  Role                                                      String?       @db.VarChar(50)
+  tblnotebook_tblnotebook_UserkontoTotblusrzugangsdaten     tblnotebook[] @relation("tblnotebook_UserkontoTotblusrzugangsdaten")
+  tblnotebook_tblnotebook_Teamviewer_IDTotblusrzugangsdaten tblnotebook[] @relation("tblnotebook_Teamviewer_IDTotblusrzugangsdaten")
+  tblnotebook_tblnotebook_AdminTotblusrzugangsdaten         tblnotebook[] @relation("tblnotebook_AdminTotblusrzugangsdaten")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
