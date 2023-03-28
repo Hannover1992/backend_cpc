@@ -4,7 +4,7 @@ import { I_UserAccessData } from "../../Interface/row/I_UserAccessData";
 
 
 
-class UserAccessData implements I_UserAccessData {
+export class UserAccessData implements I_UserAccessData {
     private _prisma: PrismaClient;
     private _ID: number;
     private _Programm: string;
