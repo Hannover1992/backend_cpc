@@ -88,12 +88,14 @@ export class Database {
 
     private projects_read() {
         this.app.get('/projects', (req: any, res: any) => {
-            // res.setHeader('Access-Control-Allow-Origin', '*');
-            res.status(200).send(res.json(this.projects.get_ready_to_send_over_rest_api()));
-            //parse the object to json
-            console.log(this.projects.get_ready_to_send_over_rest_api());
-            //console log time
-            console.log(new Date().toLocaleTimeString());
+            this.allow_acces_for_every_ip(res);
+            this._prisma.tblprojekte.findMany().
+            then((projects: any) => {
+                res.status(200).send(projects);
+                console.log(projects)
+            } ).catch((error: any) => {
+                res.status(500).send({"message": error.message});
+            } );
         });
     }
     //
