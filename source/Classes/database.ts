@@ -110,34 +110,49 @@ export class Database {
     private project_read() {
         this.app.get('/project/:id', (req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
-            const project = this.get_current_project(req);
-            //if projects undefiend
-            if(project === undefined) {
-                res.status(404).send({"message" : "Project not found"});
-            } else {
-                res.status(200).send(project.get_ready_to_send_over_rest_api());
-            }
-            console.log(new Date().toLocaleTimeString());
-            console.log(project.get_ready_to_send_over_rest_api());
+            let id = this.get_id(req);
+            this._prisma.tblprojekte.findUnique({
+                where: {
+                    ID: id
+                }
+            }).then((project: any) => {
+                res.status(200).send(project);
+            } ).catch((error: any) => {
+                res.status(500).send({"message": error.message});
+            } );
         });
+    }
+
+    private get_id(req: any) {
+        let id_as_string = req.params.id;
+        let id = parseInt(id_as_string);
+        return id;
     }
 
     private project_create() {
         this.app.post('/project', async (req: any, res: any) => {
             this.allow_acces_for_every_ip(res);
-            const project_recieved_from_client = this.create_project_using_request(req);
-            console.log(project_recieved_from_client);
+            // const project_recieved_from_client = this.create_project_using_request(req);
+            // console.log(project_recieved_from_client);
 
-                this.projects.create_project(project_recieved_from_client)
-                    .then(async () => {
-                        console.log(this.projects);
-                        console.log("Project created");
-                        res.status(200).send({"message" : "Project created"});
-                        this.read();
-                    }).catch((error: any) => {
-                    console.log("Someone tryed to creat a project with an existing ID");
-                    res.status(500).send({"message": "PRIMARY"});
-                });
+            await this.prisma.tblprojekte.create({
+                data: req
+            }) .then((project: any) => {
+                res.status(200).send(project);
+            } ).catch((error: any) => {
+                res.status(500).send({"message": error.message});
+            });
+
+                // this.projects.create_project(project_recieved_from_client)
+                //     .then(async () => {
+                //         console.log(this.projects);
+                //         console.log("Project created");
+                //         res.status(200).send({"message" : "Project created"});
+                //         this.read();
+                //     }).catch((error: any) => {
+                //     console.log("Someone tryed to creat a project with an existing ID");
+                //     res.status(500).send({"message": "PRIMARY"});
+                // });
         });
     }
 
