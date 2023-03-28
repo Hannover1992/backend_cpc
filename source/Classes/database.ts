@@ -132,33 +132,16 @@ export class Database {
     private project_create() {
         this.app.post('/project', async (req: any, res: any) => {
             this.allow_acces_for_every_ip(res);
-            // const project_recieved_from_client = this.create_project_using_request(req);
-            // console.log(project_recieved_from_client);
-
             await this.prisma.tblprojekte.create({
-                data: req
+                data: req.body
             }) .then((project: any) => {
-                res.status(200).send(project);
+                res.status(200).send({"message" : "Project created"});
             } ).catch((error: any) => {
                 res.status(500).send({"message": error.message});
             });
-
-                // this.projects.create_project(project_recieved_from_client)
-                //     .then(async () => {
-                //         console.log(this.projects);
-                //         console.log("Project created");
-                //         res.status(200).send({"message" : "Project created"});
-                //         this.read();
-                //     }).catch((error: any) => {
-                //     console.log("Someone tryed to creat a project with an existing ID");
-                //     res.status(500).send({"message": "PRIMARY"});
-                // });
         });
     }
 
-    private allow_acces_for_every_ip(res: any) {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-    }
 
     private create_project_using_request(req: any) {
         let project = new Project(
@@ -200,6 +183,7 @@ export class Database {
         });
     }
 
+    //toDo: Update hier weiter vereinfachen
     private project_update() {
         let request_project : Project;
         this.app.put('/project', (req: any, res: any) => {
@@ -219,6 +203,9 @@ export class Database {
         res.setHeader('Access-Control-Allow-Origin', '*');
     }
 
+    private allow_acces_for_every_ip(res: any) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+    }
     private project_delete() {
         this.app.delete('/project/:id', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
