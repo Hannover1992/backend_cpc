@@ -191,7 +191,15 @@ export class Database {
             try{
                 request_project = this.create_project_using_request(req);
                 this.projects.get_project(request_project.ID);
-                this.projects.update_project(request_project);
+                let id = this.get_id(req);
+                this._prisma.tblprojekte.update({
+                    where: {
+                        ID: id
+                    },
+                    data: req
+                }).then((result: any) => {
+                    console.log("updated");
+                })
                 res.status(200).send({"message" : "Project updated"});
             } catch (e) {
                 res.status(404).send({"message" : e.message});
