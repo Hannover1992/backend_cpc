@@ -1,7 +1,7 @@
 import {describe, expect, beforeAll } from '@jest/globals';
 import {ProjectTable} from '../../source/Classes/table/projectTable';
 import {PrismaClient} from "@prisma/client";
-import {Project} from "../../source/Classes/row/project";
+import {Project_old} from "../../source/Classes/row/project_old";
 
 let prisma: PrismaClient  = new PrismaClient();
 
@@ -85,12 +85,12 @@ describe("create", () => {
     });
 
     it("the.Standort of the second projects should be Standort2", async () => {
-        let project: Project = new Project(prisma , 1, "something");
+        let project: Project_old = new Project_old(prisma , 1, "something");
         await expect(project.read(9)).rejects.toThrowError('not found')
     });
 
     it("check if the projects with id 2 in database , and the.Standort Standort2" , async () => {
-        let project: Project = new Project(prisma , 2, "something");
+        let project: Project_old = new Project_old(prisma , 2, "something");
         await project.read(2);
         expect(project.Standort).toBe("Standort2");
     });
@@ -128,7 +128,7 @@ describe("update", () => {
         await projects.delete();
         await projects.generate_array_of_projects(4, 20);
 
-        let project: Project = await projects.get_project(5);
+        let project: Project_old = await projects.get_project(5);
         await expect(project.read()).rejects.toThrowError('not found')
 
     });
@@ -219,8 +219,8 @@ describe("test if the projects are able to get send through the rest api", () =>
         await expect(projects.project_with_this_number_already_exists(11)).toBe(false);
     });
 
-    it(" i wont to check if when i run the function create an Project, the project will get created" , async () => {
-        let project: Project = new Project(prisma , 11, "something");
+    it(" i wont to check if when i run the function create an Project_old, the project will get created" , async () => {
+        let project: Project_old = new Project_old(prisma , 11, "something");
         projects.create_project(project);
         await expect(projects.project_with_this_number_already_exists(11)).toBe(true);
 

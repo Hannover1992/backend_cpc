@@ -4,7 +4,7 @@ import {PrismaClient} from "@prisma/client";
 import {request} from "http";
 // import supertest, {SuperTest} from "supertest";
 import {waitForDebugger} from "inspector";
-import {Project} from "../source/Classes/row/project";
+import {Project_old} from "../source/Classes/row/project_old";
 
 
 describe('Projects', () => {
@@ -20,7 +20,7 @@ describe('Projects', () => {
         // await database.projects.delete();
     });
 
-    test('Project create/update/delete', async () => {
+    test('Project_old create/update/delete', async () => {
         await test_create_read_update_delete(database);
     });
 
@@ -75,8 +75,8 @@ describe('express', () => {
     // //         .then((response: any) => {
     // //             expect(response.status).toBe(404);
     // //
-    // //             // res.status(404).send({Data : "Project not found"});
-    // //             expect(response.body.message).toBe("Project not found");
+    // //             // res.status(404).send({Data : "Project_old not found"});
+    // //             expect(response.body.message).toBe("Project_old not found");
     // //         });
     // // });
     // //
@@ -91,7 +91,7 @@ describe('express', () => {
     // //     );
     // // });
     //
-    // it('creat an function that can build an Project form body data',
+    // it('creat an function that can build an Project_old form body data',
     //     async () => {
     //         let body = {
     //             ID: 12,
@@ -113,7 +113,7 @@ describe('express', () => {
     //             PM_2: "PM_212"
     //         };
     //
-    //         let project = new Project(database.prisma, body.ID, body.Standort, body.Niederlassung, body.Auftragsart, body.Status, body.Logistikkoordinator, body.LK_1, body.LK_2, body.ZuKo, body.Auftragsdatum, body.Startdatum, body.Endtermin, body.Netto_Auftragswert, body.Kommentar, body.Anlagenummer, body.PM_1, body.PM_2);
+    //         let project = new Project_old(database.prisma, body.ID, body.Standort, body.Niederlassung, body.Auftragsart, body.Status, body.Logistikkoordinator, body.LK_1, body.LK_2, body.ZuKo, body.Auftragsdatum, body.Startdatum, body.Endtermin, body.Netto_Auftragswert, body.Kommentar, body.Anlagenummer, body.PM_1, body.PM_2);
     //         expect(project.ID).toBe(12);
     //         expect(project.Standort).toBe("Standort12");
     //         expect(project.Niederlassung).toBe("Niederlassung12");
@@ -156,7 +156,7 @@ describe('express', () => {
     //         .send(body)
     //         .then((response: any) => {
     //             expect(response.status).toBe(200);
-    //             expect(response.body.message).toBe("Project created");
+    //             expect(response.body.message).toBe("Project_old created");
     //         });
     //     await request.post('/project')
     //         .send(body)
@@ -193,7 +193,7 @@ describe('express', () => {
     //         .send(body);
     //
     //     // expect(response1.status).toBe(200);
-    //     // expect(response1.body.message).toBe("Project updated");
+    //     // expect(response1.body.message).toBe("Project_old updated");
     //     //
     //     // body.ID = 10;
     //     //
@@ -201,18 +201,18 @@ describe('express', () => {
     //     //     .send(body);
     //     //
     //     // expect(response2.status).toBe(404);
-    //     // expect(response2.body.message).toBe("Project not found");
+    //     // expect(response2.body.message).toBe("Project_old not found");
     // });
     //
     // it('should be able to delete a project with the delete method', async () => {
     //     await request.delete('/project/9')
     //         .then((response: any) => {
     //             expect(response.status).toBe(200);
-    //             expect(response.body.message).toBe("Project deleted");
+    //             expect(response.body.message).toBe("Project_old deleted");
     //             request.delete('/project/9')
     //                 .then((response: any) => {
     //                     expect(response.status).toBe(404);
-    //                     expect(response.body.message).toBe("Project not found");
+    //                     expect(response.body.message).toBe("Project_old not found");
     //                 });
     //         });
     // });

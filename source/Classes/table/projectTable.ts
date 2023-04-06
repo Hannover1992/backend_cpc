@@ -1,4 +1,4 @@
-import {generate_test_project, Project} from "../row/project";
+import {generate_test_project, Project_old} from "../row/project_old";
 import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import assert = require("assert");
 import {I_Projects} from "../../Interface/table/I_Projects";
@@ -6,22 +6,22 @@ import {I_CRUD} from "../../Interface/I_CRUD";
 
 //create public class ProjectTable
 export  class ProjectTable implements I_Projects{
-    private _project: Project[];
+    private _project: Project_old[];
     private _length: number;
     private _prisma: PrismaClient;
 
-    get project(): Project[] {
+    get project(): Project_old[] {
         return this._project;
     }
-    get_project(number: number) : Project {
+    get_project(number: number) : Project_old {
         for (let i = 0; i < this._project.length; i++) {
             if (this._project[i].ID == number) {
                 return this._project[i];
             }
         }
-        throw new Error("Project not found");
+        throw new Error("Project_old not found");
     }
-    set project(value: Project[]) {
+    set project(value: Project_old[]) {
         this._project = value;
     }
 
@@ -59,7 +59,7 @@ export  class ProjectTable implements I_Projects{
         await this._prisma.tblprojekte.findMany()
             .then((result: any) => {
                 for (let i = 0; i < result.length; i++) {
-                    let project: Project = new Project(
+                    let project: Project_old = new Project_old(
                         this._prisma,
                         result[i].ID,
                         result[i].Standort,
@@ -106,7 +106,7 @@ export  class ProjectTable implements I_Projects{
     generate_array_of_projects(start: number, end: number) {
         this.project = [];
         for (let i = start; i <= end; i++) {
-            let project: Project = generate_test_project(this._prisma, i);
+            let project: Project_old = generate_test_project(this._prisma, i);
             this._project.push(project);
         }
         this._length = this._project.length;
@@ -162,7 +162,7 @@ export  class ProjectTable implements I_Projects{
         return projects_to_send
     }
 
-    async create_project(project: Project) {
+    async create_project(project: Project_old) {
         if(this.project_with_this_number_already_exists(project.ID)) {
             throw new Error("PRIMARY");
         }
@@ -180,7 +180,7 @@ export  class ProjectTable implements I_Projects{
         return false;
     }
 
-    update_project(project: Project) {
+    update_project(project: Project_old) {
 
         this.project[project.ID] = project;
         this._project[project.ID].update()
@@ -205,7 +205,7 @@ export  class ProjectTable implements I_Projects{
     }
 }
 
-//toDo: implenet this as a sub class of Project
+//toDo: implenet this as a sub class of Project_old
 //create project send interface
 export class Project_to_send implements Project_send {
     ID:                     number;

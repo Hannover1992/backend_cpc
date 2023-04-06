@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 import {ProjectTable} from "./table/projectTable";
-import {Project} from "./row/project";
+import {Project_old} from "./row/project_old";
 
 
 export class Database {
@@ -124,12 +124,13 @@ export class Database {
 
 
     private project_create() {
-        this.app.post('/project', async (req: any, res: any) => {
+        this.app.post('/project/:id', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
+            console.log(res.body);
             this.prisma.tblprojekte.create({
                 data: req.body
             }) .then((project: any) => {
-                res.status(200).send({"message" : "Project created"});
+                res.status(200).send({"message" : "Project_old created"});
             } ).catch((error: any) => {
                 res.status(500).send({"message": error.message});
             });
@@ -146,9 +147,9 @@ export class Database {
                 },
                 data: req.body
             }).then((result: any) => {
-                console.log("Project with ID: " + id + " wurde updated");
+                console.log("Project_old with ID: " + id + " wurde updated");
             }).then(() => {
-                res.status(200).send({"message" : "Project updated"});
+                res.status(200).send({"message" : "Project_old updated"});
             }).catch((error: any) => {
                 res.status(404).send({"message" : error.message});
             });
@@ -164,7 +165,7 @@ export class Database {
                     ID: id
                 }
             }) .then(() => {
-                res.status(200).send({"message" : "Project deleted"});
+                res.status(200).send({"message" : "Project_old deleted"});
             }).catch((error: any) => {
                 res.status(404).send({"message" : error.message});
             });
@@ -172,4 +173,6 @@ export class Database {
     }
 
 }
+
+
 

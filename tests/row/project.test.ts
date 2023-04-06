@@ -1,5 +1,5 @@
 import {describe, expect,  beforeAll } from '@jest/globals';
-import {generate_test_project, Project} from "../../source/Classes/row/project";
+import {generate_test_project, Project_old} from "../../source/Classes/row/project_old";
 import {PrismaClient} from "@prisma/client";
 
 let prisma: PrismaClient = new PrismaClient();
@@ -52,7 +52,7 @@ describe('Project', () => {
     });
 
     it("we will test if after insert into db projects with id 1 and name 'test' exists in db", async () => {
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project_old = new Project_old(prisma,1, "test");
         //check if id = 1 and test
         expect(project.ID).toBe(1);
         expect(project.Standort).toBe("test");
@@ -70,7 +70,7 @@ describe('Test creating and saving a random project', () => {
     });
 
     it("schould create a random project and save it in db", async () => {
-        let project: Project;
+        let project: Project_old;
         let prisma = new PrismaClient();
         project = generate_test_project(prisma, 0);
         await project.create();
@@ -90,7 +90,7 @@ describe("create", () => {
             }
         )
         await prisma.tblprojekte.deleteMany()
-        let project1: Project = new Project(prisma, 1, "test");
+        let project1: Project_old = new Project_old(prisma, 1, "test");
         //expect no error
         await project1.create().catch(() => { expect(true).toBe(false); });
         await project1.create().catch((error: any) => {
@@ -103,14 +103,14 @@ describe("create", () => {
 describe("test create and read", () => {
     it('test create and read', async () => {
         await prisma.tblprojekte.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project_old = new Project_old(prisma,1, "test");
         //expect to not throe error
         // expect(await projects.create()).toBe(undefined);
         await project.create()
             .catch( () => {
                 expect(true).toBe(false);
             });
-        let project2: Project = new Project(prisma,1);
+        let project2: Project_old = new Project_old(prisma,1);
         expect(await project2.project_exists_in_db()).toBe(false);
         await project2.read();
         expect(project2.Standort).toBe("test");
@@ -121,10 +121,10 @@ describe("test create and read", () => {
 describe('read', () => {
     it("insert projects with id 1 and name test in db, then read it from db", async () => {
         await prisma.tblprojekte.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project_old = new Project_old(prisma,1, "test");
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
-        let project2: Project = new Project(prisma,1, "");
+        let project2: Project_old = new Project_old(prisma,1, "");
         expect(await project2.project_exists_in_db()).toBe(false);
         await project2.read(1);
         await expect(project2.Standort).toBe("test");
@@ -143,7 +143,7 @@ describe('read', () => {
 describe("update", () => {
     it('test if can update an projects', async () => {
         await prisma.tblprojekte.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project_old = new Project_old(prisma,1, "test");
         //expect to not throe error
         await project.create()
             .catch( () => {
@@ -166,7 +166,7 @@ describe("try to update project that does not exist", () => {
     });
 
     it('test if cant update projects that not exist in db', async () => {
-        let project: Project = new Project(prisma,2, "test");
+        let project: Project_old = new Project_old(prisma,2, "test");
         //expect to not throe error
         await project.update()
             .then( () => {
@@ -183,7 +183,7 @@ describe("try to update project that does not exist", () => {
 describe('delete', () => {
     it("insert projects with id 1 and name test in db, then delete it from db", async () => {
         await prisma.tblprojekte.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project_old = new Project_old(prisma,1, "test");
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
         await project.delete();
@@ -192,7 +192,7 @@ describe('delete', () => {
 
     it("test if get error when try to delete an projects that does not exist in db", async () => {
         await prisma.tblprojekte.deleteMany();
-        let project: Project = new Project(prisma,1, "test");
+        let project: Project_old = new Project_old(prisma,1, "test");
         await project.delete()
             .then( () => {
                 expect(false).toBe(true);
@@ -214,7 +214,7 @@ describe("test complexe constructor", () => {
    });
 
    it("test if can create a project with complexe constructor", async () => {
-        let project: Project = new Project(prisma, 1, "test");
+        let project: Project_old = new Project_old(prisma, 1, "test");
         project.LK_2 = "Stefan";
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
@@ -239,7 +239,7 @@ describe("test date", () => {
     });
 
     it("test if can create a project with complexe constructor", async () => {
-        let project: Project = new Project(prisma, 1, "test");
+        let project: Project_old = new Project_old(prisma, 1, "test");
         project.Auftragsdatum = new Date(10);
         await project.create();
         expect(await project.project_exists_in_db()).toBe(true);
@@ -257,7 +257,7 @@ describe("test PRIMARY KEY", () => {
     });
 
     it("when i create 2 times the same project i have to get the PRIMARY error", async () => {
-        let project: Project = new Project(prisma, 1, "test");
+        let project: Project_old = new Project_old(prisma, 1, "test");
         await project.create();
         await project.create()
             .then( () => {
@@ -282,17 +282,17 @@ describe("test generate project function", () => {
     });
 
     it("generate project with number = 7 then test it", async () => {
-        let project_generatet : Project = generate_test_project(prisma, 7);
+        let project_generatet : Project_old = generate_test_project(prisma, 7);
         expect(project_generatet).not.toBe(null);
         expect(project_generatet.Auftragsdatum).not.toBe(null);
         expect(project_generatet.Standort).toBe("Standort7");
         project_generatet.create()
             .then   ( () => {
-                let project_compare_to: Project = new Project(prisma, 7, "Standort7", "Niederlassung7");
+                let project_compare_to: Project_old = new Project_old(prisma, 7, "Standort7", "Niederlassung7");
                 project_compare_to.LK_1 = "LK_17";
                 project_compare_to.LK_2 = "LK_27";
                 project_compare_to.Auftragsdatum = new Date(7);
-                expect(project_generatet).toEqual(new Project(prisma, 7, "Standort7", "Niederlassung7"));
+                expect(project_generatet).toEqual(new Project_old(prisma, 7, "Standort7", "Niederlassung7"));
             });
     });
 
