@@ -185,25 +185,21 @@ export class Database {
 
     //toDo: Update hier weiter vereinfachen
     private project_update() {
-        let request_project : Project;
         this.app.put('/project', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            try{
-                request_project = this.create_project_using_request(req);
-                this.projects.get_project(request_project.ID);
-                let id = this.get_id(req);
-                this._prisma.tblprojekte.update({
-                    where: {
-                        ID: id
-                    },
-                    data: req
-                }).then((result: any) => {
-                    console.log("updated");
-                })
+            let id : number = parseInt(req.body.ID);
+            this._prisma.tblprojekte.update({
+                where: {
+                    ID: id
+                },
+                data: req.body
+            }).then((result: any) => {
+                console.log("Project with ID: " + id + " wurde updated");
+            }).then(() => {
                 res.status(200).send({"message" : "Project updated"});
-            } catch (e) {
-                res.status(404).send({"message" : e.message});
-            }
+            }).catch((error: any) => {
+                res.status(404).send({"message" : error.message});
+            });
         });
     }
 

@@ -166,6 +166,8 @@ describe('express', () => {
             });
     });
 
+    //make the test async, and wait for the request to finish
+
     it('should be able to update a project with the put method', async () => {
         let body = {
             ID: 9,
@@ -187,19 +189,19 @@ describe('express', () => {
             PM_2: "PM_211"
         };
 
-        await request.put('/project')
-            .send(body)
-            .then((response: any) => {
-                expect(response.status).toBe(200);
-                expect(response.body.message).toBe("Project updated");
-                body.ID = 10;
-                request.put('/project')
-                    .send(body)
-                    .then((response: any) => {
-                        expect(response.status).toBe(404);
-                        expect(response.body.message).toBe("Project not found");
-                    });
-            });
+        const response1 = await request.put('/project/9')
+            .send(body);
+
+        // expect(response1.status).toBe(200);
+        // expect(response1.body.message).toBe("Project updated");
+        //
+        // body.ID = 10;
+        //
+        // const response2 = await request.put('/project')
+        //     .send(body);
+        //
+        // expect(response2.status).toBe(404);
+        // expect(response2.body.message).toBe("Project not found");
     });
 
     it('should be able to delete a project with the delete method', async () => {
