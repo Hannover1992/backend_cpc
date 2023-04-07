@@ -5,6 +5,8 @@ import {I_CRUD} from "../Interface/I_CRUD";
 
 export class Project extends ServerSetup implements I_CRUD{
 
+    //toDo: create helper file with funciton form id to string
+    //toDo: extract project Table
 
     constructor() {
         super();
@@ -41,6 +43,39 @@ export class Project extends ServerSetup implements I_CRUD{
         let id = parseInt(id_as_string);
         return id;
     }
+
+    //toDo: use this clean code
+
+    // private async createProject(data: any) {
+    //     try {
+    //         await this.prisma.tblprojekte.create({ data });
+    //         return true;
+    //     } catch (error) {
+    //         console.error("Error creating project:", error);
+    //         return false;
+    //     }
+    // }
+    //
+    // private sendSuccessResponse(res: any, message: string) {
+    //     res.status(200).send({ message });
+    // }
+    //
+    // private sendErrorResponse(res: any, message: string, statusCode: number = 500) {
+    //     res.status(statusCode).send({ message });
+    // }
+    //
+    // private create() {
+    //     this.app.post('/project/:id', async (req: any, res: any) => {
+    //         this.allow_communikation_from_all_ip_adress(res);
+    //         const success = await this.createProject(req.body);
+    //
+    //         if (success) {
+    //             this.sendSuccessResponse(res, "Project created");
+    //         } else {
+    //             this.sendErrorResponse(res, "An error occurred while creating the project");
+    //         }
+    //     });
+    // }
 
 
     create() {
