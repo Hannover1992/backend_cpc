@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 
-export class ServerSetup {
+export abstract class ServerSetup {
 
     get bodyParser(): any {
         return this._bodyParser;
@@ -72,5 +72,7 @@ export class ServerSetup {
         this._PORT = 8080;
         this.allow_any_sites_to_talk_with_this_id();
     }
+
+    abstract CRUD(): void;
 
 }

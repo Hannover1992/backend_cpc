@@ -4,7 +4,6 @@ import {PrismaClient} from "@prisma/client";
 import {request} from "http";
 // import supertest, {SuperTest} from "supertest";
 import {waitForDebugger} from "inspector";
-import {Project_old} from "../source/Classes/row/project_old";
 
 
 describe('Projects', () => {

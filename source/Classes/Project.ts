@@ -1,8 +1,9 @@
 import {PrismaClient} from "@prisma/client";
 import {ServerSetup} from "./ServerSetup";
+import {I_CRUD} from "../Interface/I_CRUD";
 
 
-export class Project extends ServerSetup {
+export class Project extends ServerSetup implements I_CRUD{
 
 
     constructor() {
@@ -28,13 +29,34 @@ export class Project extends ServerSetup {
     //
 
     CRUD() {
-        this.read();
         this.create();
+        this.read();
         this.update();
         this.deletee();
     }
 
-    private read() {
+
+    public get_id(req: any) {
+        let id_as_string = req.params.id;
+        let id = parseInt(id_as_string);
+        return id;
+    }
+
+
+    create() {
+        this.app.post('/project/:id', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            this.prisma.tblprojekte.create({
+                data: req.body
+            }) .then((project: any) => {
+                res.status(200).send({"message" : "Project created"});
+            } ).catch((error: any) => {
+                res.status(500).send({"message": error.message});
+            });
+        });
+    }
+
+    read() {
         this.app.get('/project/:id', (req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
             let id = this.get_id(req);
@@ -50,27 +72,8 @@ export class Project extends ServerSetup {
         });
     }
 
-    public get_id(req: any) {
-        let id_as_string = req.params.id;
-        let id = parseInt(id_as_string);
-        return id;
-    }
 
-
-    private create() {
-        this.app.post('/project/:id', async (req: any, res: any) => {
-            this.allow_communikation_from_all_ip_adress(res);
-            this.prisma.tblprojekte.create({
-                data: req.body
-            }) .then((project: any) => {
-                res.status(200).send({"message" : "Project created"});
-            } ).catch((error: any) => {
-                res.status(500).send({"message": error.message});
-            });
-        });
-    }
-
-    private update() {
+    update() {
         this.app.put('/project/:id', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             let id = this.get_id(req);
@@ -89,7 +92,7 @@ export class Project extends ServerSetup {
         });
     }
 
-    private deletee() {
+    deletee() {
         this.app.delete('/project/:id', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             let id = this.get_id(req);
