@@ -4,7 +4,7 @@ import {ServerSetup} from "./Classes/ServerSetup";
 
 
 async function start() {
-    let project = new Project(new PrismaClient());
+    let project = new Project();
     project.CRUD();
     project.projects_CRUD()
 }

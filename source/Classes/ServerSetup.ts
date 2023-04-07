@@ -19,11 +19,11 @@ export class ServerSetup {
     }
 
     get prisma(): any {
-        return this._prisma;
+        return ServerSetup._prisma;
     }
 
     set prisma(value: any) {
-        this._prisma = value;
+        ServerSetup._prisma = value;
     }
 
     get app(): any {
@@ -35,13 +35,16 @@ export class ServerSetup {
     }
 
     private _cors: any;
-    private _prisma: any;
+    private static _prisma: any;
     private _app: any;
     private _PORT: number;
     private _bodyParser: any;
 
-    constructor(prisma : PrismaClient) {
-        this.prisma = prisma;
+    constructor() {
+        if(ServerSetup._prisma == null){
+            ServerSetup._prisma = new PrismaClient();
+            console.log("prisma wurde etabliert")
+        }
         this.setup_express();
         this.start_listen();
     }

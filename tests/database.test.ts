@@ -11,7 +11,7 @@ describe('Projects', () => {
     let database: Project;
 
     beforeAll(async () => {
-        database = new Project(new PrismaClient());
+        database = new Project();
         const supertest = require('supertest')
         const request = supertest(database.app)
     });

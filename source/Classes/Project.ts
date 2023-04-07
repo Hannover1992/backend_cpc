@@ -5,8 +5,8 @@ import {ServerSetup} from "./ServerSetup";
 export class Project extends ServerSetup {
 
 
-    constructor(prisma: PrismaClient) {
-        super(prisma);
+    constructor() {
+        super();
     }
 
     projects_CRUD() {
