@@ -2,7 +2,7 @@ import {PrismaClient} from "prisma/prisma-client/scripts/default-index";
 import {I_CRUD} from "../../Interface/I_CRUD";
 import {I_Project} from "../../Interface/row/I_Project";
 
-export class Project implements I_Project, I_CRUD {
+export class Project_old implements I_Project, I_CRUD {
 
     //toDo: fuhre LK, Zuko und Pm zu einer Tabelle zusammen
     private _prisma: PrismaClient;
@@ -223,11 +223,11 @@ export class Project implements I_Project, I_CRUD {
                 this.PM_1 = result[0].PM_1;
                 this.PM_2 = result[0].PM_2;
             } else {
-                throw new Error("Project not found in db");
+                throw new Error("Project_old not found in db");
             }
         }).catch(
             () => {
-                throw new Error("Project not found in db");
+                throw new Error("Project_old not found in db");
             }
         )
     }
@@ -323,7 +323,7 @@ export class Project implements I_Project, I_CRUD {
 }
 
 
-export function generate_test_project(prisma: PrismaClient, i: number): Project {
+export function generate_test_project(prisma: PrismaClient, i: number): Project_old {
 
     let random_komments_rick_and_morty = [
         "I'm Pickle Rick!",
@@ -336,7 +336,7 @@ export function generate_test_project(prisma: PrismaClient, i: number): Project 
         "Great, now I have to take over an entire planet because of your stupid boobs.",
     ]
 
-    let project = new Project(prisma, i);
+    let project = new Project_old(prisma, i);
     project.Standort = "Standort" + i;
     project.Niederlassung = "Niederlassung" + i;
     project.Auftragsart = "Auftragsart" + i;
