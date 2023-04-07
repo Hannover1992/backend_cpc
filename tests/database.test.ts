@@ -1,5 +1,5 @@
 import {beforeAll, describe} from '@jest/globals';
-import {Database} from "../source/Classes/database";
+import {Project} from "../source/Classes/project";
 import {PrismaClient} from "@prisma/client";
 import {request} from "http";
 // import supertest, {SuperTest} from "supertest";
@@ -8,10 +8,10 @@ import {Project_old} from "../source/Classes/row/project_old";
 
 
 describe('Projects', () => {
-    let database: Database;
+    let database: Project;
 
     beforeAll(async () => {
-        database = new Database(new PrismaClient());
+        database = new Project();
         const supertest = require('supertest')
         const request = supertest(database.app)
     });
@@ -27,7 +27,7 @@ describe('Projects', () => {
 });
 
 
-async function test_create_read_update_delete(database: Database) {
+async function test_create_read_update_delete(database: Project) {
     // await database.projects.generate_array_of_projects(0, 9);
     // await database.projects.create()
     // await expect(database.projects.length).toBe(10);
@@ -41,8 +41,8 @@ async function test_create_read_update_delete(database: Database) {
     // await expect(database.projects.project[2].Standort).toBe("foo");
 }
 
-async function setup_database_for_testing(database: Database) {
-    // database = new Database(new PrismaClient());
+async function setup_database_for_testing(database: Project) {
+    // database = new Project(new PrismaClient());
     // await database.projects.delete();
     // await database.projects.generate_array_of_projects(0, 9);
     // await database.projects.create()
@@ -53,11 +53,11 @@ async function setup_database_for_testing(database: Database) {
 }
 
 describe('express', () => {
-    // let database: Database;
+    // let database: Project;
     // let request: any;
     //
     // beforeAll(async () => {
-    //     database = new Database(new PrismaClient());
+    //     database = new Project(new PrismaClient());
     //     request = await setup_database_for_testing(database);
     // });
     //

@@ -2,7 +2,7 @@ import {PrismaClient} from "@prisma/client";
 import {ProjectTable} from "./table/projectTable";
 import {Project_old} from "./row/project";
 
-export class Database {
+export class Project {
     private _cors: any;
     private _prisma: any;
     private _projects: ProjectTable;
@@ -852,10 +852,10 @@ export interface Project_send {
     PM_2:                   String;
 }
 import {PrismaClient} from "@prisma/client";
-import {Database} from "./Classes/database";
+import {Project} from "./Classes/database";
 let prisma: PrismaClient = new PrismaClient();
 
-let database: Database = new Database(prisma);
+let database: Project = new Project(prisma);
 
 async function start() {
     async function create_test_enviroment() {

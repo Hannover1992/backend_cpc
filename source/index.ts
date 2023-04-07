@@ -1,8 +1,8 @@
 import {PrismaClient} from "@prisma/client";
-import {Database} from "./Classes/database";
-let prisma: PrismaClient = new PrismaClient();
+import {Project} from "./Classes/project";
+// let prisma: PrismaClient = new PrismaClient();
 
-let database: Database = new Database(prisma);
+// let database: Project = new Project(prisma);
 
 async function start() {
     async function create_test_enviroment() {
@@ -12,7 +12,8 @@ async function start() {
         // await database.projects.read();
     }
     // await create_test_enviroment();
-    await database.start_server();
+    // await database.start_server();
+    let project = new Project();
 }
 
 start();

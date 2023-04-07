@@ -1,78 +1,12 @@
 import {PrismaClient} from "@prisma/client";
-import {ProjectTable} from "./table/projectTable";
-import {Project_old} from "./row/project_old";
+import {ServerSetup} from "./ServerSetup";
 
 
-export class Database {
+export class Project extends ServerSetup {
 
-    get bodyParser(): any {
-        return this._bodyParser;
-    }
-    set bodyParser(value: any) {
-        this._bodyParser = value;
-    }
-    get cors(): any {
-        return this._cors;
-    }
-    set cors(value: any) {
-        this._cors = value;
-    }
-    get prisma(): any {
-        return this._prisma;
-    }
-    set prisma(value: any) {
-        this._prisma = value;
-    }
-    get app(): any {
-        return this._app;
-    }
-    set app(value: any) {
-        this._app = value;
-    }
 
-    private _cors: any;
-    private _prisma: any;
-    private _app: any;
-    private _PORT: number;
-    private _bodyParser: any;
-
-    constructor(prisma: PrismaClient ) {
-        this.prisma = prisma;
-        this.setup_express();
-    }
-
-    private start_listen() {
-        this.app.listen(this._PORT, () => {
-            console.log(`Server running on port ${this._PORT}`);
-        });
-    }
-
-    private allow_any_sites_to_talk_with_this_id() {
-        this.app.use(this.cors({origin: '*'}));
-    }
-
-    private allow_communikation_from_all_ip_adress(res: any) {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-    }
-
-    setup_express(){
-        this._cors = require('cors');
-        this._app = require('express')();
-        this._bodyParser = require('body-parser');
-        this.app.use(this.bodyParser.json());
-        this._PORT = 8080;
-        this.allow_any_sites_to_talk_with_this_id();
-    }
-
-    async start_server() {
-        // await this.projects.read();
-        await this.run_apis();
-    }
-
-    async run_apis() {
-        this.start_listen();
-        this.projects_CRUD();
-        this.project_CRUD();
+    constructor() {
+        super();
     }
 
     private projects_CRUD() {
@@ -82,7 +16,7 @@ export class Database {
     private projects_read() {
         this.app.get('/projects', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            this._prisma.tblprojekte.findMany().
+            this.prisma.tblprojekte.findMany().
             then((projects: any) => {
                 res.status(200).send(projects);
                 // console.log(projects)
@@ -93,18 +27,18 @@ export class Database {
     }
     //
 
-    private project_CRUD() {
-        this.project_read();
-        this.project_create();
-        this.project_update();
-        this.project_delete();
+    CRUD() {
+        this.read();
+        this.create();
+        this.update();
+        this.deletee();
     }
 
-    private project_read() {
+    private read() {
         this.app.get('/project/:id', (req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
             let id = this.get_id(req);
-            this._prisma.tblprojekte.findUnique({
+            this.prisma.tblprojekte.findUnique({
                 where: {
                     ID: id
                 }
@@ -123,7 +57,7 @@ export class Database {
     }
 
 
-    private project_create() {
+    private create() {
         this.app.post('/project/:id', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             this.prisma.tblprojekte.create({
@@ -136,11 +70,11 @@ export class Database {
         });
     }
 
-    private project_update() {
+    private update() {
         this.app.put('/project/:id', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             let id = this.get_id(req);
-            this._prisma.tblprojekte.update({
+            this.prisma.tblprojekte.update({
                 where: {
                     ID: id
                 },
@@ -155,11 +89,11 @@ export class Database {
         });
     }
 
-    private project_delete() {
+    private deletee() {
         this.app.delete('/project/:id', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             let id = this.get_id(req);
-            this._prisma.tblprojekte.delete({
+            this.prisma.tblprojekte.delete({
                 where: {
                     ID: id
                 }
@@ -172,6 +106,7 @@ export class Database {
     }
 
 }
+
 
 
 
