@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 
-export abstract class ServerSetup {
+export class ServerSetup {
 
     get bodyParser(): any {
         return this._bodyParser;
@@ -19,11 +19,11 @@ export abstract class ServerSetup {
     }
 
     get prisma(): any {
-        return this.prisma;
+        return this._prisma;
     }
 
     set prisma(value: any) {
-        this.prisma = value;
+        this._prisma = value;
     }
 
     get app(): any {
@@ -35,15 +35,13 @@ export abstract class ServerSetup {
     }
 
     private _cors: any;
-    protected static _prisma: any;
+    private _prisma: any;
     private _app: any;
     private _PORT: number;
     private _bodyParser: any;
 
-    protected constructor() {
-        if (!ServerSetup._prisma) {
-            ServerSetup._prisma = new PrismaClient();
-        }
+    constructor(prisma : PrismaClient) {
+        this.prisma = prisma;
         this.setup_express();
         this.start_listen();
     }
@@ -72,5 +70,4 @@ export abstract class ServerSetup {
         this.allow_any_sites_to_talk_with_this_id();
     }
 
-    abstract CRUD(): void;
 }
