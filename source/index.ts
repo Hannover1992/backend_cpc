@@ -1,11 +1,12 @@
 import {PrismaClient} from "@prisma/client";
-import {Project, ProjectTable} from "./Classes/Project";
+import {Project} from "./Classes/Project";
+import {ProjectTable} from "./Classes/ProjectTable";
 import {ServerSetup} from "./Classes/ServerSetup";
 
 
 async function start() {
-    let project         = new Project();
-    let project_table   = new ProjectTable();
+    new Project();
+    new ProjectTable();
 }
 
 start();
