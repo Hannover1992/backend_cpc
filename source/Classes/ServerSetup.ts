@@ -47,6 +47,15 @@ export abstract class ServerSetup {
         }
         this.setup_express();
         this.start_listen();
+        this.CRUD();
+    }
+
+
+    CRUD() {
+        this.create();
+        this.read();
+        this.update();
+        this.deletee();
     }
 
 
@@ -73,6 +82,9 @@ export abstract class ServerSetup {
         this.allow_any_sites_to_talk_with_this_id();
     }
 
-    abstract CRUD(): void;
+    abstract create(...args: any[]): any;
+    abstract read(...args: any[]): any;
+    abstract update(...args: any[]): any;
+    abstract deletee(...args: any[]): any;
 
 }
