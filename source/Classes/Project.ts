@@ -1,7 +1,10 @@
-import {PrismaClient} from "@prisma/client";
 import {ServerSetup} from "./ServerSetup";
-import {I_CRUD} from "../Interface/I_CRUD";
 
+
+function get_id_from_request(req: any) {
+    let id = parseInt(req.params.id);
+    return id;
+}
 
 export class Project extends ServerSetup {
 
@@ -12,19 +15,6 @@ export class Project extends ServerSetup {
         super();
     }
 
-    projects_CRUD() {
-        this.projects_read();
-    }
-
-    //
-
-
-
-    public get_id(req: any) {
-        let id_as_string = req.params.id;
-        let id = parseInt(id_as_string);
-        return id;
-    }
 
     //toDo: use this clean code
 
@@ -76,7 +66,7 @@ export class Project extends ServerSetup {
     read() {
         this.app.get('/project/:id', (req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
-            let id = this.get_id(req);
+            let id = get_id_from_request(req);
             this.prisma.tblprojekte.findUnique({
                 where: {
                     ID: id
@@ -93,7 +83,7 @@ export class Project extends ServerSetup {
     update() {
         this.app.put('/project/:id', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            let id = this.get_id(req);
+            let id = get_id_from_request(req);
             this.prisma.tblprojekte.update({
                 where: {
                     ID: id
@@ -112,7 +102,7 @@ export class Project extends ServerSetup {
     deletee() {
         this.app.delete('/project/:id', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            let id = this.get_id(req);
+            let id = get_id_from_request(req);
             this.prisma.tblprojekte.delete({
                 where: {
                     ID: id
@@ -132,9 +122,6 @@ export class ProjectTable extends ServerSetup{
     create(...args: any[]): any {
     }
 
-    deletee(...args: any[]): any {
-    }
-
     read(...args: any[]): any {
         this.app.get('/projects', (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
@@ -147,6 +134,10 @@ export class ProjectTable extends ServerSetup{
             } );
         });
     }
+
+    deletee(...args: any[]): any {
+    }
+
 
     update(...args: any[]): any {
     }
