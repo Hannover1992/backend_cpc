@@ -1,9 +1,10 @@
 import {beforeAll, describe} from '@jest/globals';
-import {Project} from "../source/Classes/project";
-import {PrismaClient} from "@prisma/client";
+import {Project} from "../source/Apis/Project";
+import {ProjectTable} from "../source/Apis/ProjectTable";
+import supertest from "supertest";
 import {request} from "http";
-// import supertest, {SuperTest} from "supertest";
-import {waitForDebugger} from "inspector";
+import SuperTest from "supertest";
+
 
 
 describe('Projects', () => {
@@ -27,18 +28,44 @@ describe('Projects', () => {
 
 
 async function test_create_read_update_delete(database: Project) {
-    // await database.projects.generate_array_of_projects(0, 9);
-    // await database.projects.create()
-    // await expect(database.projects.length).toBe(10);
-    // await database.projects.read();
-    // await expect(database.projects.length).toBe(10);
-    // database.projects.project[2].Standort = "foo";
-    // await database.projects.update();
-    // await database.projects.generate_array_of_projects(0, 9);
-    // await expect(database.projects.project[2].Standort).toBe("Standort2");
-    // await database.projects.read();
-    // await expect(database.projects.project[2].Standort).toBe("foo");
+    let project = new Project();
+    new ProjectTable();
+
+    let request = supertest(project.app);
+    let body = {
+        ID: 18,
+        Anlagenummer: 18,
+        Auftragsart: "Auftragsart18",
+        Standort: "Standort18",
+        Niederlassung: "Niederlassung18",
+        Status: "Status18",
+        Auftragsdatum: new Date(),
+        Startdatum: new Date(),
+        Endtermin: new Date(),
+        Netto_Auftragswert: "Netto",
+        Kommentar: "",
+        Logistikkoordinator: "Logistikkoordinator18",
+        LK_1: "LK_181",
+        LK_2: "LK_218",
+        ZuKo: "ZuKo18",
+        PM_1: "PM_181",
+        PM_2: "PM_218"
+    };
+    await request.post('/project/11')
+        .send(body)
+        .then((response: any) => {
+            expect(response.status).toBe(200);
+            expect(response.body.message).toBe("Project created");
+        });
+
+
+    // await request.get('/project/0') //     .then((response: any) => {
+    //         expect(response.status).toBe(200);
+    //         expect(response.body.Standort).toBe("Standort0");
+    //         expect(response.body.ID).toBe(0);
+    //     });
 }
+
 
 async function setup_database_for_testing(database: Project) {
     // database = new Project(new PrismaClient());
@@ -61,12 +88,12 @@ describe('express', () => {
     // });
     //
     // // it('gets the test endpoint',async () => {
-    // //     await request.get('/project/0')
-    // //         .then((response: any) => {
-    // //             expect(response.status).toBe(200);
-    // //             expect(response.body.Standort).toBe("Standort0");
-    // //             expect(response.body.ID).toBe(0);
-    // //         });
+    //     await request.get('/project/0')
+    //         .then((response: any) => {
+    //             expect(response.status).toBe(200);
+    //             expect(response.body.Standort).toBe("Standort0");
+    //             expect(response.body.ID).toBe(0);
+    //         });
     // // })
     // //
     // // it('gets the endpoint, where the projects does not exist',async () => {

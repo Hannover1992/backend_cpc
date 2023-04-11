@@ -1,5 +1,5 @@
-import {ServerSetup} from "./ServerSetup";
-import {get_id_from_request} from "./Function/string_manipulation";
+import {ServerSetup} from "../ServerSetup";
+import {get_id_from_request} from "../Function/string_manipulation";
 
 
 export class Project extends ServerSetup {

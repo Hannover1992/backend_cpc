@@ -1,4 +1,4 @@
-import {ServerSetup} from "./ServerSetup";
+import {ServerSetup} from "../ServerSetup";
 
 export class ProjectTable extends ServerSetup{
 

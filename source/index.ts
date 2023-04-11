@@ -1,7 +1,5 @@
-import {PrismaClient} from "@prisma/client";
-import {Project} from "./Classes/Project";
-import {ProjectTable} from "./Classes/ProjectTable";
-import {ServerSetup} from "./Classes/ServerSetup";
+import {Project} from "./Apis/Project";
+import {ProjectTable} from "./Apis/ProjectTable";
 
 
 async function start() {
