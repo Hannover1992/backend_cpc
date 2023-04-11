@@ -18,7 +18,9 @@ export class ProjectTable extends ServerSetup{
         });
     }
 
-    deletee(...args: any[]): any {
+    deletee(...args: any[]):  any {
+        return this.prisma.tblprojekte.deleteMany();
+        //return promise;
     }
 
 

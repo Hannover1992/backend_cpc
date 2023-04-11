@@ -8,17 +8,14 @@ datasource db {
 }
 
 model tbl_notebook_bestellung {
-  ID              Int         @id @unique(map: "tblnotebookbestellung_ID_uindex")
-  ProjektID       Int
-  NotebookID      Int
-  Beauftragt_von  String?     @db.VarChar(50)
-  BestellungDatum DateTime?   @default(now()) @db.DateTime(0)
-  Menga           Int?        @default(1)
-  tblnotebook     tblnotebook @relation(fields: [NotebookID], references: [NotebookID], onDelete: NoAction, onUpdate: NoAction, map: "tbl_notebook_bestellung_tblnotebook_NotebookID_fk")
-  tblprojekte     tblprojekte @relation(fields: [ProjektID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tbl_notebook_bestellung_tblprojekte_ID_fk")
+  ProjektID   Int
+  NotebookID  Int
+  Menga       Int?        @default(1)
+  tblnotebook tblnotebook @relation(fields: [NotebookID], references: [NotebookID], onDelete: NoAction, onUpdate: NoAction, map: "tbl_notebook_bestellung_tblnotebook_NotebookID_fk")
+  tblprojekte tblprojekte @relation(fields: [ProjektID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tbl_notebook_bestellung_tblprojekte_ID_fk")
 
+  @@id([ProjektID, NotebookID])
   @@index([NotebookID], map: "tbl_notebook_bestellung_tblnotebook_NotebookID_fk")
-  @@index([ProjektID], map: "tbl_notebook_bestellung_tblprojekte_ID_fk")
 }
 
 model tblacu {
@@ -95,16 +92,16 @@ model tblbe_assets {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model tbldrucker {
-  ID                Int?
-  Hersteller        String?   @db.VarChar(255)
-  Typ               String?   @db.VarChar(255)
-  Seriennummer      String?   @db.VarChar(255)
-  Bemerkung_Zustand String?   @map("Bemerkung Zustand") @db.VarChar(255)
-  Zustand           Float?    @db.Float
-  Projekt           Int?
-  Kommentar         String?   @db.VarChar(255)
-  Anlagenummer      String?   @db.TinyText
-  Datum             DateTime? @db.Timestamp(0)
+  ID                 Int                  @id @unique(map: "tbldrucker_ID_uindex") @default(autoincrement())
+  Hersteller         String               @db.VarChar(255)
+  Typ                String?              @db.VarChar(255)
+  Seriennummer       String?              @unique(map: "drucker_Seriennummer_uindex") @db.VarChar(255)
+  Bemerkung_Zustand  String?              @map("Bemerkung Zustand") @db.VarChar(255)
+  Zustand            Float?               @db.Float
+  Kommentar          String?              @db.VarChar(255)
+  Anlagenummer       String?              @db.TinyText
+  Datum              DateTime?            @db.Timestamp(0)
+  drucker_bestellung drucker_bestellung[]
 
   @@ignore
 }
@@ -297,7 +294,7 @@ model tblprojekte {
   PM_2                    String?                   @db.VarChar(255)
   Endtermin               String?                   @db.VarChar(255)
   Netto_Auftragswert      String?                   @db.VarChar(255)
-  test                    Int?
+  drucker_bestellung      drucker_bestellung[]      @ignore
   tbl_notebook_bestellung tbl_notebook_bestellung[]
 }
 
@@ -408,5 +405,30 @@ model tblzubeh_r {
   Datum               DateTime? @db.Timestamp(0)
 
   @@map("tblzubehör")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model drucker_bestellung {
+  DruckerID   Int
+  ProjektID   Int
+  Menge       Int?        @default(1)
+  tbldrucker  tbldrucker  @relation(fields: [DruckerID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "Drucker_bestellung_drucker_ID_fk")
+  tblprojekte tblprojekte @relation(fields: [ProjektID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "Drucker_bestellung_tblprojekte_ID_fk")
+
+  @@index([DruckerID], map: "Drucker_bestellung_drucker_ID_fk")
+  @@index([ProjektID], map: "Drucker_bestellung_tblprojekte_ID_fk")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model tbl_notabook_bestellung_log {
+  ID               Int?
+  ProjektID        Int?
+  NotebookID       Int?
+  Beauftragt_von   String?   @db.VarChar(50)
+  Bestellung_Datum DateTime? @default(now()) @db.DateTime(0)
+  Menge            Int?      @default(1)
+
   @@ignore
 }

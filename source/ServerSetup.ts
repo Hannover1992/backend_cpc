@@ -43,7 +43,6 @@ export abstract class ServerSetup {
     constructor() {
         if(ServerSetup._prisma == null){
             ServerSetup._prisma = new PrismaClient();
-            console.log("prisma wurde etabliert")
             this.setup_express();
             this.start_listen();
         }
