@@ -46,6 +46,23 @@ constructor() {
                 res.status(500).send({"message": error.message});
             });
         });
+
+        //toDo: Write the Dynamic, menu using this function
+
+        this.app.get('/kategorieJoinSub', async (req: any, res: any) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            const id = parseInt(req.params.id);
+
+            await this.prisma.kategorien.findMany({
+                include: {
+                    subkategorien: true,
+                },
+            }).then((kategorie: any) => {
+                res.status(200).send(kategorie);
+            }).catch((error: any) => {
+                res.status(500).send({"message": error.message});
+            });
+        });
     }
 
 
