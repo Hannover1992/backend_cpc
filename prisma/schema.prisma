@@ -7,101 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tbl_notebook_bestellung {
-  ProjektID   Int
-  NotebookID  Int
-  Menga       Int?        @default(1)
-  tblnotebook tblnotebook @relation(fields: [NotebookID], references: [NotebookID], onDelete: NoAction, onUpdate: NoAction, map: "tbl_notebook_bestellung_tblnotebook_NotebookID_fk")
-  tblprojekte tblprojekte @relation(fields: [ProjektID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tbl_notebook_bestellung_tblprojekte_ID_fk")
-
-  @@id([ProjektID, NotebookID])
-  @@index([NotebookID], map: "tbl_notebook_bestellung_tblnotebook_NotebookID_fk")
-}
-
-model tblacu {
-  Hersteller        String? @db.VarChar(255)
-  Typ               String? @db.VarChar(255)
-  Seriennummer      Int     @id @unique(map: "tblacu_Seriennummer_uindex")
-  MAC_Adresse       String? @map("MAC-Adresse") @db.VarChar(255)
-  IP_Adresse_ACU    String? @map("IP-Adresse ACU") @db.VarChar(256)
-  Projekt           Int?
-  Bemerkungen       String? @db.VarChar(255)
-  Router            String? @db.VarChar(255)
-  IP_Adresse_Router String? @map("IP-Adresse Router") @db.VarChar(255)
-  Datum             String? @db.VarChar(255)
-  Anlagenummer      String? @db.TinyText
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblartikel {
-  ID               Int?
-  Artikelkategorie String? @db.VarChar(255)
-  Artikeltyp       String? @db.VarChar(255)
-  Anlagenummer     String? @db.TinyText
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblartikelkategorie {
-  ID               Int?
-  Artikelkategorie String? @db.VarChar(255)
-  Anlagenummer     String? @db.TinyText
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblartikelzustand {
-  ID           Int?
-  Zustand      String? @db.VarChar(255)
-  Anlagenummer String? @db.TinyText
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblbe_assets {
-  ID                         Int?
-  Inventarnummer             Int?
-  Projekt                    Int?
-  Artikel                    String?   @db.VarChar(255)
-  Hersteller                 String?   @db.VarChar(255)
-  Typ                        String?   @db.VarChar(255)
-  Seriennummer               String?   @db.VarChar(255)
-  Beschreibung               String?   @db.VarChar(255)
-  Anschaffung_Jahr           String?   @map("Anschaffung Jahr") @db.VarChar(255)
-  Lieferant                  Int?
-  Anschaffung_Lieferant      String?   @map("Anschaffung Lieferant") @db.VarChar(255)
-  Anschaffung_EK_pro_Einheit String?   @map("Anschaffung EK pro Einheit") @db.VarChar(255)
-  Garantie                   String?   @db.VarChar(255)
-  Zustand                    Int?
-  Zustand_alt                String?   @map("Zustand alt") @db.VarChar(255)
-  Menge                      Float?    @db.Float
-  Artikelwert                Decimal?  @db.Decimal(19, 4)
-  Gesamtwert                 Decimal?  @db.Decimal(19, 4)
-  Bemerkungen                String?   @db.VarChar(256)
-  Bild                       String?   @db.VarChar(255)
-  SSMA_TimeStamp             Boolean?  @db.Bit(1)
-  Anlagenummer               String?   @db.TinyText
-  Datum                      DateTime? @db.Timestamp(0)
-
-  @@map("tblbe-assets")
-  @@ignore
-}
-
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model tbldrucker {
-  ID                 Int                  @id @unique(map: "tbldrucker_ID_uindex") @default(autoincrement())
-  Hersteller         String               @db.VarChar(255)
-  Typ                String?              @db.VarChar(255)
-  Seriennummer       String?              @unique(map: "drucker_Seriennummer_uindex") @db.VarChar(255)
-  Bemerkung_Zustand  String?              @map("Bemerkung Zustand") @db.VarChar(255)
-  Zustand            Float?               @db.Float
-  Kommentar          String?              @db.VarChar(255)
-  Anlagenummer       String?              @db.TinyText
-  Datum              DateTime?            @db.Timestamp(0)
-  drucker_bestellung drucker_bestellung[]
+  ID                Int       @id @unique(map: "tbldrucker_ID_uindex") @default(autoincrement())
+  Hersteller        String    @db.VarChar(255)
+  Typ               String?   @db.VarChar(255)
+  Seriennummer      String?   @unique(map: "drucker_Seriennummer_uindex") @db.VarChar(255)
+  Bemerkung_Zustand String?   @map("Bemerkung Zustand") @db.VarChar(255)
+  Zustand           Float?    @db.Float
+  Kommentar         String?   @db.VarChar(255)
+  Anlagenummer      String?   @db.TinyText
+  Datum             DateTime? @db.Timestamp(0)
 
   @@ignore
 }
@@ -251,23 +167,22 @@ model tbllogistikkoordinatoren {
 }
 
 model tblnotebook {
-  NotebookID                                                       Int                       @id @unique(map: "tblnotebook_Notebook_ID_uindex")
-  Typ                                                              String?                   @db.VarChar(50)
-  Hersteller                                                       String?                   @db.VarChar(50)
+  NotebookID                                                       Int                 @id @unique(map: "tblnotebook_Notebook_ID_uindex")
+  Typ                                                              String?             @db.VarChar(50)
+  Hersteller                                                       String?             @db.VarChar(50)
   Admin                                                            Int?
   Userkonto                                                        Int?
   Teamviewer_ID                                                    Int?
   Projekt                                                          Int?
-  Bemerkung                                                        String?                   @db.VarChar(255)
-  Anlagenummer                                                     String?                   @db.TinyText
-  EinkaufsDatum                                                    DateTime?                 @default(now()) @db.Timestamp(0)
-  EditDatum                                                        DateTime?                 @default(now()) @db.Timestamp(0)
-  Wert                                                             Decimal?                  @default(0.00) @db.Decimal(10, 2)
-  Seriennummer                                                     String                    @db.VarChar(50)
-  tblusrzugangsdaten_tblnotebook_UserkontoTotblusrzugangsdaten     tblusrzugangsdaten?       @relation("tblnotebook_UserkontoTotblusrzugangsdaten", fields: [Userkonto], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook___fk_")
-  tblusrzugangsdaten_tblnotebook_Teamviewer_IDTotblusrzugangsdaten tblusrzugangsdaten?       @relation("tblnotebook_Teamviewer_IDTotblusrzugangsdaten", fields: [Teamviewer_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook_tblusrzugangsdaten_ID_fk")
-  tblusrzugangsdaten_tblnotebook_AdminTotblusrzugangsdaten         tblusrzugangsdaten?       @relation("tblnotebook_AdminTotblusrzugangsdaten", fields: [Admin], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook_tblusrzugangsdaten_ID_fk_2")
-  tbl_notebook_bestellung                                          tbl_notebook_bestellung[]
+  Bemerkung                                                        String?             @db.VarChar(255)
+  Anlagenummer                                                     String?             @db.TinyText
+  EinkaufsDatum                                                    DateTime?           @default(now()) @db.Timestamp(0)
+  EditDatum                                                        DateTime?           @default(now()) @db.Timestamp(0)
+  Wert                                                             Decimal?            @default(0.00) @db.Decimal(10, 2)
+  Seriennummer                                                     String              @db.VarChar(50)
+  tblusrzugangsdaten_tblnotebook_UserkontoTotblusrzugangsdaten     tblusrzugangsdaten? @relation("tblnotebook_UserkontoTotblusrzugangsdaten", fields: [Userkonto], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook___fk_")
+  tblusrzugangsdaten_tblnotebook_Teamviewer_IDTotblusrzugangsdaten tblusrzugangsdaten? @relation("tblnotebook_Teamviewer_IDTotblusrzugangsdaten", fields: [Teamviewer_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook_tblusrzugangsdaten_ID_fk")
+  tblusrzugangsdaten_tblnotebook_AdminTotblusrzugangsdaten         tblusrzugangsdaten? @relation("tblnotebook_AdminTotblusrzugangsdaten", fields: [Admin], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook_tblusrzugangsdaten_ID_fk_2")
 
   @@unique([Seriennummer, Typ, Hersteller], map: "tblnotebook_")
   @@index([Userkonto], map: "tblnotebook___fk_")
@@ -277,25 +192,24 @@ model tblnotebook {
 }
 
 model tblprojekte {
-  ID                      Int                       @id
-  Standort                String?                   @db.TinyText
-  Niederlassung           String?                   @db.VarChar(255)
-  Auftragsart             String?                   @db.VarChar(255)
-  Status                  String?                   @db.VarChar(255)
-  Logistikkoordinator     String?                   @db.VarChar(255)
-  LK_1                    String?                   @db.VarChar(255)
-  LK_2                    String?                   @db.VarChar(255)
-  ZuKo                    String?                   @db.VarChar(255)
-  Auftragsdatum           String?                   @db.VarChar(255)
-  Startdatum              String?                   @db.VarChar(255)
-  Kommentar               String?                   @db.VarChar(255)
-  Anlagenummer            Int?
-  PM_1                    String?                   @db.VarChar(255)
-  PM_2                    String?                   @db.VarChar(255)
-  Endtermin               String?                   @db.VarChar(255)
-  Netto_Auftragswert      String?                   @db.VarChar(255)
-  drucker_bestellung      drucker_bestellung[]      @ignore
-  tbl_notebook_bestellung tbl_notebook_bestellung[]
+  ID                  Int               @id
+  Standort            String?           @db.TinyText
+  Niederlassung       String?           @db.VarChar(255)
+  Auftragsart         String?           @db.VarChar(255)
+  Status              String?           @db.VarChar(255)
+  Logistikkoordinator String?           @db.VarChar(255)
+  LK_1                String?           @db.VarChar(255)
+  LK_2                String?           @db.VarChar(255)
+  ZuKo                String?           @db.VarChar(255)
+  Auftragsdatum       String?           @db.VarChar(255)
+  Startdatum          String?           @db.VarChar(255)
+  Kommentar           String?           @db.VarChar(255)
+  Anlagenummer        Int?
+  PM_1                String?           @db.VarChar(255)
+  PM_2                String?           @db.VarChar(255)
+  Endtermin           String?           @db.VarChar(255)
+  Netto_Auftragswert  String?           @db.VarChar(255)
+  projekt_artikel     projekt_artikel[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -408,27 +322,86 @@ model tblzubeh_r {
   @@ignore
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model drucker_bestellung {
-  DruckerID   Int
-  ProjektID   Int
-  Menge       Int?        @default(1)
-  tbldrucker  tbldrucker  @relation(fields: [DruckerID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "Drucker_bestellung_drucker_ID_fk")
-  tblprojekte tblprojekte @relation(fields: [ProjektID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "Drucker_bestellung_tblprojekte_ID_fk")
-
-  @@index([DruckerID], map: "Drucker_bestellung_drucker_ID_fk")
-  @@index([ProjektID], map: "Drucker_bestellung_tblprojekte_ID_fk")
-  @@ignore
+model acu {
+  ID                Int     @id @unique(map: "acu_ID_uindex")
+  Typ               String? @db.VarChar(255)
+  Seriennummer      Int
+  MAC_Adresse       String? @map("MAC-Adresse") @db.VarChar(255)
+  IP_Adresse_ACU    String? @map("IP-Adresse ACU") @db.VarChar(256)
+  Bemerkungen       String? @db.VarChar(255)
+  Router            String? @db.VarChar(255)
+  IP_Adresse_Router String? @map("IP-Adresse Router") @db.VarChar(255)
+  Datum             String? @db.VarChar(255)
+  Anlagenummer      String? @db.TinyText
+  Hersteller        String? @db.VarChar(255)
+  artikel           artikel @relation(fields: [ID], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "acu_artikel_artikel_id_fk")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tbl_notabook_bestellung_log {
-  ID               Int?
-  ProjektID        Int?
-  NotebookID       Int?
-  Beauftragt_von   String?   @db.VarChar(50)
-  Bestellung_Datum DateTime? @default(now()) @db.DateTime(0)
-  Menge            Int?      @default(1)
+model artikel {
+  artikel_id        Int               @id @default(autoincrement())
+  artikelname       String            @db.VarChar(255)
+  unterkategorie_id Int
+  preis             Decimal?          @db.Decimal(10, 2)
+  beschreibung      String?           @db.Text
+  bild_url          String?           @db.VarChar(255)
+  subkategorien     subkategorien     @relation(fields: [unterkategorie_id], references: [unterkategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
+  acu               acu?
+  assets            assets?
+  projekt_artikel   projekt_artikel[]
 
-  @@ignore
+  @@index([unterkategorie_id], map: "unterkategorie_id")
+}
+
+model assets {
+  ID                         Int       @id @unique(map: "tblbe-assets_ID_uindex")
+  Inventarnummer             Int?
+  Projekt                    Int?
+  Artikel                    String?   @db.VarChar(255)
+  Hersteller                 String?   @db.VarChar(255)
+  Typ                        String?   @db.VarChar(255)
+  Seriennummer               String?   @db.VarChar(255)
+  Beschreibung               String?   @db.VarChar(255)
+  Anschaffung_Jahr           String?   @map("Anschaffung Jahr") @db.VarChar(255)
+  Lieferant                  Int?
+  Anschaffung_Lieferant      String?   @map("Anschaffung Lieferant") @db.VarChar(255)
+  Anschaffung_EK_pro_Einheit String?   @map("Anschaffung EK pro Einheit") @db.VarChar(255)
+  Garantie                   String?   @db.VarChar(255)
+  Zustand                    Int?
+  Zustand_alt                String?   @map("Zustand alt") @db.VarChar(255)
+  Menge                      Float?    @db.Float
+  Artikelwert                Decimal?  @db.Decimal(19, 4)
+  Gesamtwert                 Decimal?  @db.Decimal(19, 4)
+  Bemerkungen                String?   @db.VarChar(256)
+  Bild                       String?   @db.VarChar(255)
+  Anlagenummer               String?   @db.TinyText
+  Datum                      DateTime? @db.Timestamp(0)
+  artikel                    artikel   @relation(fields: [ID], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "tblbe-assets_artikel_artikel_id_fk")
+}
+
+model kategorien {
+  kategorie_id  Int             @id @default(autoincrement())
+  kategoriename String          @unique(map: "kategoriename") @db.VarChar(255)
+  subkategorien subkategorien[]
+}
+
+model projekt_artikel {
+  projekt_artikel_id Int         @id @default(autoincrement())
+  projekt_id         Int
+  artikel_id         Int
+  bestellmenge       Int
+  tblprojekte        tblprojekte @relation(fields: [projekt_id], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "projekt_artikel_ibfk_1")
+  artikel            artikel     @relation(fields: [artikel_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "projekt_artikel_ibfk_2")
+
+  @@index([artikel_id], map: "artikel_id")
+  @@index([projekt_id], map: "projekt_id")
+}
+
+model subkategorien {
+  unterkategorie_id  Int        @id @default(autoincrement())
+  unterkategoriename String     @db.VarChar(255)
+  kategorie_id       Int
+  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "subkategorien_ibfk_1")
+  artikel            artikel[]
+
+  @@index([kategorie_id], map: "kategorie_id")
 }
