@@ -21,15 +21,26 @@ constructor() {
         });
     }
 
+
+    // read(...args: any[]): any {
+    //     this.app.get('/projects', (req: any, res: any) => {
+    //         this.allow_communikation_from_all_ip_adress(res);
+    //         this.prisma.tblprojekte.findMany().
+    //         then((projects: any) => {
+    //             res.status(200).send(projects);
+    //             // console.log(projects)
+    //         } ).catch((error: any) => {
+    //             res.status(500).send({"message": error.message});
+    //         } );
+    //     });
+    // }
+    //
     read() {
-        this.app.get('/kategorie/:id', async (req: any, res: any) => {
+        this.app.get('/kategorie', async (req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
             const id = parseInt(req.params.id);
-            await this.prisma.kategorien.findUnique({
-                where: {
-                    kategorie_id: id
-                },
-            }).then((kategorie: any) => {
+            await this.prisma.kategorien.findMany().
+            then((kategorie: any) => {
                 res.status(200).send(kategorie);
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
