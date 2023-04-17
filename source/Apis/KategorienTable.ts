@@ -1,8 +1,8 @@
-import {ServerSetup} from "../ServerSetup";
+import {ServerSetup} from "../ServerSetup"
 
-export class KategorienTable extends ServerSetup{
+export class KategorienTable extends ServerSetup {
 
-constructor() {
+    constructor() {
         super();
     }
 
@@ -14,33 +14,18 @@ constructor() {
                     kategoriename: req.body.kategoriename
                 }
             }).then(() => {
-                res.status(200).send({ "message": "Kategorie created" });
+                res.status(200).send({"message": "Kategorie created"});
             }).catch((error: any) => {
-                res.status(500).send({ "message": error.message });
+                res.status(500).send({"message": error.message});
             });
         });
     }
 
-
-    // read(...args: any[]): any {
-    //     this.app.get('/projects', (req: any, res: any) => {
-    //         this.allow_communikation_from_all_ip_adress(res);
-    //         this.prisma.tblprojekte.findMany().
-    //         then((projects: any) => {
-    //             res.status(200).send(projects);
-    //             // console.log(projects)
-    //         } ).catch((error: any) => {
-    //             res.status(500).send({"message": error.message});
-    //         } );
-    //     });
-    // }
-    //
     read() {
         this.app.get('/kategorie', async (req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
             const id = parseInt(req.params.id);
-            await this.prisma.kategorien.findMany().
-            then((kategorie: any) => {
+            await this.prisma.kategorien.findMany().then((kategorie: any) => {
                 res.status(200).send(kategorie);
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
@@ -101,3 +86,5 @@ constructor() {
         });
     }
 }
+
+//ignore
