@@ -32,7 +32,6 @@ export class KategorienTable extends ServerSetup {
             });
         });
 
-        //toDo: Write the Dynamic, menu using this function
 
         this.app.get('/kategorieJoinSub', async (req: any, res: any) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
