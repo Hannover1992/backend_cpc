@@ -6,7 +6,8 @@
     "test": "jest --watchAll --verbose",
     "start": "start node .",
     "db_pull": "npx prisma db pull --force",
-    "generate_client": "npx prisma generate"
+    "generate_client": "npx prisma generate",
+    "prisma studio": "npx prisma studio"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
