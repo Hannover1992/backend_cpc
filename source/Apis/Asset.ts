@@ -51,15 +51,29 @@ export class Asset extends ServerSetup {
     read() {
         this.app.get('/assets', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            await this.prisma.assets.findMany({
-                include: {
-                    artikel: true,
-                },
-            }).then((assets: any) => {
-                res.status(200).send(assets);
-            }).catch((error: any) => {
-                res.status(500).send({"message": error.message});
-            });
+
+            try {
+                await this.prisma.assets.findMany({
+                    include: {
+                        artikel: {
+                            include: {
+                                subkategorien: {
+                                    include: {
+                                        kategorien: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }).then((assets: any) => {
+                    res.status(200).send(assets);
+                }).catch((error: any) => {
+                    res.status(500).send({"message": error.message});
+                });
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({message: error.message});
+            }
         });
     }
 
