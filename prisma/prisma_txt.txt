@@ -1,0 +1,46 @@
+model kategorien {
+  kategorie_id   Int              @id @default(autoincrement())
+  kategoriename  String           @unique(map: "kategoriename") @db.VarChar(255)
+  unterkategorie unterkategorie[]
+}
+
+model unterkategorie {
+  unterkategorie_id  Int        @id @default(autoincrement())
+  unterkategoriename String     @db.VarChar(255)
+  kategorie_id       Int
+  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "unterkategorie_ibfk_1")
+  artikel            artikel[]
+
+  @@index([kategorie_id], map: "kategorie_id")
+}
+
+model artikel {
+  artikel_id        Int               @id @default(autoincrement())
+  artikelname       String            @db.VarChar(255)
+  unterkategorie_id Int
+  preis             Decimal?          @db.Decimal(10, 2)
+  beschreibung      String?           @db.Text
+  bild_url          String?           @db.VarChar(255)
+  zustand           String            @db.VarChar(15)
+  einkaufs_datum    DateTime?         @default(now()) @db.DateTime(0)
+  belegt_von        DateTime?         @db.DateTime(0)
+  belegt_bis        DateTime?         @db.DateTime(0)
+  anlagenummer      String?           @db.VarChar(15)
+  edit_date         DateTime?         @default(now()) @db.DateTime(0)
+  besitzer_id       Int?
+  unterkategorie    unterkategorie    @relation(fields: [unterkategorie_id], references: [unterkategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
+  personal          personal?         @relation(fields: [besitzer_id], references: [Personalnummer], onDelete: NoAction, onUpdate: NoAction, map: "artikel_personal_Personalnummer_fk")
+  assets            assets?
+  electronics       electronics?
+  projekt_artikel   projekt_artikel[]
+
+  @@index([besitzer_id], map: "artikel_personal_Personalnummer_fk")
+  @@index([unterkategorie_id], map: "unterkategorie_id")
+}
+
+model assets {
+  ID             Int     @id @unique(map: "tblbe-assets_ID_uindex")
+  Inventarnummer Int?
+  artikel        artikel @relation(fields: [ID], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "tblbe-assets_artikel_artikel_id_fk")
+}
+

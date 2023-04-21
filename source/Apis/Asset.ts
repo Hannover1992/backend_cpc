@@ -8,23 +8,22 @@ export class Asset extends ServerSetup {
         super();
     }
 
-   async create(req: any, res: any) {
-
-       this.app.post('/assets', async (req: any, res: any) => {
-           this.allow_communikation_from_all_ip_adress(res);
-           const Inventarnummer = req.body.Inventarnummer;
-           const artikelData = req.body.artikel;
-           try {
-               const createdArtikel = await this.create_new_artiekal(artikelData);
-               await this.create_new_Asset(Inventarnummer, createdArtikel);
-               res.status(200).send({
-                   message: "Asset created",
-               });
-           } catch (error) {
-               console.error(error);
-               res.status(500).send({message: error.message});
-           }
-       });
+    async create(req: any, res: any) {
+        this.app.post('/assets', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            const Inventarnummer = req.body.Inventarnummer;
+            const artikelData = req.body.artikel;
+            try {
+                const createdArtikel = await this.create_new_artiekal(artikelData);
+                await this.create_new_Asset(Inventarnummer, createdArtikel);
+                res.status(200).send({
+                    message: "Asset created",
+                });
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({message: error.message});
+            }
+        });
     }
 
     private async create_new_Asset(Inventarnummer: any, createdArtikel: any) {
@@ -42,8 +41,32 @@ export class Asset extends ServerSetup {
     }
 
     private async create_new_artiekal(artikelData: any) {
+        const subkategorienData = artikelData.unterkategorie;
+        const kategorienData = subkategorienData.kategorien;
+        // delete artikelData.unterkategorie;
+
         const createdArtikel = await this.prisma.artikel.create({
-            data: artikelData,
+            data: {
+                ...artikelData,
+                unterkategorie: {
+                    connectOrCreate: {
+                        create: {
+                            ...subkategorienData,
+                            kategorien: {
+                                connectOrCreate: {
+                                    create: kategorienData,
+                                    where: {
+                                        kategoriename: kategorienData.kategoriename,
+                                    },
+                                },
+                            },
+                        },
+                        where: {
+                            unterkategorie_id: subkategorienData.unterkategorie_id,
+                        },
+                    },
+                },
+            },
         });
         return createdArtikel;
     }
@@ -57,7 +80,7 @@ export class Asset extends ServerSetup {
                     include: {
                         artikel: {
                             include: {
-                                subkategorien: {
+                                unterkategorie: {
                                     include: {
                                         kategorien: true
                                     }

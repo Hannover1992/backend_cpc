@@ -21,7 +21,7 @@ model artikel {
   anlagenummer      String?           @db.VarChar(15)
   edit_date         DateTime?         @default(now()) @db.DateTime(0)
   besitzer_id       Int?
-  subkategorien     subkategorien     @relation(fields: [unterkategorie_id], references: [unterkategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
+  unterkategorie    unterkategorie    @relation(fields: [unterkategorie_id], references: [unterkategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
   personal          personal?         @relation(fields: [besitzer_id], references: [Personalnummer], onDelete: NoAction, onUpdate: NoAction, map: "artikel_personal_Personalnummer_fk")
   assets            assets?
   electronics       electronics?
@@ -47,9 +47,9 @@ model electronics {
 }
 
 model kategorien {
-  kategorie_id  Int             @id @default(autoincrement())
-  kategoriename String          @unique(map: "kategoriename") @db.VarChar(255)
-  subkategorien subkategorien[]
+  kategorie_id   Int              @id @default(autoincrement())
+  kategoriename  String           @unique(map: "kategoriename") @db.VarChar(255)
+  unterkategorie unterkategorie[]
 }
 
 model personal {
@@ -77,16 +77,6 @@ model projekt_artikel {
 
   @@index([artikel_id], map: "artikel_id")
   @@index([projekt_id], map: "projekt_id")
-}
-
-model subkategorien {
-  unterkategorie_id  Int        @id @default(autoincrement())
-  unterkategoriename String     @db.VarChar(255)
-  kategorie_id       Int
-  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "subkategorien_ibfk_1")
-  artikel            artikel[]
-
-  @@index([kategorie_id], map: "kategorie_id")
 }
 
 model tbldrucker {
@@ -363,6 +353,16 @@ model tblsoftware {
   Anlagenummer String? @db.TinyText
 
   @@ignore
+}
+
+model unterkategorie {
+  unterkategorie_id  Int        @id @default(autoincrement())
+  unterkategoriename String     @db.VarChar(255)
+  kategorie_id       Int
+  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "unterkategorie_ibfk_1")
+  artikel            artikel[]
+
+  @@index([kategorie_id], map: "kategorie_id")
 }
 
 model usrzugangsdaten {
