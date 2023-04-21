@@ -12,36 +12,40 @@ export class Asset extends ServerSetup {
 
        this.app.post('/assets', async (req: any, res: any) => {
            this.allow_communikation_from_all_ip_adress(res);
-           const {assets: {Inventarnummer}, ...artikelData} = req.body;
-
-
+           const Inventarnummer = req.body.Inventarnummer;
+           const artikelData = req.body.artikel;
            try {
-               // Create a new article
-               const createdArtikel = await this.prisma.artikel.create({
-                   data: artikelData,
-               });
-
-               // Create a new asset connected to the new article
-               const createdAsset = await this.prisma.assets.create({
-                   data: {
-                       Inventarnummer: Number(Inventarnummer),
-                       artikel: {
-                           connect: {
-                               artikel_id: createdArtikel.artikel_id,
-                           },
-                       },
-                   },
-               });
-
+               const createdArtikel = await this.create_new_artiekal(artikelData);
+               await this.create_new_Asset(Inventarnummer, createdArtikel);
                res.status(200).send({
                    message: "Asset created",
-                   data: createdAsset,
                });
            } catch (error) {
                console.error(error);
                res.status(500).send({message: error.message});
            }
        });
+    }
+
+    private async create_new_Asset(Inventarnummer: any, createdArtikel: any) {
+        const createdAsset = await this.prisma.assets.create({
+            data: {
+                Inventarnummer: Number(Inventarnummer),
+                artikel: {
+                    connect: {
+                        artikel_id: createdArtikel.artikel_id,
+                    },
+                },
+            },
+        });
+        return createdAsset;
+    }
+
+    private async create_new_artiekal(artikelData: any) {
+        const createdArtikel = await this.prisma.artikel.create({
+            data: artikelData,
+        });
+        return createdArtikel;
     }
 
     read() {
