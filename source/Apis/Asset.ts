@@ -14,8 +14,8 @@ export class Asset extends ServerSetup {
             const Inventarnummer = req.body.Inventarnummer;
             const artikelData = req.body.artikel;
             try {
-                const createdArtikel = await this.create_new_artiekal(artikelData);
-                await this.create_new_Asset(Inventarnummer, createdArtikel);
+                const createdArtikel = await this.create_new_artikel(artikelData);
+                // await this.create_new_Asset(Inventarnummer, createdArtikel);
                 res.status(200).send({
                     message: "Asset created",
                 });
@@ -40,35 +40,66 @@ export class Asset extends ServerSetup {
         return createdAsset;
     }
 
-    private async create_new_artiekal(artikelData: any) {
+    private async create_new_artikel(artikelData: any) {
+        const kategorienData = artikelData.unterkategorie.kategorien;
+        await this.create_new_Kategory(kategorienData);
         const subkategorienData = artikelData.unterkategorie;
-        const kategorienData = subkategorienData.kategorien;
-        // delete artikelData.unterkategorie;
+        await this.create_new_unterkategory(subkategorienData, kategorienData);
+        const unterkategorie = artikelData.unterkategorie;
+        const createdArtikel = await this.create_artikel(artikelData, unterkategorie);
+        return createdArtikel;
+    }
 
-        const createdArtikel = await this.prisma.artikel.create({
-            data: {
-                ...artikelData,
-                unterkategorie: {
-                    connectOrCreate: {
-                        create: {
-                            ...subkategorienData,
-                            kategorien: {
-                                connectOrCreate: {
-                                    create: kategorienData,
-                                    where: {
-                                        kategoriename: kategorienData.kategoriename,
-                                    },
-                                },
-                            },
-                        },
-                        where: {
-                            unterkategorie_id: subkategorienData.unterkategorie_id,
+
+    private async create_artikel(artikelData: any, unterkategorie: any) {
+        const createdArtikel = await this.prisma.artikel.findFirst({
+            where: { artikel_id: artikelData.artikel_id },
+        });
+
+        delete artikelData.kategorien;
+
+        if (!createdArtikel) {
+            await this.prisma.artikel.create({
+                data: {
+                    ...artikelData,
+                    unterkategorie_id: unterkategorie.unterkategorie_id, // changed from unterkategorie
+                },
+            });
+        }
+    }
+
+    private async create_new_Kategory(kategorienData: any) {
+
+        const kategorie = await this.prisma.kategorien.findFirst({
+            where: {kategorie_id: kategorienData.kategorie_id},
+        });
+
+        if (!kategorie) {
+            await this.prisma.kategorien.create({
+                data: kategorienData,
+            });
+        }
+    }
+
+
+    private async create_new_unterkategory(subkategorienData: any, kategorie: any ) {
+
+        const unterkategorie = await this.prisma.unterkategorie.findFirst({
+            where: {unterkategorie_id: subkategorienData.unterkategorie_id},
+        });
+
+        if (!unterkategorie) {
+            await this.prisma.unterkategorie.create({
+                data: {
+                    ...subkategorienData,
+                    kategorien: {
+                        connect: {
+                            kategorie_id: kategorie.kategorie_id,
                         },
                     },
                 },
-            },
-        });
-        return createdArtikel;
+            });
+        }
     }
 
     read() {
