@@ -91,6 +91,7 @@ export class Asset extends ServerSetup {
     read() {
         this.app.get('/assets', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
+            const project_number = req.query.project_number;
 
             try {
                 await this.prisma.assets.findMany({
