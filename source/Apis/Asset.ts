@@ -57,21 +57,6 @@ export class Asset extends ServerSetup {
 
     private async create_new_Kategory(kategorienData: any) {
 
-        // const kategorie = await this.prisma.kategorien.findFirst({
-        //     where: {kategorie_id: kategorienData.kategorie_id},
-        // });
-
-        // model kategorien {
-        //     kategorie_id   Int              @id @default(autoincrement())
-        //     kategoriename  String           @unique(map: "kategoriename") @db.VarChar(255)
-        //     unterkategorie unterkategorie[]
-        // }
-        //
-
-        // Object {kategorie_id: 1, kategoriename: "Assets"}
-        // kategorie_id = 1
-        // kategoriename = "Assets"
-        //     [[Prototype]] = Object
         const kategorie = await this.prisma.kategorien.findFirst({
             where: { kategorie_id: kategorienData.kategorien_id },
         });
