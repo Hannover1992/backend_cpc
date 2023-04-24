@@ -260,6 +260,8 @@ model tblnotebook {
   @@index([Admin], map: "tblnotebook_tblusrzugangsdaten_ID_fk_2")
 }
 
+//toDo: das auf projekte umstellen
+
 model tblprojekte {
   ID                  Int               @id
   Standort            String?           @db.TinyText

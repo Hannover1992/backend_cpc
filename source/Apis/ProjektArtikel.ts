@@ -13,11 +13,33 @@ export class ProjektArtikel extends ServerSetup {
     }
 
     read(...args: any[]): any {
-        this.app.get('/project/:id/artikel', async (req: any, res: any) => {
+        this.app.get('/projekt_artikel', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            let id = get_id_from_request(req);
-            this.getFilteredProjektArtikel(id, req.query.unterkategoriename)
-                .then((artikel: any) => {
+            const inputet_projekt_id = req.query.projekt_id;
+            const inputet_unterkategoriename = req.query.unterkategoriename;
+            this.prisma.projekt_artikel.findMany({
+                where: {
+                    artikel: {
+                        unterkategorie: {
+                            unterkategoriename: {
+                                equals: 'Verkehrstechnik',
+                            },
+                        },
+                    },
+                },
+                include: {
+                    artikel: {
+                        include: {
+                            unterkategorie: {
+                                include: {
+                                    kategorien: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            })
+            .then((artikel: any) => {
                 res.status(200).send(artikel);
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
