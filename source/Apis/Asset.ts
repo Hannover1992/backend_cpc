@@ -11,10 +11,10 @@ export class Asset extends ServerSetup {
     async create(req: any, res: any) {
         this.app.post('/assets', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            const Inventarnummer = req.body.Inventarnummer;
             const artikelData = req.body.artikel;
             try {
-                const createdArtikel = await this.create_new_artikel(artikelData);
+
+                await this.create_new_artikel(artikelData);
                 // await this.create_new_Asset(Inventarnummer, createdArtikel);
                 res.status(200).send({
                     message: "Asset created",
@@ -42,13 +42,14 @@ export class Asset extends ServerSetup {
             where: { artikel_id: artikelData.artikel_id },
         });
         //temp
-        delete artikelData.kategorien;
+        delete artikelData.unterkategorie;
+
 
         if (!createdArtikel) {
             await this.prisma.artikel.create({
                 data: {
-                    ...artikelData,
-                    unterkategorie_id: unterkategorie.unterkategorie_id, // changed from unterkategorie
+                    ...artikelData
+                    // unterkategorie_id: artikelData.unterkategorie.unterkategorie_id,
                 },
             });
         }
@@ -56,8 +57,23 @@ export class Asset extends ServerSetup {
 
     private async create_new_Kategory(kategorienData: any) {
 
+        // const kategorie = await this.prisma.kategorien.findFirst({
+        //     where: {kategorie_id: kategorienData.kategorie_id},
+        // });
+
+        // model kategorien {
+        //     kategorie_id   Int              @id @default(autoincrement())
+        //     kategoriename  String           @unique(map: "kategoriename") @db.VarChar(255)
+        //     unterkategorie unterkategorie[]
+        // }
+        //
+
+        // Object {kategorie_id: 1, kategoriename: "Assets"}
+        // kategorie_id = 1
+        // kategoriename = "Assets"
+        //     [[Prototype]] = Object
         const kategorie = await this.prisma.kategorien.findFirst({
-            where: {kategorie_id: kategorienData.kategorie_id},
+            where: { kategorie_id: kategorienData.kategorien_id },
         });
 
         if (!kategorie) {
@@ -85,7 +101,7 @@ export class Asset extends ServerSetup {
                     },
                 },
             });
-        }
+}
     }
 
     read() {
