@@ -26,20 +26,6 @@ export class Asset extends ServerSetup {
         });
     }
 
-    private async create_new_Asset(Inventarnummer: any, createdArtikel: any) {
-        const createdAsset = await this.prisma.assets.create({
-            data: {
-                Inventarnummer: Number(Inventarnummer),
-                artikel: {
-                    connect: {
-                        artikel_id: createdArtikel.artikel_id,
-                    },
-                },
-            },
-        });
-        return createdAsset;
-    }
-
     private async create_new_artikel(artikelData: any) {
         const kategorienData = artikelData.unterkategorie.kategorien;
         await this.create_new_Kategory(kategorienData);
@@ -55,7 +41,7 @@ export class Asset extends ServerSetup {
         const createdArtikel = await this.prisma.artikel.findFirst({
             where: { artikel_id: artikelData.artikel_id },
         });
-
+        //temp
         delete artikelData.kategorien;
 
         if (!createdArtikel) {
