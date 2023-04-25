@@ -39,7 +39,7 @@ export class KategorienTable extends ServerSetup {
 
             await this.prisma.kategorien.findMany({
                 include: {
-                    subkategorien: true,
+                    unterkategorie: true,
                 },
             }).then((kategorie: any) => {
                 res.status(200).send(kategorie);
