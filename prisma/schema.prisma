@@ -1,3 +1,5 @@
+//toDo: belegt von bis ins projekt_artikel model bewegen
+//toDo: one to many Person to Artikel
 generator client {
   provider = "prisma-client-js"
 }

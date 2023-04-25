@@ -1,3 +1,5 @@
+
+
 model kategorien {
   kategorie_id   Int              @id @default(autoincrement())
   kategoriename  String           @unique(map: "kategoriename") @db.VarChar(255)
