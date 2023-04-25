@@ -46,6 +46,32 @@ export class ProjektArtikel extends ServerSetup {
                 res.status(500).send({"message": error.message});
             });
         });
+
+
+
+        this.app.get('/projekt_artikel', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            this.prisma.projekt_artikel.findMany({
+                include: {
+                    artikel: {
+                        include: {
+                            unterkategorie: {
+                                include: {
+                                    kategorien: true,
+                                },
+                            },
+                            assets: true, // Hier wurde das assets-Modell hinzugefügt
+                        },
+                    },
+                    tblprojekte: true,
+                },
+            })
+                .then((artikel: any) => {
+                    res.status(200).send(artikel);
+                }).catch((error: any) => {
+                res.status(500).send({"message": error.message});
+            });
+        });
     }
 
 
