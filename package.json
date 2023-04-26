@@ -7,7 +7,8 @@
     "start": "start node .",
     "db_pull": "npx prisma db pull --force",
     "generate_client": "npx prisma generate",
-    "prisma studio": "npx prisma studio"
+    "prisma studio": "npx prisma studio",
+    "prisma merge": "npx prisma migrate dev --name 'init'"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
