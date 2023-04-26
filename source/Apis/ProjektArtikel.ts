@@ -39,6 +39,7 @@ export class ProjektArtikel extends ServerSetup {
             });
         });
 
+        //toDo: ich muss das noch mit dem Assets verknupfen
         this.app.get('/projekt_artikel/:projekt_id/:unterkategoriename', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             const inputet_projekt_id = parseInt(req.params.projekt_id);
@@ -57,11 +58,12 @@ export class ProjektArtikel extends ServerSetup {
                 include: {
                     artikel: {
                         include: {
+                            assets: true,
                             unterkategorie: {
                                 include: {
                                     kategorien: true,
-                                },
-                            },
+                                }
+                            }
                         },
                     },
                 },
