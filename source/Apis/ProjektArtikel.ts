@@ -16,8 +16,6 @@ export class ProjektArtikel extends ServerSetup {
 
         this.app.get('/test', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            const inputet_projekt_id = parseInt(req.params.projekt_id);
-            const inputet_unterkategoriename = req.params.unterkategoriename;
             this.prisma.projekt_artikel.findMany({
                 include: {
                     artikel: {
@@ -40,7 +38,7 @@ export class ProjektArtikel extends ServerSetup {
         });
 
         //toDo: ich muss das noch mit dem Assets verknupfen
-        this.app.get('/projekt_artikel/:projekt_id/:unterkategoriename', async (req: any, res: any) => {
+        this.app.get('/projekt_assets/:projekt_id/:unterkategoriename', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             const inputet_projekt_id = parseInt(req.params.projekt_id);
             const inputet_unterkategoriename = req.params.unterkategoriename;
@@ -103,31 +101,31 @@ export class ProjektArtikel extends ServerSetup {
     }
 
 
-    async getFilteredProjektArtikel(projekt_id: any, unterkategoriename: any) {
-        const result = await this.prisma.projekt_artikel.findMany({
-            where: {
-                projekt_artiekl_id: projekt_id,
-                artikel: {
-                    unterkategorie: {
-                        unterkategoriename: {
-                            contains: unterkategoriename,
-                        },
-                    },
-                },
-            },
-            include: {
-                artikel: {
-                    select: {
-                        artikel_id: true,
-                        artikelname: true,
-                        unterkategorie: true,
-                    },
-                },
-            },
-        });
-
-        return result;
-    }
+    // async getFilteredProjektArtikel(projekt_id: any, unterkategoriename: any) {
+    //     const result = await this.prisma.projekt_artikel.findMany({
+    //         where: {
+    //             projekt_artiekl_id: projekt_id,
+    //             artikel: {
+    //                 unterkategorie: {
+    //                     unterkategoriename: {
+    //                         contains: unterkategoriename,
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //         include: {
+    //             artikel: {
+    //                 select: {
+    //                     artikel_id: true,
+    //                     artikelname: true,
+    //                     unterkategorie: true,
+    //                 },
+    //             },
+    //         },
+    //     });
+    //
+    //     return result;
+    // }
 
 
 
