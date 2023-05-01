@@ -29,11 +29,9 @@ export class Asset extends ServerSetup {
     private async create_new_artikel(artikelData: any) {
         const kategorienData = artikelData.unterkategorie.kategorien;
         await this.create_new_Kategory(kategorienData);
-        const subkategorienData = artikelData.unterkategorie;
-        await this.create_new_unterkategory(subkategorienData, kategorienData);
         const unterkategorie = artikelData.unterkategorie;
-        const createdArtikel = await this.create_artikel(artikelData, unterkategorie);
-        return createdArtikel;
+        await this.create_new_unterkategory(unterkategorie, kategorienData);
+        return await this.create_artikel(artikelData, unterkategorie);;
     }
 
 
