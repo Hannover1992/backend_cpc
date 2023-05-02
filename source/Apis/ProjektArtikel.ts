@@ -68,6 +68,7 @@ export class ProjektArtikel extends ServerSetup {
             })
             .then((artikel: any) => {
                 res.status(200).send(artikel);
+                console.log("projekt Artikel wurden angefragt")
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
             });
