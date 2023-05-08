@@ -1,5 +1,3 @@
-//toDo: belegt von bis ins projekt_artikel model bewegen
-//toDo: one to many Person to Artikel
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,6 +21,8 @@ model artikel {
   anlagenummer      String?           @db.VarChar(15)
   edit_date         DateTime?         @default(now()) @db.DateTime(0)
   besitzer_id       Int?
+  firma             String?           @db.VarChar(50)
+  model             String?           @db.VarChar(35)
   unterkategorie    unterkategorie    @relation(fields: [unterkategorie_id], references: [unterkategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
   personal          personal?         @relation(fields: [besitzer_id], references: [Personalnummer], onDelete: NoAction, onUpdate: NoAction, map: "artikel_personal_Personalnummer_fk")
   assets            assets?
@@ -261,8 +261,6 @@ model tblnotebook {
   @@index([Teamviewer_ID], map: "tblnotebook_tblusrzugangsdaten_ID_fk")
   @@index([Admin], map: "tblnotebook_tblusrzugangsdaten_ID_fk_2")
 }
-
-//toDo: das auf projekte umstellen
 
 model tblprojekte {
   ID                  Int               @id
