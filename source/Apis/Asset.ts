@@ -8,6 +8,9 @@ export class Asset extends ServerSetup {
         super();
     }
 
+    //toDo: eintlich hier, ich muss erstm mal die Assets erstellen,
+    //dabei werden die Kategorien und Unterkategorien erstellt mit ihren id die ich brauche um die Assets zu erstellen
+
     async create(req: any, res: any) {
         this.app.post('/assets', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
@@ -26,12 +29,12 @@ export class Asset extends ServerSetup {
         });
     }
 
-    private async create_new_artikel(artikelData: any) {
+    async create_new_artikel(artikelData: any) {
         const kategorienData = artikelData.unterkategorie.kategorien;
-        await this.create_new_Kategory(kategorienData);
+        let new_kategorie_data = await this.create_new_Kategory(kategorienData);
         const unterkategorie = artikelData.unterkategorie;
-        await this.create_new_unterkategory(unterkategorie, kategorienData);
-        return await this.create_artikel(artikelData, unterkategorie);;
+        let unterkategorie_new_data = await this.create_new_unterkategory(unterkategorie, kategorienData);
+        return await this.create_artikel(artikelData, unterkategorie_new_data);;
     }
 
 
@@ -40,23 +43,31 @@ export class Asset extends ServerSetup {
             where: { artikel_id: artikelData.artikel_id },
         });
         //temp
-        delete artikelData.unterkategorie;
+        // delete artikelData.unterkategorie;
 
 
+        //toDo: eintlich,
         if (!createdArtikel) {
-            await this.prisma.artikel.create({
+            return await this.prisma.artikel.create({
                 data: {
-                    ...artikelData
-                    // unterkategorie_id: artikelData.unterkategorie.unterkategorie_id,
+                    ...artikelData,
+                    unterkategorie_id: unterkategorie.unterkategorie_id,
                 },
+                include: {
+                    unterkategorie: true
+                }
+
             });
+        } else {
+            return createdArtikel;
         }
+
     }
 
     private async create_new_Kategory(kategorienData: any) {
 
         const kategorie = await this.prisma.kategorien.findFirst({
-            where: { kategorie_id: kategorienData.kategorien_id },
+            where: { kategorie_id: kategorienData.kategorie_id },
         });
 
         if (!kategorie) {
@@ -74,7 +85,7 @@ export class Asset extends ServerSetup {
         });
 
         if (!unterkategorie) {
-            await this.prisma.unterkategorie.create({
+            return await this.prisma.unterkategorie.create({
                 data: {
                     ...subkategorienData,
                     kategorien: {
@@ -93,18 +104,16 @@ export class Asset extends ServerSetup {
             const project_number = req.query.project_number;
 
             try {
-                await this.prisma.assets.findMany({
+                await this.prisma.artikel.findMany({
                     include: {
-                        artikel: {
+                        unterkategorie: {
                             include: {
-                                unterkategorie: {
-                                    include: {
-                                        kategorien: true
-                                    }
-                                }
+                                kategorien: true
                             }
                         }
-                    },
+                        ,
+                        assets: true
+                    }
                 }).then((assets: any) => {
                     res.status(200).send(assets);
                 }).catch((error: any) => {

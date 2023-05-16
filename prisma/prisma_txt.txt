@@ -1,21 +1,3 @@
-
-
-model kategorien {
-  kategorie_id   Int              @id @default(autoincrement())
-  kategoriename  String           @unique(map: "kategoriename") @db.VarChar(255)
-  unterkategorie unterkategorie[]
-}
-
-model unterkategorie {
-  unterkategorie_id  Int        @id @default(autoincrement())
-  unterkategoriename String     @db.VarChar(255)
-  kategorie_id       Int
-  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "unterkategorie_ibfk_1")
-  artikel            artikel[]
-
-  @@index([kategorie_id], map: "kategorie_id")
-}
-
 model artikel {
   artikel_id        Int               @id @default(autoincrement())
   artikelname       String            @db.VarChar(255)
@@ -30,6 +12,8 @@ model artikel {
   anlagenummer      String?           @db.VarChar(15)
   edit_date         DateTime?         @default(now()) @db.DateTime(0)
   besitzer_id       Int?
+  firma             String?           @db.VarChar(50)
+  model             String?           @db.VarChar(35)
   unterkategorie    unterkategorie    @relation(fields: [unterkategorie_id], references: [unterkategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
   personal          personal?         @relation(fields: [besitzer_id], references: [Personalnummer], onDelete: NoAction, onUpdate: NoAction, map: "artikel_personal_Personalnummer_fk")
   assets            assets?
@@ -40,9 +24,38 @@ model artikel {
   @@index([unterkategorie_id], map: "unterkategorie_id")
 }
 
+
 model assets {
   ID             Int     @id @unique(map: "tblbe-assets_ID_uindex")
   Inventarnummer Int?
   artikel        artikel @relation(fields: [ID], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "tblbe-assets_artikel_artikel_id_fk")
 }
 
+
+model kategorien {
+  kategorie_id   Int              @id @default(autoincrement())
+  kategoriename  String           @unique(map: "kategoriename") @db.VarChar(255)
+  unterkategorie unterkategorie[]
+}
+
+model projekt_artikel {
+  projekt_artikel_id Int         @id @default(autoincrement())
+  projekt_id         Int
+  artikel_id         Int
+  menge              Int
+  tblprojekte        tblprojekte @relation(fields: [projekt_id], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "projekt_artikel_ibfk_1")
+  artikel            artikel     @relation(fields: [artikel_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "projekt_artikel_ibfk_2")
+
+  @@index([artikel_id], map: "artikel_id")
+  @@index([projekt_id], map: "projekt_id")
+}
+
+model unterkategorie {
+  unterkategorie_id  Int        @id @default(autoincrement())
+  unterkategoriename String     @db.VarChar(255)
+  kategorie_id       Int
+  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "unterkategorie_ibfk_1")
+  artikel            artikel[]
+
+  @@index([kategorie_id], map: "kategorie_id")
+}
