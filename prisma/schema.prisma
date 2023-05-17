@@ -63,8 +63,8 @@ model personal {
   Position            String?          @db.VarChar(50)
   Gehalt              Decimal?         @db.Decimal(10, 2)
   usrzugangs_daten_ID Int?
-  usrzugangsdaten     usrzugangsdaten? @relation(fields: [usrzugangs_daten_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "personal_ibfk_1")
   artikel             artikel[]
+  usrzugangsdaten     usrzugangsdaten? @relation(fields: [usrzugangs_daten_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "personal_ibfk_1")
 
   @@index([usrzugangs_daten_ID], map: "usrzugangs_daten_ID")
 }
@@ -79,187 +79,6 @@ model projekt_artikel {
 
   @@index([artikel_id], map: "artikel_id")
   @@index([projekt_id], map: "projekt_id")
-}
-
-model tbldrucker {
-  ID                Int       @id @unique(map: "tbldrucker_ID_uindex") @default(autoincrement())
-  Hersteller        String    @db.VarChar(255)
-  Typ               String?   @db.VarChar(255)
-  Seriennummer      String?   @unique(map: "drucker_Seriennummer_uindex") @db.VarChar(255)
-  Bemerkung_Zustand String?   @map("Bemerkung Zustand") @db.VarChar(255)
-  Zustand           Float?    @db.Float
-  Kommentar         String?   @db.VarChar(255)
-  Anlagenummer      String?   @db.TinyText
-  Datum             DateTime? @db.Timestamp(0)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblempfadressen {
-  ID                     Int?
-  EmpfangsbestaetigungID Int?
-  SenderFirmenName       String? @db.TinyText
-  SenderName             String? @db.TinyText
-  SenderStrasse          String? @db.TinyText
-  SenderStrasseNummer    Int?
-  SenderStadt            String? @db.TinyText
-  SenderPostleitzahl     Int?
-  EmpfangerFirmenName    String? @db.TinyText
-  EmpfangerName          String? @db.TinyText
-  EmpfangerStrasse       String? @db.TinyText
-  EmpfangerStrasseNummer Int?
-  EmpfangerStadt         String? @db.TinyText
-  EmpfangerPostleitzahl  Int?
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblempfangsbestaetigung {
-  ID                     Int?
-  EmpfangsbestaetigungID Int?
-  TabelName              String?   @db.TinyText
-  Beschreibung           String?   @db.TinyText
-  Anzahl                 Int?
-  ProjektID              Int?
-  Anlagenummer           String?   @db.TinyText
-  TableID                Int?
-  Datum                  DateTime? @db.Timestamp(0)
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblersatzteile {
-  ID             Int?
-  Typ            String?   @db.VarChar(255)
-  Bezeichnung    String?   @db.VarChar(255)
-  Anzahl         Float?    @db.Float
-  Zustand        Int?
-  Firma          String?   @db.VarChar(255)
-  Bemerkungen    String?   @db.VarChar(255)
-  Hinweis        String?   @db.VarChar(255)
-  SSMA_TimeStamp Boolean?  @db.Bit(1)
-  Anlagenummer   String?   @db.TinyText
-  Datum          DateTime? @db.Timestamp(0)
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblfunkger_te {
-  ID           Int?
-  Bezeichnung  String?   @db.VarChar(255)
-  Typ          String?   @db.VarChar(255)
-  Seriennummer String?   @db.VarChar(255)
-  Projekt      Int?
-  Anlagenummer String?   @db.TinyText
-  Datum        DateTime? @db.Timestamp(0)
-
-  @@map("tblfunkgeräte")
-  @@ignore
-}
-
-model tblhandy {
-  ID                   Int       @unique
-  Hersteller           String?   @db.VarChar(255)
-  Typ                  String?   @db.VarChar(255)
-  IMEI_1               Float?    @map("IMEI 1") @db.Float
-  Besitzer             String?   @db.VarChar(255)
-  Projekt              Int?
-  Bemerkungen          String?   @db.VarChar(255)
-  Hinweis              String?   @db.VarChar(255)
-  SIM_Karten_Nummer    Float?    @map("SIM-Karten-Nummer") @db.Float
-  Seriennummer         String?   @db.VarChar(255)
-  Baterriezustand      Float?    @db.Float
-  Bildschirmsperre_Pin Int?      @map("Bildschirmsperre Pin")
-  SSMA_TimeStamp       Boolean?  @db.Bit(1)
-  Anlagenummer         String?   @db.TinyText
-  Datum                DateTime? @db.Timestamp(0)
-
-  @@index([Projekt], map: "tblhandy_tblprojekte_ID_fk")
-}
-
-model tblkabel {
-  ID           Int       @unique
-  Art          String?   @db.VarChar(255)
-  Beschreibung String?   @db.VarChar(255)
-  Anzahl_      Int?      @map("Anzahl:")
-  Zustand      Int?
-  Kommentar    String?   @db.VarChar(255)
-  Bemerkungen  String?   @db.VarChar(255)
-  Hinweis      String?   @db.VarChar(255)
-  Firma        String?   @db.VarChar(255)
-  Anlagenummer String?   @db.TinyText
-  Datum        DateTime? @db.Timestamp(0)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblkleidung {
-  ID           Int?
-  Bezeichnung  String?   @db.VarChar(255)
-  Farbe        String?   @db.VarChar(255)
-  Gr__e        String?   @map("Größe") @db.VarChar(255)
-  St_ck        Float?    @map("Stück") @db.Float
-  Projekt      Float?    @db.Float
-  Besitzer     String?   @db.VarChar(255)
-  Datum        DateTime? @db.Timestamp(0)
-  Anlagenummer String?   @db.TinyText
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tbllieferschein {
-  ID               Int?
-  LieferscheinID   Int?
-  TabelName        String? @db.TinyText
-  Beschreibung     String? @db.TinyText
-  Anzahl           Int?
-  ProjektID        Int?
-  empfangerAdresse String? @db.TinyText
-  AbsenderAdresse  String? @db.TinyText
-  Anlagenummer     String? @db.TinyText
-  TableID          Int?
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tbllogistikkoordinatoren {
-  ID           Int?
-  Nachname     String? @db.VarChar(255)
-  Vorname      String? @db.VarChar(255)
-  Kurzzeichen  String? @db.VarChar(255)
-  B_ro         String? @map("Büro") @db.VarChar(255)
-  Foto         String? @db.VarChar(255)
-  Anlagenummer String? @db.TinyText
-
-  @@ignore
-}
-
-model tblnotebook {
-  NotebookID                                                 Int              @id @unique(map: "tblnotebook_Notebook_ID_uindex")
-  Typ                                                        String?          @db.VarChar(50)
-  Hersteller                                                 String?          @db.VarChar(50)
-  Admin                                                      Int?
-  Userkonto                                                  Int?
-  Teamviewer_ID                                              Int?
-  Projekt                                                    Int?
-  Bemerkung                                                  String?          @db.VarChar(255)
-  Anlagenummer                                               String?          @db.TinyText
-  EinkaufsDatum                                              DateTime?        @default(now()) @db.Timestamp(0)
-  EditDatum                                                  DateTime?        @default(now()) @db.Timestamp(0)
-  Wert                                                       Decimal?         @default(0.00) @db.Decimal(10, 2)
-  Seriennummer                                               String           @db.VarChar(50)
-  usrzugangsdaten_tblnotebook_UserkontoTousrzugangsdaten     usrzugangsdaten? @relation("tblnotebook_UserkontoTousrzugangsdaten", fields: [Userkonto], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook___fk_")
-  usrzugangsdaten_tblnotebook_Teamviewer_IDTousrzugangsdaten usrzugangsdaten? @relation("tblnotebook_Teamviewer_IDTousrzugangsdaten", fields: [Teamviewer_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook_tblusrzugangsdaten_ID_fk")
-  usrzugangsdaten_tblnotebook_AdminTousrzugangsdaten         usrzugangsdaten? @relation("tblnotebook_AdminTousrzugangsdaten", fields: [Admin], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "tblnotebook_tblusrzugangsdaten_ID_fk_2")
-
-  @@unique([Seriennummer, Typ, Hersteller], map: "tblnotebook_")
-  @@index([Userkonto], map: "tblnotebook___fk_")
-  @@index([Projekt], map: "tblnotebook_tblprojekte_ID_fk")
-  @@index([Teamviewer_ID], map: "tblnotebook_tblusrzugangsdaten_ID_fk")
-  @@index([Admin], map: "tblnotebook_tblusrzugangsdaten_ID_fk_2")
 }
 
 model tblprojekte {
@@ -283,98 +102,21 @@ model tblprojekte {
   projekt_artikel     projekt_artikel[]
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblprojektmanager {
-  ID             Int?
-  Nachname       String?  @db.VarChar(255)
-  Vorname        String?  @db.VarChar(255)
-  Kurzzeichen    String?  @db.VarChar(255)
-  B_ro           String?  @map("Büro") @db.VarChar(255)
-  Feld1          String?  @db.VarChar(256)
-  SSMA_TimeStamp Boolean? @db.Bit(1)
-  Anlagenummer   String?  @db.TinyText
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblrouter {
-  ID             Int?
-  Hersteller     String?   @db.VarChar(255)
-  Typ            String?   @db.VarChar(255)
-  IMEI           String?   @db.VarChar(255)
-  Seriennummer   String?   @db.VarChar(255)
-  IP_Adresse     String?   @map("IP-Adresse") @db.VarChar(255)
-  Benutzername   String?   @db.VarChar(255)
-  Passwort       String?   @db.VarChar(255)
-  ICCID          String?   @db.VarChar(255)
-  PIN            String?   @db.VarChar(255)
-  PUK            String?   @db.VarChar(255)
-  Projekt        Int?
-  Bemerkungen    String?   @db.VarChar(255)
-  Hinweis        String?   @db.VarChar(255)
-  Kommentar      String?   @db.VarChar(255)
-  Router_aktuell String?   @map("Router aktuell") @db.VarChar(255)
-  Anlagenummer   String?   @db.TinyText
-  WLAN           String?   @db.TinyText
-  SSID           String?   @db.TinyText
-  Datum          DateTime? @db.Timestamp(0)
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblsimkarten {
-  ID                 Int?
-  Provider           String?   @db.VarChar(255)
-  Kundennummer       Float?    @db.Float
-  Rufnummer          String?   @db.VarChar(255)
-  Kartenseriennummer String?   @db.VarChar(255)
-  Tarif              String?   @db.VarChar(255)
-  Vertragsende       DateTime? @db.Timestamp(0)
-  gek_ndigt_am       String?   @map("gekündigt am") @db.VarChar(255)
-  Kuendigung_zum     DateTime? @map("Kuendigung zum") @db.Timestamp(0)
-  PIN                String?   @db.VarChar(255)
-  PUK                String?   @db.VarChar(255)
-  Einsatzort         String?   @db.VarChar(255)
-  eigene_Infos       String?   @map("eigene Infos") @db.VarChar(255)
-  aktiv_             String?   @map("aktiv?") @db.VarChar(255)
-  SSMA_TimeStamp     Boolean?  @db.Bit(1)
-  Anlagenummer       String?   @db.TinyText
-  Datum              DateTime? @db.Timestamp(0)
-  Projekt            Int?
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model tblsoftware {
-  ID           Int?
-  Software     String? @db.VarChar(255)
-  Beschreibung String? @db.VarChar(255)
-  Anlagenummer String? @db.TinyText
-
-  @@ignore
-}
-
 model unterkategorie {
   unterkategorie_id  Int        @id @default(autoincrement())
   unterkategoriename String     @db.VarChar(255)
   kategorie_id       Int
-  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "unterkategorie_ibfk_1")
   artikel            artikel[]
+  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "unterkategorie_ibfk_1")
 
   @@index([kategorie_id], map: "kategorie_id")
 }
 
 model usrzugangsdaten {
-  ID                                                     Int           @id @default(autoincrement())
-  Programm                                               String        @db.VarChar(50)
-  UserName                                               String        @db.VarChar(50)
-  Password                                               String        @db.VarChar(50)
-  Role                                                   String?       @db.VarChar(50)
-  personal                                               personal[]
-  tblnotebook_tblnotebook_UserkontoTousrzugangsdaten     tblnotebook[] @relation("tblnotebook_UserkontoTousrzugangsdaten")
-  tblnotebook_tblnotebook_Teamviewer_IDTousrzugangsdaten tblnotebook[] @relation("tblnotebook_Teamviewer_IDTousrzugangsdaten")
-  tblnotebook_tblnotebook_AdminTousrzugangsdaten         tblnotebook[] @relation("tblnotebook_AdminTousrzugangsdaten")
+  ID       Int        @id @default(autoincrement())
+  Programm String     @db.VarChar(50)
+  UserName String     @db.VarChar(50)
+  Password String     @db.VarChar(50)
+  Role     String?    @db.VarChar(50)
+  personal personal[]
 }
