@@ -6,6 +6,7 @@ export class KategorienTable extends ServerSetup {
         super();
     }
 
+
     create() {
         this.app.post('/kategorie', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);

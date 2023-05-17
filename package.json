@@ -33,7 +33,7 @@
     "@angular/animations": "^16.0.1",
     "@angular/cdk": "^16.0.1",
     "@angular/material": "^16.0.1",
-    "@prisma/client": "^4.3.1",
+    "@prisma/client": "^4.14.0",
     "rxjs": "^7.5.7"
   }
 }

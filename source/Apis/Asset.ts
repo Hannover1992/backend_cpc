@@ -6,10 +6,13 @@ export class Asset extends ServerSetup {
 
     constructor() {
         super();
+        // create new Category with the name "Asset"
+        this.create_new_Kategory("Asset");
+        //singletone, it should noy
     }
 
     async create(req: any, res: any) {
-        this.app.post('/assets', async (req: any, res: any) => {
+        this.app.post('/asset', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             const artikelData = req.body.artikel;
             try {
