@@ -12,54 +12,52 @@ export class ProjektArtikel extends ServerSetup {
             this.allow_communikation_from_all_ip_adress(res);
             console.log(req.body)
 
-            let artikelData = req.body.artikel;
-            let projekt_id = req.body.projekt_id;
-            let menge = req.body.menge;
-            let assetsData = artikelData.assets;
+            let projektArtikelData = req.body;
 
-            // Remove the 'assets' property from 'artikelData' to prevent issues
-            delete artikelData.assets;
-
-            let artikel = await this.prisma.artikel.create({
+            let projektArtikel = await this.prisma.projekt_artikel.create({
                 data: {
-                    ...artikelData,
-                }
-            })
-
-            let artikel = await this.prisma.artikel.create ({
-                data: {
-                    ...artikelData,
-                    assets: {
+                    menge: projektArtikelData.menge,
+                    tblprojekte: {
+                        connect: {
+                            ID: projektArtikelData.projekt_id
+                        }
+                    },
+                    artikel: {
                         create: {
-                            Inventarnummer: assetsData.Inventarnummer
+                            artikelname: projektArtikelData.artikelname,
+                            unterkategorie: {
+                                connect: {
+                                    unterkategorie_id: projektArtikelData.unterkategorie_id
+                                }
+                            },
+                            preis: projektArtikelData.preis,
+                            beschreibung: projektArtikelData.beschreibung,
+                            bild_url: projektArtikelData.bild_url,
+                            zustand: projektArtikelData.zustand,
+                            einkaufs_datum: new Date(projektArtikelData.einkaufs_datum),
+                            belegt_von: projektArtikelData.belegt_von,
+                            belegt_bis: projektArtikelData.belegt_bis,
+                            anlagenummer: projektArtikelData.anlagenummer,
+                            edit_date: new Date(projektArtikelData.edit_date),
+                            firma: projektArtikelData.firma,
+                            model: projektArtikelData.model,
+                            assets: {
+                                create: {
+                                    Inventarnummer: projektArtikelData.Inventarnummer
+                                }
+                            }
                         }
                     }
                 }
-            }).catch(
-                (error: any) => {
-                    res.status(500).send({"message": error.message});
-                }
-            )
-
-            let projekt_artikel = await this.prisma.projekt_artikel.create({
-                data : {
-                    projekt_id: projekt_id,
-                    artikel_id: artikel.artikel_id,
-                    menge: menge
-                }
-            }).then(
-                (projekt_artikel: any) => {
-                    res.status(200).send(projekt_artikel);
-                }
-            ).catch(
-                (error: any) => {
-                    res.status(500).send({"message": error.message});
-                });
-
-            console.log(projekt_artikel);
-            res.send(projekt_artikel);
+            }).then(() => {
+                res.status(200).send({"message": "ProjektArtikel created"});
+            }
+            ).catch((error: any) => {
+                res.status(500).send({"message": error.message});
+            }
+            );
         });
-    }
+    };
 
     deletee(...args: any[]): any {
     }
