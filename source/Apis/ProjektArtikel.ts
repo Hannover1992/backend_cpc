@@ -8,6 +8,27 @@ export class ProjektArtikel extends ServerSetup {
     }
 
     create(...args: any[]): any {
+        // form of the api request
+        // {
+        //     "projekt_id": 802007,
+        //     "menge": 6,
+        //     "artikelname": "other Kabel last over REST API",
+        //     "unterkategorie_id": 1,
+        //     "preis": null,
+        //     "beschreibung": null,
+        //     "bild_url": null,
+        //     "zustand": null,
+        //     "einkaufs_datum": "2023-05-20T10:35:16.000Z",
+        //     "belegt_von": null,
+        //     "belegt_bis": null,
+        //     "anlagenummer": null,
+        //     "edit_date": "2023-05-20T10:35:16.000Z",
+        //     "besitzer_id": null,
+        //     "firma": null,
+        //     "model": null,
+        //     "Inventarnummer": 123456,
+        //     "unterkategorie_id": 1
+        // }
         this.app.post('/projekt_aritkel', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             console.log(req.body)
