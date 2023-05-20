@@ -11,7 +11,7 @@ let menge = 10;
 
 let artikel = prisma.artikel.create ({
     data: {
-        artikelname: "HDMI Kabel",
+        artikelname: "with asset Kabel",
         unterkategorie_id: unterkategorie_id,
     }
 }) .then(
@@ -26,9 +26,16 @@ let artikel = prisma.artikel.create ({
             }).then(
                 ( projekt_artikel_newely_created)  => {
                     console.log(projekt_artikel_newely_created)
+                    return prisma.assets.create({
+                        data: {
+                            ID: projekt_artikel_newely_created.artikel_id,
+                            Inventarnummer: 123456,
+                        }
+                    })
                 }
             )
         });
+
 
 // artikel = prisma.artikel.findMany({
 //     include: {

@@ -1,4 +1,5 @@
 import {ServerSetup} from "../ServerSetup";
+import {get_id_from_request} from "../Function/string_manipulation";
 
 export class ProjektArtikel extends ServerSetup {
 
@@ -7,6 +8,57 @@ export class ProjektArtikel extends ServerSetup {
     }
 
     create(...args: any[]): any {
+        this.app.post('/projekt_aritkel', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            console.log(req.body)
+
+            let artikelData = req.body.artikel;
+            let projekt_id = req.body.projekt_id;
+            let menge = req.body.menge;
+            let assetsData = artikelData.assets;
+
+            // Remove the 'assets' property from 'artikelData' to prevent issues
+            delete artikelData.assets;
+
+            let artikel = await this.prisma.artikel.create({
+                data: {
+                    ...artikelData,
+                }
+            })
+
+            let artikel = await this.prisma.artikel.create ({
+                data: {
+                    ...artikelData,
+                    assets: {
+                        create: {
+                            Inventarnummer: assetsData.Inventarnummer
+                        }
+                    }
+                }
+            }).catch(
+                (error: any) => {
+                    res.status(500).send({"message": error.message});
+                }
+            )
+
+            let projekt_artikel = await this.prisma.projekt_artikel.create({
+                data : {
+                    projekt_id: projekt_id,
+                    artikel_id: artikel.artikel_id,
+                    menge: menge
+                }
+            }).then(
+                (projekt_artikel: any) => {
+                    res.status(200).send(projekt_artikel);
+                }
+            ).catch(
+                (error: any) => {
+                    res.status(500).send({"message": error.message});
+                });
+
+            console.log(projekt_artikel);
+            res.send(projekt_artikel);
+        });
     }
 
     deletee(...args: any[]): any {
