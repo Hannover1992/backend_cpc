@@ -1,6 +1,58 @@
 import {ServerSetup} from "../ServerSetup";
 import {get_id_from_request} from "../Function/string_manipulation";
 
+
+export interface ProjectArticle {
+    projekt_artikel_id: number;
+    projekt_id: number;
+    artikel_id: number;
+    menge: number;
+    artikel: Article;
+}
+
+
+export interface Article {
+    artikel_id: number;
+    artikelname: string;
+    firma: string,
+    model: string,
+    unterkategorie_id: number;
+    preis: string;
+    beschreibung: string;
+    bild_url: string;
+    zustand: string;
+
+    einkaufs_datum: string;
+    belegt_von: string;
+    belegt_bis: string;
+    edit_date: string;
+
+    anlagenummer: string;
+    besitzer_id: null | number;
+    assets: Asset;
+    unterkategorie?: Subcategory;
+}
+
+
+export interface Asset {
+    ID: number;
+    Inventarnummer: number;
+}
+
+
+export interface Subcategory {
+    unterkategorie_id: number;
+    unterkategoriename: string;
+    kategorie_id: number;
+    kategorien: Category;
+}
+
+
+export interface Category {
+    kategorie_id: number;
+    kategoriename: string;
+}
+
 export class ProjektArtikel extends ServerSetup {
 
     constructor() {
@@ -64,7 +116,7 @@ export class ProjektArtikel extends ServerSetup {
         //     }
         // }
 
-        this.app.post('/projekt_aritkel', async (req: any, res: any) => {
+        this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             console.log(req.body);
 
@@ -83,7 +135,7 @@ export class ProjektArtikel extends ServerSetup {
                             artikelname: projektArtikelData.artikel.artikelname,
                             unterkategorie: {
                                 connect: {
-                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie.unterkategorie_id
+                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
                                 }
                             },
                             preis: projektArtikelData.artikel.preis,
@@ -137,7 +189,7 @@ export class ProjektArtikel extends ServerSetup {
             })
                 .then((artikel: any) => {
                     res.status(200).send(artikel);
-                }).catch((error: any) => {
+            }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
             });
         });
@@ -161,18 +213,19 @@ export class ProjektArtikel extends ServerSetup {
                     artikel: {
                         include: {
                             assets: true,
-                            unterkategorie: {
-                                include: {
-                                    kategorien: true,
-                                }
-                            }
+                            unterkategorie: true
+                            // unterkategorie: {
+                            //     include: {
+                            //         kategorien: true,
+                            //     }
+                            // }
                         },
                     },
                 },
             })
             .then((artikel: any) => {
                 res.status(200).send(artikel);
-                console.log("projekt Artikel wurden angefragt")
+                console.log("Projekt Artikel Assets wurden erfolgreich geladen und Erstellt")
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
             });

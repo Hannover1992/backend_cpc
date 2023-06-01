@@ -13,7 +13,7 @@ async function start() {
     new ProjektArtikel();
     new KategorienTable();
     new Asset();
-    instantiate(project.prisma);
+    // instantiate(project.prisma);
 }
 
 

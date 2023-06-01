@@ -73,7 +73,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            this.app.post('/projekt_aritkel', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            this.app.post('/projektArtikelAsset', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var projektArtikelData, projektArtikel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -94,7 +94,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                                 artikelname: projektArtikelData.artikel.artikelname,
                                                 unterkategorie: {
                                                     connect: {
-                                                        unterkategorie_id: projektArtikelData.artikel.unterkategorie.unterkategorie_id
+                                                        unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
                                                     }
                                                 },
                                                 preis: projektArtikelData.artikel.preis,
@@ -186,18 +186,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             artikel: {
                                 include: {
                                     assets: true,
-                                    unterkategorie: {
-                                        include: {
-                                            kategorien: true,
-                                        }
-                                    }
+                                    unterkategorie: true
                                 },
                             },
                         },
                     })
                         .then(function (artikel) {
                         res.status(200).send(artikel);
-                        console.log("projekt Artikel wurden angefragt");
+                        console.log("Projekt Artikel Assets wurden erfolgreich geladen und Erstellt");
                     }).catch(function (error) {
                         res.status(500).send({ "message": error.message });
                     });

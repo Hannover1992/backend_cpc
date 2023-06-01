@@ -59,7 +59,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 new ProjektArtikel_1.ProjektArtikel();
                 new KategorienTable_1.KategorienTable();
                 new Asset_1.Asset();
-                instantiate(project.prisma);
                 return [2];
             });
         });
