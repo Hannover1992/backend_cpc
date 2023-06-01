@@ -66,7 +66,7 @@ export class ProjektArtikel extends ServerSetup {
 
         this.app.post('/projekt_aritkel', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            console.log(req.body)
+            console.log(req.body);
 
             let projektArtikelData = req.body;
 
@@ -80,26 +80,26 @@ export class ProjektArtikel extends ServerSetup {
                     },
                     artikel: {
                         create: {
-                            artikelname: projektArtikelData.artikelname,
+                            artikelname: projektArtikelData.artikel.artikelname,
                             unterkategorie: {
                                 connect: {
-                                    unterkategorie_id: projektArtikelData.unterkategorie_id
+                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie.unterkategorie_id
                                 }
                             },
-                            preis: projektArtikelData.preis,
-                            beschreibung: projektArtikelData.beschreibung,
-                            bild_url: projektArtikelData.bild_url,
-                            zustand: projektArtikelData.zustand,
-                            einkaufs_datum: new Date(projektArtikelData.einkaufs_datum),
-                            belegt_von: projektArtikelData.belegt_von,
-                            belegt_bis: projektArtikelData.belegt_bis,
-                            anlagenummer: projektArtikelData.anlagenummer,
-                            edit_date: new Date(projektArtikelData.edit_date),
-                            firma: projektArtikelData.firma,
-                            model: projektArtikelData.model,
+                            preis: projektArtikelData.artikel.preis,
+                            beschreibung: projektArtikelData.artikel.beschreibung,
+                            bild_url: projektArtikelData.artikel.bild_url,
+                            zustand: projektArtikelData.artikel.zustand,
+                            einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
+                            belegt_von: projektArtikelData.artikel.belegt_von,
+                            belegt_bis: projektArtikelData.artikel.belegt_bis,
+                            anlagenummer: projektArtikelData.artikel.anlagenummer,
+                            edit_date: new Date(projektArtikelData.artikel.edit_date),
+                            firma: projektArtikelData.artikel.firma,
+                            model: projektArtikelData.artikel.model,
                             assets: {
                                 create: {
-                                    Inventarnummer: projektArtikelData.Inventarnummer
+                                    Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer
                                 }
                             }
                         }
@@ -107,13 +107,12 @@ export class ProjektArtikel extends ServerSetup {
                 }
             }).then(() => {
                 res.status(200).send({"message": "ProjektArtikel created"});
-            }
-            ).catch((error: any) => {
+            }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
-            }
-            );
+            });
         });
-    };
+    }
+
 
     deletee(...args: any[]): any {
     }
