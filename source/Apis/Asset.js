@@ -91,6 +91,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                 case 0:
                                     this.allow_communikation_from_all_ip_adress(res);
                                     artikelData = req.body.artikel;
+                                    console.log(artikelData);
                                     _a.label = 1;
                                 case 1:
                                     _a.trys.push([1, 3, , 4]);

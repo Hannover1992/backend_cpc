@@ -29,6 +29,41 @@ export class ProjektArtikel extends ServerSetup {
         //     "Inventarnummer": 123456,
         //     "unterkategorie_id": 1
         // }
+
+        // {
+        //     "projekt_artikel_id": 1,
+        //     "projekt_id": 802007,
+        //     "artikel_id": 2,
+        //     "menge": 10,
+        //     "artikel": {
+        //     "artikel_id": 2,
+        //         "artikelname": "HDMI Kabel",
+        //         "unterkategorie_id": 1,
+        //         "preis": null,
+        //         "beschreibung": null,
+        //         "bild_url": null,
+        //         "zustand": null,
+        //         "einkaufs_datum": "2023-05-19T10:17:29.000Z",
+        //         "belegt_von": null,
+        //         "belegt_bis": null,
+        //         "anlagenummer": null,
+        //         "edit_date": "2023-05-19T10:17:29.000Z",
+        //         "besitzer_id": null,
+        //         "firma": null,
+        //         "model": null,
+        //         "assets": null,
+        //         "unterkategorie": {
+        //         "unterkategorie_id": 1,
+        //             "unterkategoriename": "Kabel",
+        //             "kategorie_id": 1,
+        //             "kategorien": {
+        //             "kategorie_id": 1,
+        //                 "kategoriename": "Asset"
+        //             }
+        //         }
+        //     }
+        // }
+
         this.app.post('/projekt_aritkel', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             console.log(req.body)
@@ -108,7 +143,6 @@ export class ProjektArtikel extends ServerSetup {
             });
         });
 
-        //toDo: ich muss das noch mit dem Assets verknupfen
         this.app.get('/projekt_assets/:projekt_id/:unterkategoriename', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             const inputet_projekt_id = parseInt(req.params.projekt_id);

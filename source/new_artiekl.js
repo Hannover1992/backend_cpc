@@ -17,7 +17,7 @@
     var menge = 10;
     var artikel = prisma.artikel.create({
         data: {
-            artikelname: "with asset Kabel",
+            artikelname: "Last new Cabel",
             unterkategorie_id: unterkategorie_id,
         }
     }).then(function (artikel) {

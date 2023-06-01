@@ -11,7 +11,7 @@ let menge = 10;
 
 let artikel = prisma.artikel.create ({
     data: {
-        artikelname: "with asset Kabel",
+        artikelname: "Last new Cabel",
         unterkategorie_id: unterkategorie_id,
     }
 }) .then(

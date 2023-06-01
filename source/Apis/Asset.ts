@@ -15,6 +15,7 @@ export class Asset extends ServerSetup {
         this.app.post('/asset', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             const artikelData = req.body.artikel;
+            console.log(artikelData);
             try {
 
                 await this.create_new_artikel(artikelData);
