@@ -129,10 +129,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }); });
         };
         ProjektArtikel.prototype.deletee = function () {
+            var _this = this;
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
+            this.app.delete('/projektArtikelAsset/:projekt_artikel_id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var projektArtikelID;
+                return __generator(this, function (_a) {
+                    this.allow_communikation_from_all_ip_adress(res);
+                    projektArtikelID = parseInt(req.params.projekt_artikel_id);
+                    this.prisma.projekt_artikel.delete({
+                        where: {
+                            projekt_artikel_id: projektArtikelID
+                        },
+                        include: {
+                            artikel: {
+                                include: {
+                                    assets: true,
+                                    electronics: true
+                                }
+                            }
+                        }
+                    }).then(function () {
+                        res.status(200).send({ "message": "Asset wurde erfolgreich gelöscht" });
+                    }).catch(function (error) {
+                        res.status(500).send({ "message": error.message });
+                    });
+                    return [2];
+                });
+            }); });
         };
         ProjektArtikel.prototype.read = function () {
             var _this = this;
@@ -140,31 +166,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            this.app.get('/test', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    this.allow_communikation_from_all_ip_adress(res);
-                    this.prisma.projekt_artikel.findMany({
-                        include: {
-                            artikel: {
-                                include: {
-                                    assets: true,
-                                    unterkategorie: {
-                                        include: {
-                                            kategorien: true,
-                                        }
-                                    }
-                                },
-                            },
-                        },
-                    })
-                        .then(function (artikel) {
-                        res.status(200).send(artikel);
-                    }).catch(function (error) {
-                        res.status(500).send({ "message": error.message });
-                    });
-                    return [2];
-                });
-            }); });
             this.app.get('/projekt_assets/:projekt_id/:unterkategoriename', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var inputet_projekt_id, inputet_unterkategoriename;
                 return __generator(this, function (_a) {

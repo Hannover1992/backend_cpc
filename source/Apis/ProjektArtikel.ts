@@ -60,62 +60,6 @@ export class ProjektArtikel extends ServerSetup {
     }
 
     create(...args: any[]): any {
-        // form of the api request
-        // {
-        //     "projekt_id": 802007,
-        //     "menge": 6,
-        //     "artikelname": "other Kabel last over REST API",
-        //     "unterkategorie_id": 1,
-        //     "preis": null,
-        //     "beschreibung": null,
-        //     "bild_url": null,
-        //     "zustand": null,
-        //     "einkaufs_datum": "2023-05-20T10:35:16.000Z",
-        //     "belegt_von": null,
-        //     "belegt_bis": null,
-        //     "anlagenummer": null,
-        //     "edit_date": "2023-05-20T10:35:16.000Z",
-        //     "besitzer_id": null,
-        //     "firma": null,
-        //     "model": null,
-        //     "Inventarnummer": 123456,
-        //     "unterkategorie_id": 1
-        // }
-
-        // {
-        //     "projekt_artikel_id": 1,
-        //     "projekt_id": 802007,
-        //     "artikel_id": 2,
-        //     "menge": 10,
-        //     "artikel": {
-        //     "artikel_id": 2,
-        //         "artikelname": "HDMI Kabel",
-        //         "unterkategorie_id": 1,
-        //         "preis": null,
-        //         "beschreibung": null,
-        //         "bild_url": null,
-        //         "zustand": null,
-        //         "einkaufs_datum": "2023-05-19T10:17:29.000Z",
-        //         "belegt_von": null,
-        //         "belegt_bis": null,
-        //         "anlagenummer": null,
-        //         "edit_date": "2023-05-19T10:17:29.000Z",
-        //         "besitzer_id": null,
-        //         "firma": null,
-        //         "model": null,
-        //         "assets": null,
-        //         "unterkategorie": {
-        //         "unterkategorie_id": 1,
-        //             "unterkategoriename": "Kabel",
-        //             "kategorie_id": 1,
-        //             "kategorien": {
-        //             "kategorie_id": 1,
-        //                 "kategoriename": "Asset"
-        //             }
-        //         }
-        //     }
-        // }
-
         this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             console.log(req.body);
@@ -167,32 +111,33 @@ export class ProjektArtikel extends ServerSetup {
 
 
     deletee(...args: any[]): any {
-    }
-
-    read(...args: any[]): any {
-
-        this.app.get('/test', async (req: any, res: any) => {
+        this.app.delete('/projektArtikelAsset/:projekt_artikel_id', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
-            this.prisma.projekt_artikel.findMany({
+            let projektArtikelID = parseInt(req.params.projekt_artikel_id);
+            // convert to ineger
+
+            this.prisma.projekt_artikel.delete({
+                where: {
+                    projekt_artikel_id: projektArtikelID
+                },
                 include: {
                     artikel: {
                         include: {
                             assets: true,
-                            unterkategorie: {
-                                include: {
-                                    kategorien: true,
-                                }
-                            }
-                        },
-                    },
-                },
-            })
-                .then((artikel: any) => {
-                    res.status(200).send(artikel);
+                            electronics: true
+                        }
+                    }
+                }
+            }).then(() => {
+                res.status(200).send({"message": "Asset wurde erfolgreich gelöscht"});
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
             });
         });
+    }
+
+    read(...args: any[]): any {
+
 
         this.app.get('/projekt_assets/:projekt_id/:unterkategoriename', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
@@ -213,19 +158,15 @@ export class ProjektArtikel extends ServerSetup {
                     artikel: {
                         include: {
                             assets: true,
-                            unterkategorie: true
-                            // unterkategorie: {
-                            //     include: {
-                            //         kategorien: true,
-                            //     }
-                            // }
+                            unterkategorie: true,
+                            electronics: true
                         },
                     },
                 },
             })
             .then((artikel: any) => {
                 res.status(200).send(artikel);
-                console.log("Projekt Artikel Assets wurden erfolgreich geladen und Erstellt")
+                console.log("Deleted Success")
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
             });
@@ -244,7 +185,7 @@ export class ProjektArtikel extends ServerSetup {
                                     kategorien: true,
                                 },
                             },
-                            assets: true, // Hier wurde das assets-Modell hinzugefügt
+                            assets: true,
                         },
                     },
                     tblprojekte: true,
@@ -257,34 +198,6 @@ export class ProjektArtikel extends ServerSetup {
             });
         });
     }
-
-
-    // async getFilteredProjektArtikel(projekt_id: any, unterkategoriename: any) {
-    //     const result = await this.prisma.projekt_artikel.findMany({
-    //         where: {
-    //             projekt_artiekl_id: projekt_id,
-    //             artikel: {
-    //                 unterkategorie: {
-    //                     unterkategoriename: {
-    //                         contains: unterkategoriename,
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //         include: {
-    //             artikel: {
-    //                 select: {
-    //                     artikel_id: true,
-    //                     artikelname: true,
-    //                     unterkategorie: true,
-    //                 },
-    //             },
-    //         },
-    //     });
-    //
-    //     return result;
-    // }
-
 
 
     update(...args: any[]): any {

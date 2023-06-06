@@ -30,6 +30,8 @@ export class Asset extends ServerSetup {
         });
     }
 
+
+
     private async create_new_artikel(artikelData: any) {
         const kategorienData = artikelData.unterkategorie.kategorien;
         await this.create_new_Kategory(kategorienData);
