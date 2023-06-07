@@ -12,6 +12,7 @@ export interface ProjectArticle {
 
 
 export interface Article {
+    seriennummer: string;
     artikel_id: number;
     artikelname: string;
     firma: string,
@@ -64,7 +65,24 @@ export class ProjektArtikel extends ServerSetup {
             this.allow_communikation_from_all_ip_adress(res);
             console.log(req.body);
 
-            let projektArtikelData = req.body;
+            let projektArtikelData : ProjectArticle = req.body;
+
+            console.log(projektArtikelData)
+
+            //this prisma projekt_arikel create include tbprojekte and artikel and artiekl.asset
+
+
+            // await this.prisma.projekt_artikel.create({
+            //     data: projektArtikelData,
+            //     include: {
+            //         tblprojekte: true,
+            //         artikel: {
+            //             include: {
+            //                 assets: true
+            //             }
+            //         }
+            //     }
+            // });
 
             let projektArtikel = await this.prisma.projekt_artikel.create({
                 data: {
@@ -93,6 +111,7 @@ export class ProjektArtikel extends ServerSetup {
                             edit_date: new Date(projektArtikelData.artikel.edit_date),
                             firma: projektArtikelData.artikel.firma,
                             model: projektArtikelData.artikel.model,
+                            seriennummer:  projektArtikelData.artikel.seriennummer,
                             assets: {
                                 create: {
                                     Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer

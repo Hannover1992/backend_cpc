@@ -23,6 +23,7 @@ model artikel {
   besitzer_id       Int?
   firma             String?           @db.VarChar(50)
   model             String?           @db.VarChar(35)
+  seriennummer      String?           @db.VarChar(55)
   unterkategorie    unterkategorie    @relation(fields: [unterkategorie_id], references: [unterkategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
   personal          personal?         @relation(fields: [besitzer_id], references: [Personalnummer], onDelete: NoAction, onUpdate: NoAction, map: "artikel_personal_Personalnummer_fk")
   assets            assets?

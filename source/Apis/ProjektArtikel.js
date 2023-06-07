@@ -81,6 +81,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             this.allow_communikation_from_all_ip_adress(res);
                             console.log(req.body);
                             projektArtikelData = req.body;
+                            console.log(projektArtikelData);
                             return [4, this.prisma.projekt_artikel.create({
                                     data: {
                                         menge: projektArtikelData.menge,
@@ -108,6 +109,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                                 edit_date: new Date(projektArtikelData.artikel.edit_date),
                                                 firma: projektArtikelData.artikel.firma,
                                                 model: projektArtikelData.artikel.model,
+                                                seriennummer: projektArtikelData.artikel.seriennummer,
                                                 assets: {
                                                     create: {
                                                         Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer
@@ -187,14 +189,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             artikel: {
                                 include: {
                                     assets: true,
-                                    unterkategorie: true
+                                    unterkategorie: true,
+                                    electronics: true
                                 },
                             },
                         },
                     })
                         .then(function (artikel) {
                         res.status(200).send(artikel);
-                        console.log("Projekt Artikel Assets wurden erfolgreich geladen und Erstellt");
+                        console.log("Deleted Success");
                     }).catch(function (error) {
                         res.status(500).send({ "message": error.message });
                     });
