@@ -76,9 +76,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     var Asset = (function (_super) {
         __extends(Asset, _super);
         function Asset() {
-            var _this = _super.call(this) || this;
-            _this.create_new_Kategory("Asset");
-            return _this;
+            return _super.call(this) || this;
         }
         Asset.prototype.create = function (req, res) {
             return __awaiter(this, void 0, void 0, function () {

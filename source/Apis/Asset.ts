@@ -1,5 +1,6 @@
 import {ServerSetup} from "../ServerSetup";
 import {get_id_from_request} from "../Function/string_manipulation";
+import {kategorien} from "@prisma/client";
 
 
 export class Asset extends ServerSetup {
@@ -7,8 +8,6 @@ export class Asset extends ServerSetup {
     constructor() {
         super();
         // create new Category with the name "Asset"
-        this.create_new_Kategory("Asset");
-        //singletone, it should noy
     }
 
     async create(req: any, res: any) {
@@ -33,7 +32,7 @@ export class Asset extends ServerSetup {
 
 
     private async create_new_artikel(artikelData: any) {
-        const kategorienData = artikelData.unterkategorie.kategorien;
+        const kategorienData : kategorien = artikelData.unterkategorie.kategorien;
         await this.create_new_Kategory(kategorienData);
         const unterkategorie = artikelData.unterkategorie;
         await this.create_new_unterkategory(unterkategorie, kategorienData);
