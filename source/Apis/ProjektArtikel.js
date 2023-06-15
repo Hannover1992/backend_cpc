@@ -82,42 +82,46 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             console.log(req.body);
                             projektArtikelData = req.body;
                             return [4, this.prisma.projekt_artikel.create({
-                                    menge: projektArtikelData.menge,
-                                    tblprojekte: {
-                                        connect: {
-                                            ID: projektArtikelData.projekt_id
-                                        }
-                                    },
-                                    artikel: {
-                                        create: {
-                                            artikelname: projektArtikelData.artikel.artikelname,
-                                            unterkategorie: {
-                                                connect: {
-                                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                                }
-                                            },
-                                            preis: projektArtikelData.artikel.preis,
-                                            beschreibung: projektArtikelData.artikel.beschreibung,
-                                            bild_url: projektArtikelData.artikel.bild_url,
-                                            zustand: projektArtikelData.artikel.zustand,
-                                            einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
-                                            belegt_von: projektArtikelData.artikel.belegt_von,
-                                            belegt_bis: projektArtikelData.artikel.belegt_bis,
-                                            anlagenummer: projektArtikelData.artikel.anlagenummer,
-                                            edit_date: new Date(projektArtikelData.artikel.edit_date),
-                                            firma: projektArtikelData.artikel.firma,
-                                            model: projektArtikelData.artikel.model,
-                                            seriennummer: projektArtikelData.artikel.seriennummer,
-                                            assets: {
-                                                create: {
-                                                    Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer
+                                    data: {
+                                        menge: projektArtikelData.menge,
+                                        tblprojekte: {
+                                            connect: {
+                                                ID: projektArtikelData.projekt_id
+                                            }
+                                        },
+                                        artikel: {
+                                            create: {
+                                                artikelname: projektArtikelData.artikel.artikelname,
+                                                unterkategorie: {
+                                                    connect: {
+                                                        unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
+                                                    }
+                                                },
+                                                preis: projektArtikelData.artikel.preis,
+                                                beschreibung: projektArtikelData.artikel.beschreibung,
+                                                bild_url: projektArtikelData.artikel.bild_url,
+                                                zustand: projektArtikelData.artikel.zustand,
+                                                einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
+                                                belegt_von: projektArtikelData.artikel.belegt_von,
+                                                belegt_bis: projektArtikelData.artikel.belegt_bis,
+                                                anlagenummer: projektArtikelData.artikel.anlagenummer,
+                                                edit_date: new Date(projektArtikelData.artikel.edit_date),
+                                                firma: projektArtikelData.artikel.firma,
+                                                model: projektArtikelData.artikel.model,
+                                                seriennummer: projektArtikelData.artikel.seriennummer,
+                                                assets: {
+                                                    create: {
+                                                        Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }).then(function () {
+                                })
+                                    .then(function () {
                                     res.status(200).send({ "message": "ProjektArtikel created" });
-                                }).catch(function (error) {
+                                })
+                                    .catch(function (error) {
                                     res.status(500).send({ "message": error.message });
                                 })];
                         case 1:
