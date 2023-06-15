@@ -12,7 +12,6 @@ export interface ProjectArticle {
 
 
 export interface Article {
-    seriennummer: string;
     artikel_id: number;
     artikelname: string;
     firma: string,
@@ -29,6 +28,7 @@ export interface Article {
     edit_date: string;
 
     anlagenummer: string;
+    seriennummer: string;
     besitzer_id: null | number;
     assets: Asset;
     unterkategorie?: Subcategory;
@@ -65,27 +65,9 @@ export class ProjektArtikel extends ServerSetup {
             this.allow_communikation_from_all_ip_adress(res);
             console.log(req.body);
 
-            let projektArtikelData : ProjectArticle = req.body;
-
-            console.log(projektArtikelData)
-
-            //this prisma projekt_arikel create include tbprojekte and artikel and artiekl.asset
-
-
-            // await this.prisma.projekt_artikel.create({
-            //     data: projektArtikelData,
-            //     include: {
-            //         tblprojekte: true,
-            //         artikel: {
-            //             include: {
-            //                 assets: true
-            //             }
-            //         }
-            //     }
-            // });
+            let projektArtikelData = req.body;
 
             let projektArtikel = await this.prisma.projekt_artikel.create({
-                data: {
                     menge: projektArtikelData.menge,
                     tblprojekte: {
                         connect: {
@@ -111,7 +93,7 @@ export class ProjektArtikel extends ServerSetup {
                             edit_date: new Date(projektArtikelData.artikel.edit_date),
                             firma: projektArtikelData.artikel.firma,
                             model: projektArtikelData.artikel.model,
-                            seriennummer:  projektArtikelData.artikel.seriennummer,
+                            seriennummer: projektArtikelData.artikel.seriennummer,
                             assets: {
                                 create: {
                                     Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer
@@ -120,7 +102,7 @@ export class ProjektArtikel extends ServerSetup {
                         }
                     }
                 }
-            }).then(() => {
+            ).then(() => {
                 res.status(200).send({"message": "ProjektArtikel created"});
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
