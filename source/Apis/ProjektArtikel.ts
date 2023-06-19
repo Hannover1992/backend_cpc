@@ -67,6 +67,15 @@ export class ProjektArtikel extends ServerSetup {
 
             let projektArtikelData = req.body;
 
+            await this.prisma.projekt_artikel.create({
+                data: {
+                    projektArtikelData
+                }
+            }).catch((err: any) => {
+                console.log(err);
+                res.status(500).send({"message": err.message});
+            });
+
             let projektArtikel = await this.prisma.projekt_artikel.create({
                 data: {
                     menge: projektArtikelData.menge,

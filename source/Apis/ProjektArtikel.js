@@ -83,6 +83,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             projektArtikelData = req.body;
                             return [4, this.prisma.projekt_artikel.create({
                                     data: {
+                                        projektArtikelData: projektArtikelData
+                                    }
+                                }).catch(function (err) {
+                                    console.log(err);
+                                    res.status(500).send({ "message": err.message });
+                                })];
+                        case 1:
+                            _a.sent();
+                            return [4, this.prisma.projekt_artikel.create({
+                                    data: {
                                         menge: projektArtikelData.menge,
                                         tblprojekte: {
                                             connect: {
@@ -124,7 +134,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                     .catch(function (error) {
                                     res.status(500).send({ "message": error.message });
                                 })];
-                        case 1:
+                        case 2:
                             projektArtikel = _a.sent();
                             return [2];
                     }
