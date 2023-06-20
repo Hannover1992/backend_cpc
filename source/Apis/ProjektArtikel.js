@@ -187,54 +187,117 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             if (!existingArtikel) return [3, 4];
                             return [4, this.updateProjektArtikel(projektArtikelData)];
                         case 3: return [2, _a.sent()];
-                        case 4: return [4, this.createProjektArtikel(projektArtikelData)];
+                        case 4: return [4, this.createProjectArticle(projektArtikelData)];
                         case 5: return [2, _a.sent()];
                     }
                 });
             });
         };
-        ProjektArtikel.prototype.createProjektArtikel = function (projektArtikelData) {
+        ProjektArtikel.prototype.createProjectArticle = function (projektArtikelData) {
             return __awaiter(this, void 0, void 0, function () {
+                var parsedData, project, articleData;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4, this.prisma.projekt_artikel.create({
-                                data: {
-                                    menge: parseInt(projektArtikelData.artikel.asset_numbers.menge),
-                                    tblprojekte: {
-                                        connect: {
-                                            ID: projektArtikelData.projekt_id
-                                        }
-                                    },
-                                    artikel: {
-                                        create: {
-                                            artikelname: projektArtikelData.artikel.asset_details.artikelname,
-                                            unterkategorie: {
-                                                connect: {
-                                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                                }
-                                            },
-                                            preis: parseFloat(projektArtikelData.artikel.asset_numbers.preis),
-                                            beschreibung: projektArtikelData.artikel.asset_details.beschreibung,
-                                            zustand: projektArtikelData.artikel.asset_details.zustand,
-                                            einkaufs_datum: new Date(projektArtikelData.artikel.date_info.einkaufs_datum),
-                                            belegt_von: new Date(projektArtikelData.artikel.date_info.belegt_von),
-                                            belegt_bis: new Date(projektArtikelData.artikel.date_info.belegt_bis),
-                                            anlagenummer: projektArtikelData.artikel.asset_numbers.anlagenummer,
-                                            edit_date: new Date(projektArtikelData.artikel.date_info.edit_date),
-                                            firma: projektArtikelData.artikel.asset_details.firma,
-                                            model: projektArtikelData.artikel.asset_details.model,
-                                            seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
-                                            assets: {
-                                                create: {
-                                                    Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
-                                                }
-                                            }
-                                        }
+                        case 0:
+                            parsedData = this.parseArticleData(projektArtikelData);
+                            return [4, this.connectProject(parsedData.projekt_id)];
+                        case 1:
+                            project = _a.sent();
+                            return [4, this.createArticle(parsedData)];
+                        case 2:
+                            articleData = _a.sent();
+                            return [4, this.prisma.projekt_artikel.create({
+                                    data: {
+                                        menge: parsedData.menge,
+                                        tblprojekte: project,
+                                        artikel: articleData
                                     }
-                                }
-                            })];
-                        case 1: return [2, _a.sent()];
+                                })];
+                        case 3: return [2, _a.sent()];
                     }
+                });
+            });
+        };
+        ProjektArtikel.prototype.parseArticleData = function (projektArtikelData) {
+            return {
+                menge: parseInt(projektArtikelData.artikel.asset_numbers.menge),
+                projekt_id: projektArtikelData.projekt_id,
+                artikel: projektArtikelData.artikel,
+                unterkategorie_id: projektArtikelData.artikel.unterkategorie_id,
+                assets: projektArtikelData.artikel.assets
+            };
+        };
+        ProjektArtikel.prototype.connectProject = function (projekt_id) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2, {
+                            connect: {
+                                ID: projekt_id
+                            }
+                        }];
+                });
+            });
+        };
+        ProjektArtikel.prototype.createArticle = function (parsedData) {
+            return __awaiter(this, void 0, void 0, function () {
+                var article;
+                var _a, _b;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0:
+                            _a = {};
+                            _b = {
+                                artikelname: parsedData.artikel.asset_details.artikelname,
+                                preis: parseFloat(parsedData.artikel.asset_numbers.preis),
+                                beschreibung: parsedData.artikel.asset_details.beschreibung,
+                                zustand: parsedData.artikel.asset_details.zustand,
+                                einkaufs_datum: new Date(parsedData.artikel.date_info.einkaufs_datum),
+                                belegt_von: new Date(parsedData.artikel.date_info.belegt_von),
+                                belegt_bis: new Date(parsedData.artikel.date_info.belegt_bis),
+                                anlagenummer: parsedData.artikel.asset_numbers.anlagenummer,
+                                edit_date: new Date(parsedData.artikel.date_info.edit_date),
+                                firma: parsedData.artikel.asset_details.firma,
+                                model: parsedData.artikel.asset_details.model,
+                                seriennummer: parsedData.artikel.asset_numbers.seriennummer
+                            };
+                            return [4, this.connectSubcategory(parsedData.unterkategorie_id)];
+                        case 1:
+                            _b.unterkategorie = _c.sent();
+                            return [4, this.createAssets(parsedData)];
+                        case 2:
+                            article = (_a.create = (_b.assets = _c.sent(),
+                                _b),
+                                _a);
+                            return [2, article];
+                    }
+                });
+            });
+        };
+        ProjektArtikel.prototype.connectSubcategory = function (unterkategorie_id) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2, {
+                            connect: {
+                                unterkategorie_id: unterkategorie_id
+                            }
+                        }];
+                });
+            });
+        };
+        ProjektArtikel.prototype.createAssets = function (parsedData) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    if (parsedData.assets) {
+                        return [2, {
+                                create: {
+                                    Inventarnummer: parseInt(parsedData.assets.Inventarnummer)
+                                }
+                            }];
+                    }
+                    else {
+                        return [2, {}];
+                    }
+                    return [2];
                 });
             });
         };
@@ -276,7 +339,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             this.allow_communikation_from_all_ip_adress(res);
                             console.log(req.body);
                             projektArtikelData = req.body;
-                            this.createProjektArtikel(projektArtikelData);
+                            this.createProjectArticle(projektArtikelData);
                             return [4, this.prisma.projekt_artikel.create({
                                     data: {
                                         menge: parseInt(projektArtikelData.artikel.asset_numbers.menge),
