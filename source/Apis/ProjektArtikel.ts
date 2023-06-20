@@ -134,67 +134,6 @@ export class ProjektArtikel extends ServerSetup {
     //     this.app.post('/projektArtikelAsset', this.handlePostRequest.bind(this));
     // }
 
-
-    async createProjektArtikel(projektArtikelData: any) {
-    }
-
-    create(...args: any[]): any {
-        this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
-            this.allow_communikation_from_all_ip_adress(res);
-            console.log(req.body);
-
-            let projektArtikelData = req.body;
-
-            this.createProjektArtikel(projektArtikelData)
-
-            return await this.prisma.projekt_artikel.create({
-                data: {
-                    menge: parseInt(projektArtikelData.artikel.asset_numbers.menge),
-                    tblprojekte: {
-                        connect: {
-                            ID: projektArtikelData.projekt_id
-                        }
-                    },
-                    artikel: {
-                        create: {
-                            artikelname: projektArtikelData.artikel.asset_details.artikelname,
-                            unterkategorie: {
-                                connect: {
-                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                }
-                            },
-                            preis: parseFloat(projektArtikelData.artikel.asset_numbers.preis),
-                            beschreibung: projektArtikelData.artikel.asset_details.beschreibung,
-                            zustand: projektArtikelData.artikel.asset_details.zustand,
-                            einkaufs_datum: new Date(projektArtikelData.artikel.date_info.einkaufs_datum),
-                            belegt_von: new Date(projektArtikelData.artikel.date_info.belegt_von),
-                            belegt_bis: new Date(projektArtikelData.artikel.date_info.belegt_bis),
-                            anlagenummer: projektArtikelData.artikel.asset_numbers.anlagenummer,
-                            edit_date: new Date(projektArtikelData.artikel.date_info.edit_date),
-                            firma: projektArtikelData.artikel.asset_details.firma,
-                            model: projektArtikelData.artikel.asset_details.model,
-                            seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
-                            assets: {
-                                create: {
-                                    Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
-                                }
-                            }
-                        }
-                    }
-                }
-            })
-                .then(() => {
-                    res.status(200).send({"message": "ProjektArtikel created"});
-                    console.log("ProjektArtikel created");
-                })
-                .catch((error: any) => {
-                    res.status(500).send({"message": error.message});
-                    console.log(error.message);
-                });
-        });
-    }
-
-
     deletee(...args: any[]): any {
         this.app.delete('/projektArtikelAsset/:projekt_artikel_id', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
@@ -284,41 +223,35 @@ export class ProjektArtikel extends ServerSetup {
         });
     }
 
+    async upsertProjektArtikel(projektArtikelData: any) {
+        let existingArtikel;
+        if(projektArtikelData.artikel.artikel_id != null){
+            existingArtikel = await this.prisma.artikel.findUnique({
+                where: {
+                    artikel_id: projektArtikelData.artikel.artikel_id
+                }
+            });
+        }
 
-    update(...args: any[]): any {
-        this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
-            this.allow_communikation_from_all_ip_adress(res);
-            console.log(req.body);
-
-            let projektArtikelData = req.body;
-
-            this.updateProjektArtikel(projektArtikelData)
-                .then(() => {
-                    res.status(200).send({"message": "ProjektArtikel updated"});
-                    console.log("ProjektArtikel updated");
-                })
-                .catch((error: any) => {
-                    res.status(500).send({"message": error.message});
-                    console.log(error.message);
-                });
-        });
+        if(existingArtikel) {
+            return await this.updateProjektArtikel(projektArtikelData);
+        } else {
+            return await this.createProjektArtikel(projektArtikelData);
+        }
     }
 
 
-    async updateProjektArtikel(projektArtikelData: any) {
-        return await this.prisma.projekt_artikel.update({
-            where: {
-                artikel_id: projektArtikelData.artikel.artikel_id
-            },
+    async createProjektArtikel(projektArtikelData: any) {
+        return await this.prisma.projekt_artikel.create({
             data: {
-                menge: projektArtikelData.artikel.asset_numbers.menge,
+                menge: parseInt(projektArtikelData.artikel.asset_numbers.menge),
                 tblprojekte: {
                     connect: {
                         ID: projektArtikelData.projekt_id
                     }
                 },
                 artikel: {
-                    update: {
+                    create: {
                         artikelname: projektArtikelData.artikel.asset_details.artikelname,
                         unterkategorie: {
                             connect: {
@@ -337,7 +270,7 @@ export class ProjektArtikel extends ServerSetup {
                         model: projektArtikelData.artikel.asset_details.model,
                         seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
                         assets: {
-                            update: {
+                            create: {
                                 Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
                             }
                         }
@@ -346,6 +279,204 @@ export class ProjektArtikel extends ServerSetup {
             }
         });
     }
+
+    create(...args: any[]): any {
+
+        this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            console.log(req.body);
+
+            let projektArtikelData = req.body;
+
+            this.upsertProjektArtikel(projektArtikelData)
+                .then((response: any) => {
+                    if (response) {
+                        res.status(200).send({"message": "ProjektArtikel updated"});
+                        console.log("ProjektArtikel updated");
+                    } else {
+                        res.status(200).send({"message": "ProjektArtikel created"});
+                        console.log("ProjektArtikel created");
+                    }
+                })
+                .catch((error: any) => {
+                    res.status(500).send({"message": error.message});
+                    console.log(error.message);
+                });
+        });
+
+        this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            console.log(req.body);
+
+            let projektArtikelData = req.body;
+
+            this.createProjektArtikel(projektArtikelData)
+
+            return await this.prisma.projekt_artikel.create({
+                data: {
+                    menge: parseInt(projektArtikelData.artikel.asset_numbers.menge),
+                    tblprojekte: {
+                        connect: {
+                            ID: projektArtikelData.projekt_id
+                        }
+                    },
+                    artikel: {
+                        create: {
+                            artikelname: projektArtikelData.artikel.asset_details.artikelname,
+                            unterkategorie: {
+                                connect: {
+                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
+                                }
+                            },
+                            preis: parseFloat(projektArtikelData.artikel.asset_numbers.preis),
+                            beschreibung: projektArtikelData.artikel.asset_details.beschreibung,
+                            zustand: projektArtikelData.artikel.asset_details.zustand,
+                            einkaufs_datum: new Date(projektArtikelData.artikel.date_info.einkaufs_datum),
+                            belegt_von: new Date(projektArtikelData.artikel.date_info.belegt_von),
+                            belegt_bis: new Date(projektArtikelData.artikel.date_info.belegt_bis),
+                            anlagenummer: projektArtikelData.artikel.asset_numbers.anlagenummer,
+                            edit_date: new Date(projektArtikelData.artikel.date_info.edit_date),
+                            firma: projektArtikelData.artikel.asset_details.firma,
+                            model: projektArtikelData.artikel.asset_details.model,
+                            seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
+                            assets: {
+                                create: {
+                                    Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+                .then(() => {
+                    res.status(200).send({"message": "ProjektArtikel created"});
+                    console.log("ProjektArtikel created");
+                })
+                .catch((error: any) => {
+                    res.status(500).send({"message": error.message});
+                    console.log(error.message);
+                });
+        });
+    }
+
+
+    async updateProjektArtikel(projektArtikelData: any) {
+        const existingArtikel = await this.prisma.artikel.findUnique({
+            where: {
+                artikel_id: projektArtikelData.artikel.artikel_id
+            }
+        });
+
+        if(existingArtikel) {
+            return await this.prisma.projekt_artikel.update({
+                where: {
+                    artikel_id: projektArtikelData.artikel.artikel_id
+                },
+                data: {
+                    data: {
+                        menge: projektArtikelData.artikel.asset_numbers.menge,
+                        tblprojekte: {
+                            connect: {
+                                ID: projektArtikelData.projekt_id
+                            }
+                        },
+                        artikel: {
+                            update: {
+                                artikelname: projektArtikelData.artikel.asset_details.artikelname,
+                                unterkategorie: {
+                                    connect: {
+                                        unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
+                                    }
+                                },
+                                preis: parseFloat(projektArtikelData.artikel.asset_numbers.preis),
+                                beschreibung: projektArtikelData.artikel.asset_details.beschreibung,
+                                zustand: projektArtikelData.artikel.asset_details.zustand,
+                                einkaufs_datum: new Date(projektArtikelData.artikel.date_info.einkaufs_datum),
+                                belegt_von: new Date(projektArtikelData.artikel.date_info.belegt_von),
+                                belegt_bis: new Date(projektArtikelData.artikel.date_info.belegt_bis),
+                                anlagenummer: projektArtikelData.artikel.asset_numbers.anlagenummer,
+                                edit_date: new Date(projektArtikelData.artikel.date_info.edit_date),
+                                firma: projektArtikelData.artikel.asset_details.firma,
+                                model: projektArtikelData.artikel.asset_details.model,
+                                seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
+                                assets: {
+                                    update: {
+                                        Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            return null;
+        }
+    }
+
+
+
+    update(...args: any[]): any {
+        // this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
+        //     this.allow_communikation_from_all_ip_adress(res);
+        //     console.log(req.body);
+        //
+        //     let projektArtikelData = req.body;
+        //
+        //     this.updateProjektArtikel(projektArtikelData)
+        //         .then(() => {
+        //             res.status(200).send({"message": "ProjektArtikel updated"});
+        //             console.log("ProjektArtikel updated");
+        //         })
+        //         .catch((error: any) => {
+        //             res.status(500).send({"message": error.message});
+        //             console.log(error.message);
+        //         });
+        // });
+    }
+
+
+    // async updateProjektArtikel(projektArtikelData: any) {
+    //     return await this.prisma.projekt_artikel.update({
+    //         where: {
+    //             artikel_id: projektArtikelData.artikel.artikel_id
+    //         },
+    //         data: {
+    //             menge: projektArtikelData.artikel.asset_numbers.menge,
+    //             tblprojekte: {
+    //                 connect: {
+    //                     ID: projektArtikelData.projekt_id
+    //                 }
+    //             },
+    //             artikel: {
+    //                 update: {
+    //                     artikelname: projektArtikelData.artikel.asset_details.artikelname,
+    //                     unterkategorie: {
+    //                         connect: {
+    //                             unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
+    //                         }
+    //                     },
+    //                     preis: parseFloat(projektArtikelData.artikel.asset_numbers.preis),
+    //                     beschreibung: projektArtikelData.artikel.asset_details.beschreibung,
+    //                     zustand: projektArtikelData.artikel.asset_details.zustand,
+    //                     einkaufs_datum: new Date(projektArtikelData.artikel.date_info.einkaufs_datum),
+    //                     belegt_von: new Date(projektArtikelData.artikel.date_info.belegt_von),
+    //                     belegt_bis: new Date(projektArtikelData.artikel.date_info.belegt_bis),
+    //                     anlagenummer: projektArtikelData.artikel.asset_numbers.anlagenummer,
+    //                     edit_date: new Date(projektArtikelData.artikel.date_info.edit_date),
+    //                     firma: projektArtikelData.artikel.asset_details.firma,
+    //                     model: projektArtikelData.artikel.asset_details.model,
+    //                     seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
+    //                     assets: {
+    //                         update: {
+    //                             Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 
 
 }
