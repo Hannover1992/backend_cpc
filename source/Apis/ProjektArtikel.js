@@ -67,6 +67,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         function ProjektArtikel() {
             return _super.call(this) || this;
         }
+        ProjektArtikel.prototype.createProjektArtikel = function (projektArtikelData) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2];
+                });
+            });
+        };
         ProjektArtikel.prototype.create = function () {
             var _this = this;
             var args = [];
@@ -74,26 +81,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 args[_i] = arguments[_i];
             }
             this.app.post('/projektArtikelAsset', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelData, projektArtikel;
+                var projektArtikelData;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             this.allow_communikation_from_all_ip_adress(res);
                             console.log(req.body);
                             projektArtikelData = req.body;
+                            this.createProjektArtikel(projektArtikelData);
                             return [4, this.prisma.projekt_artikel.create({
                                     data: {
-                                        projektArtikelData: projektArtikelData
-                                    }
-                                }).catch(function (err) {
-                                    console.log(err);
-                                    res.status(500).send({ "message": err.message });
-                                })];
-                        case 1:
-                            _a.sent();
-                            return [4, this.prisma.projekt_artikel.create({
-                                    data: {
-                                        menge: projektArtikelData.menge,
+                                        menge: parseInt(projektArtikelData.artikel.asset_numbers.menge),
                                         tblprojekte: {
                                             connect: {
                                                 ID: projektArtikelData.projekt_id
@@ -101,27 +99,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                         },
                                         artikel: {
                                             create: {
-                                                artikelname: projektArtikelData.artikel.artikelname,
+                                                artikelname: projektArtikelData.artikel.asset_details.artikelname,
                                                 unterkategorie: {
                                                     connect: {
                                                         unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
                                                     }
                                                 },
-                                                preis: projektArtikelData.artikel.preis,
-                                                beschreibung: projektArtikelData.artikel.beschreibung,
-                                                bild_url: projektArtikelData.artikel.bild_url,
-                                                zustand: projektArtikelData.artikel.zustand,
-                                                einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
-                                                belegt_von: projektArtikelData.artikel.belegt_von,
-                                                belegt_bis: projektArtikelData.artikel.belegt_bis,
-                                                anlagenummer: projektArtikelData.artikel.anlagenummer,
-                                                edit_date: new Date(projektArtikelData.artikel.edit_date),
-                                                firma: projektArtikelData.artikel.firma,
-                                                model: projektArtikelData.artikel.model,
-                                                seriennummer: projektArtikelData.artikel.seriennummer,
+                                                preis: parseFloat(projektArtikelData.artikel.asset_numbers.preis),
+                                                beschreibung: projektArtikelData.artikel.asset_details.beschreibung,
+                                                zustand: projektArtikelData.artikel.asset_details.zustand,
+                                                einkaufs_datum: new Date(projektArtikelData.artikel.date_info.einkaufs_datum),
+                                                belegt_von: new Date(projektArtikelData.artikel.date_info.belegt_von),
+                                                belegt_bis: new Date(projektArtikelData.artikel.date_info.belegt_bis),
+                                                anlagenummer: projektArtikelData.artikel.asset_numbers.anlagenummer,
+                                                edit_date: new Date(projektArtikelData.artikel.date_info.edit_date),
+                                                firma: projektArtikelData.artikel.asset_details.firma,
+                                                model: projektArtikelData.artikel.asset_details.model,
+                                                seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
                                                 assets: {
                                                     create: {
-                                                        Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer
+                                                        Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
                                                     }
                                                 }
                                             }
@@ -130,13 +127,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                 })
                                     .then(function () {
                                     res.status(200).send({ "message": "ProjektArtikel created" });
+                                    console.log("ProjektArtikel created");
                                 })
                                     .catch(function (error) {
                                     res.status(500).send({ "message": error.message });
+                                    console.log(error.message);
                                 })];
-                        case 2:
-                            projektArtikel = _a.sent();
-                            return [2];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             }); });
@@ -243,10 +240,77 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }); });
         };
         ProjektArtikel.prototype.update = function () {
+            var _this = this;
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
+            this.app.post('/projektArtikelAsset', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var projektArtikelData;
+                return __generator(this, function (_a) {
+                    this.allow_communikation_from_all_ip_adress(res);
+                    console.log(req.body);
+                    projektArtikelData = req.body;
+                    this.updateProjektArtikel(projektArtikelData)
+                        .then(function () {
+                        res.status(200).send({ "message": "ProjektArtikel updated" });
+                        console.log("ProjektArtikel updated");
+                    })
+                        .catch(function (error) {
+                        res.status(500).send({ "message": error.message });
+                        console.log(error.message);
+                    });
+                    return [2];
+                });
+            }); });
+        };
+        ProjektArtikel.prototype.updateProjektArtikel = function (projektArtikelData) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4, this.prisma.projekt_artikel.update({
+                                where: {
+                                    artikel_id: projektArtikelData.artikel.artikel_id
+                                },
+                                data: {
+                                    menge: projektArtikelData.artikel.asset_numbers.menge,
+                                    tblprojekte: {
+                                        connect: {
+                                            ID: projektArtikelData.projekt_id
+                                        }
+                                    },
+                                    artikel: {
+                                        update: {
+                                            artikelname: projektArtikelData.artikel.asset_details.artikelname,
+                                            unterkategorie: {
+                                                connect: {
+                                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
+                                                }
+                                            },
+                                            preis: parseFloat(projektArtikelData.artikel.asset_numbers.preis),
+                                            beschreibung: projektArtikelData.artikel.asset_details.beschreibung,
+                                            zustand: projektArtikelData.artikel.asset_details.zustand,
+                                            einkaufs_datum: new Date(projektArtikelData.artikel.date_info.einkaufs_datum),
+                                            belegt_von: new Date(projektArtikelData.artikel.date_info.belegt_von),
+                                            belegt_bis: new Date(projektArtikelData.artikel.date_info.belegt_bis),
+                                            anlagenummer: projektArtikelData.artikel.asset_numbers.anlagenummer,
+                                            edit_date: new Date(projektArtikelData.artikel.date_info.edit_date),
+                                            firma: projektArtikelData.artikel.asset_details.firma,
+                                            model: projektArtikelData.artikel.asset_details.model,
+                                            seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
+                                            assets: {
+                                                update: {
+                                                    Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            })];
+                        case 1: return [2, _a.sent()];
+                    }
+                });
+            });
         };
         return ProjektArtikel;
     }(ServerSetup_1.ServerSetup));

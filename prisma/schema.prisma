@@ -23,7 +23,7 @@ model artikel {
   besitzer_id       Int?
   firma             String?           @db.VarChar(50)
   model             String?           @db.VarChar(35)
-  seriennummer      Int?
+  seriennummer      String?           @db.VarChar(55)
   unterkategorie    unterkategorie    @relation(fields: [unterkategorie_id], references: [unterkategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "artikel_ibfk_1")
   personal          personal?         @relation(fields: [besitzer_id], references: [Personalnummer], onDelete: NoAction, onUpdate: NoAction, map: "artikel_personal_Personalnummer_fk")
   assets            assets?
@@ -56,16 +56,16 @@ model kategorien {
 }
 
 model personal {
-  Personalnummer      Int              @id
-  Vorname             String?          @db.VarChar(50)
-  Nachname            String?          @db.VarChar(50)
-  Geburtsdatum        DateTime?        @db.Date
-  Abteilung           String?          @db.VarChar(50)
-  Position            String?          @db.VarChar(50)
-  Gehalt              Decimal?         @db.Decimal(10, 2)
+  Personalnummer      Int           @id
+  Vorname             String?       @db.VarChar(50)
+  Nachname            String?       @db.VarChar(50)
+  Geburtsdatum        DateTime?     @db.Date
+  Abteilung           String?       @db.VarChar(50)
+  Position            String?       @db.VarChar(50)
+  Gehalt              Decimal?      @db.Decimal(10, 2)
   usrzugangs_daten_ID Int?
   artikel             artikel[]
-  usrzugangsdaten     usrzugangsdaten? @relation(fields: [usrzugangs_daten_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "personal_ibfk_1")
+  zugangsdaten        zugangsdaten? @relation(fields: [usrzugangs_daten_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "personal_ibfk_1")
 
   @@index([usrzugangs_daten_ID], map: "usrzugangs_daten_ID")
 }
@@ -80,6 +80,15 @@ model projekt_artikel {
 
   @@index([artikel_id], map: "artikel_id")
   @@index([projekt_id], map: "projekt_id")
+}
+
+model simkarten {
+  ID             Int           @id @unique(map: "tblbe-simkarten_ID_uindex")
+  Kundennummer   String?       @db.VarChar(55)
+  Rufnummer      String?       @db.VarChar(55)
+  Tarif          String?       @db.VarChar(55)
+  zugangsdatenID Int?          @unique
+  zugangsdaten   zugangsdaten? @relation(fields: [zugangsdatenID], references: [ID])
 }
 
 model tblprojekte {
@@ -113,11 +122,12 @@ model unterkategorie {
   @@index([kategorie_id], map: "kategorie_id")
 }
 
-model usrzugangsdaten {
-  ID       Int        @id @default(autoincrement())
-  Programm String     @db.VarChar(50)
-  UserName String     @db.VarChar(50)
-  Password String     @db.VarChar(50)
-  Role     String?    @db.VarChar(50)
-  personal personal[]
+model zugangsdaten {
+  ID        Int        @id @default(autoincrement())
+  Programm  String     @db.VarChar(50)
+  UserName  String     @db.VarChar(50)
+  Password  String     @db.VarChar(50)
+  Role      String?    @db.VarChar(50)
+  personal  personal[]
+  simkarten simkarten?
 }
