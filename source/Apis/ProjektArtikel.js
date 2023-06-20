@@ -240,34 +240,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         ProjektArtikel.prototype.createArticle = function (parsedData) {
             return __awaiter(this, void 0, void 0, function () {
-                var article;
-                var _a, _b;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0:
-                            _a = {};
-                            _b = {
-                                artikelname: parsedData.artikel.asset_details.artikelname,
-                                preis: parseFloat(parsedData.artikel.asset_numbers.preis),
-                                beschreibung: parsedData.artikel.asset_details.beschreibung,
-                                zustand: parsedData.artikel.asset_details.zustand,
-                                einkaufs_datum: new Date(parsedData.artikel.date_info.einkaufs_datum),
-                                belegt_von: new Date(parsedData.artikel.date_info.belegt_von),
-                                belegt_bis: new Date(parsedData.artikel.date_info.belegt_bis),
-                                anlagenummer: parsedData.artikel.asset_numbers.anlagenummer,
-                                edit_date: new Date(parsedData.artikel.date_info.edit_date),
-                                firma: parsedData.artikel.asset_details.firma,
-                                model: parsedData.artikel.asset_details.model,
-                                seriennummer: parsedData.artikel.asset_numbers.seriennummer
-                            };
-                            return [4, this.connectSubcategory(parsedData.unterkategorie_id)];
+                var unterkategorie, assets, article;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4, this.connectSubcategory(parsedData.unterkategorie_id)];
                         case 1:
-                            _b.unterkategorie = _c.sent();
+                            unterkategorie = _a.sent();
+                            assets = null;
+                            if (!parsedData.assets) return [3, 3];
                             return [4, this.createAssets(parsedData)];
                         case 2:
-                            article = (_a.create = (_b.assets = _c.sent(),
-                                _b),
-                                _a);
+                            assets = _a.sent();
+                            _a.label = 3;
+                        case 3:
+                            article = {
+                                create: {
+                                    artikelname: parsedData.artikel.asset_details.artikelname,
+                                    preis: parseFloat(parsedData.artikel.asset_numbers.preis),
+                                    beschreibung: parsedData.artikel.asset_details.beschreibung,
+                                    zustand: parsedData.artikel.asset_details.zustand,
+                                    einkaufs_datum: new Date(parsedData.artikel.date_info.einkaufs_datum),
+                                    belegt_von: new Date(parsedData.artikel.date_info.belegt_von),
+                                    belegt_bis: new Date(parsedData.artikel.date_info.belegt_bis),
+                                    anlagenummer: parsedData.artikel.asset_numbers.anlagenummer,
+                                    edit_date: new Date(parsedData.artikel.date_info.edit_date),
+                                    firma: parsedData.artikel.asset_details.firma,
+                                    model: parsedData.artikel.asset_details.model,
+                                    seriennummer: parsedData.artikel.asset_numbers.seriennummer,
+                                    unterkategorie: unterkategorie,
+                                    assets: assets
+                                }
+                            };
                             return [2, article];
                     }
                 });
@@ -286,18 +289,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         ProjektArtikel.prototype.createAssets = function (parsedData) {
             return __awaiter(this, void 0, void 0, function () {
+                var assetsData;
                 return __generator(this, function (_a) {
-                    if (parsedData.assets) {
-                        return [2, {
-                                create: {
-                                    Inventarnummer: parseInt(parsedData.assets.Inventarnummer)
-                                }
-                            }];
-                    }
-                    else {
-                        return [2, {}];
-                    }
-                    return [2];
+                    assetsData = parsedData.artikel.assets && parsedData.artikel.assets.Inventarnummer
+                        ? { create: { Inventarnummer: parseInt(parsedData.artikel.assets.Inventarnummer) } }
+                        : undefined;
+                    return [2, assetsData];
                 });
             });
         };

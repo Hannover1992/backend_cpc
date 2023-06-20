@@ -239,6 +239,13 @@ export class ProjektArtikel extends ServerSetup {
     }
 
     async createArticle(parsedData: any) {
+        let unterkategorie = await this.connectSubcategory(parsedData.unterkategorie_id);
+
+        let assets = null;
+        if (parsedData.assets) {  // Prüfen, ob assets nicht undefiniert ist
+            assets = await this.createAssets(parsedData);
+        }
+
         let article = {
             create: {
                 artikelname:        parsedData.artikel.asset_details.artikelname,
@@ -253,8 +260,8 @@ export class ProjektArtikel extends ServerSetup {
                 firma:              parsedData.artikel.asset_details.firma,
                 model:              parsedData.artikel.asset_details.model,
                 seriennummer:       parsedData.artikel.asset_numbers.seriennummer,
-                unterkategorie:     await this.connectSubcategory(parsedData.unterkategorie_id),
-                assets:             await this.createAssets(parsedData),
+                unterkategorie:     unterkategorie,
+                assets:             assets
             }
         };
 
@@ -270,15 +277,11 @@ export class ProjektArtikel extends ServerSetup {
     }
 
     async createAssets(parsedData: any) {
-        if (parsedData.assets) {
-            return {
-                create: {
-                    Inventarnummer: parseInt(parsedData.assets.Inventarnummer)
-                }
-            };
-        } else {
-            return {};
-        }
+        let assetsData = parsedData.artikel.assets && parsedData.artikel.assets.Inventarnummer
+            ? { create: { Inventarnummer: parseInt(parsedData.artikel.assets.Inventarnummer) } }
+            : undefined;
+
+        return assetsData;
     }
 
 
