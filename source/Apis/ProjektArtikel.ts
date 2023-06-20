@@ -232,7 +232,7 @@ export class ProjektArtikel extends ServerSetup {
                 }
             });
         }
-
+        // test
         if(existingArtikel) {
             return await this.updateProjektArtikel(projektArtikelData);
         } else {
