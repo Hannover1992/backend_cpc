@@ -116,7 +116,6 @@ export class ProjektArtikel extends ServerSetup {
             })
             .then((artikel: any) => {
                 res.status(200).send(artikel);
-                console.log("Deleted Success")
             }).catch((error: any) => {
                 res.status(500).send({"message": error.message});
             });
@@ -150,18 +149,20 @@ export class ProjektArtikel extends ServerSetup {
     }
 
     async upsertProjektArtikel(projektArtikelData: any) {
-        let existingArtikel;
-        if(projektArtikelData.artikel.artikel_id != null){
-            existingArtikel = await this.prisma.artikel.findUnique({
-                where: {
-                    artikel_id: projektArtikelData.artikel.artikel_id
-                }
-            });
-        }
+        // let existingArtikel;
+        // if(projektArtikelData.artikel.artikel_id){
+        //     existingArtikel = await this.prisma.artikel.findUnique({
+        //         where: {
+        //             artikel_id: projektArtikelData.artikel.artikel_id
+        //         }
+        //     });
+        // }
         // test
-        if(existingArtikel) {
+        if(projektArtikelData.artikel.artikel_id) {
+            console.log("update wird ausgeführt")
             return await this.updateProjektArtikel(projektArtikelData);
         } else {
+            console.log("create wird ausgeführt")
             return await this.createProjectArticle(projektArtikelData);
         }
     }
@@ -298,12 +299,8 @@ export class ProjektArtikel extends ServerSetup {
             this.upsertProjektArtikel(projektArtikelData)
                 .then((response: any) => {
                     if (response) {
-                        res.status(200).send({"message": "ProjektArtikel updated"});
-                        console.log("ProjektArtikel updated");
-                    } else {
-                        res.status(200).send({"message": "ProjektArtikel created"});
-                        console.log("ProjektArtikel created");
-                    }
+                        res.status(200).send({"message": "ProjektArtikel upsertProjektArtikel"});
+                    };
                 })
                 .catch((error: any) => {
                     res.status(500).send({"message": error.message});

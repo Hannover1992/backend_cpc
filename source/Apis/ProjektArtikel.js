@@ -134,7 +134,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     })
                         .then(function (artikel) {
                         res.status(200).send(artikel);
-                        console.log("Deleted Success");
                     }).catch(function (error) {
                         res.status(500).send({ "message": error.message });
                     });
@@ -170,25 +169,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         ProjektArtikel.prototype.upsertProjektArtikel = function (projektArtikelData) {
             return __awaiter(this, void 0, void 0, function () {
-                var existingArtikel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            if (!(projektArtikelData.artikel.artikel_id != null)) return [3, 2];
-                            return [4, this.prisma.artikel.findUnique({
-                                    where: {
-                                        artikel_id: projektArtikelData.artikel.artikel_id
-                                    }
-                                })];
-                        case 1:
-                            existingArtikel = _a.sent();
-                            _a.label = 2;
-                        case 2:
-                            if (!existingArtikel) return [3, 4];
+                            if (!projektArtikelData.artikel.artikel_id) return [3, 2];
+                            console.log("update wird ausgeführt");
                             return [4, this.updateProjektArtikel(projektArtikelData)];
+                        case 1: return [2, _a.sent()];
+                        case 2:
+                            console.log("create wird ausgeführt");
+                            return [4, this.createProjectArticle(projektArtikelData)];
                         case 3: return [2, _a.sent()];
-                        case 4: return [4, this.createProjectArticle(projektArtikelData)];
-                        case 5: return [2, _a.sent()];
                     }
                 });
             });
