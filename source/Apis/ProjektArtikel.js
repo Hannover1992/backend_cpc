@@ -304,13 +304,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     this.upsertProjektArtikel(projektArtikelData)
                         .then(function (response) {
                         if (response) {
-                            res.status(200).send({ "message": "ProjektArtikel updated" });
-                            console.log("ProjektArtikel updated");
+                            res.status(200).send({ "message": "ProjektArtikel upsertProjektArtikel" });
                         }
-                        else {
-                            res.status(200).send({ "message": "ProjektArtikel created" });
-                            console.log("ProjektArtikel created");
-                        }
+                        ;
                     })
                         .catch(function (error) {
                         res.status(500).send({ "message": error.message });
