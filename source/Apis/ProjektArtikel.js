@@ -190,7 +190,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     switch (_a.label) {
                         case 0: return [4, this.prisma.projekt_artikel.create({
                                 data: {
-                                    menge: parseInt(projektArtikelData.menge),
+                                    menge: projektArtikelData.menge,
                                     tblprojekte: {
                                         connect: {
                                             ID: projektArtikelData.projekt_id
@@ -204,7 +204,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                                     unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
                                                 }
                                             },
-                                            preis: parseFloat(projektArtikelData.artikel.preis),
+                                            preis: projektArtikelData.artikel.preis,
                                             beschreibung: projektArtikelData.artikel.beschreibung,
                                             zustand: projektArtikelData.artikel.zustand,
                                             einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
@@ -217,7 +217,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                             seriennummer: projektArtikelData.artikel.seriennummer,
                                             assets: {
                                                 create: {
-                                                    Inventarnummer: parseInt(projektArtikelData.artikel.asset.Inventarnummer)
+                                                    Inventarnummer: projektArtikelData.artikel.asset.Inventarnummer
                                                 }
                                             }
                                         }
