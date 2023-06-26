@@ -211,7 +211,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         ProjektArtikel.prototype.parseArticleData = function (projektArtikelData) {
             return {
-                menge: parseInt(projektArtikelData.artikel.asset_numbers.menge),
+                menge: parseInt(projektArtikelData.menge),
                 projekt_id: projektArtikelData.projekt_id,
                 artikel: projektArtikelData.artikel,
                 unterkategorie_id: projektArtikelData.artikel.unterkategorie_id,
@@ -246,18 +246,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         case 3:
                             article = {
                                 create: {
-                                    artikelname: parsedData.artikel.asset_details.artikelname,
-                                    preis: parseFloat(parsedData.artikel.asset_numbers.preis),
-                                    beschreibung: parsedData.artikel.asset_details.beschreibung,
-                                    zustand: parsedData.artikel.asset_details.zustand,
-                                    einkaufs_datum: new Date(parsedData.artikel.date_info.einkaufs_datum),
-                                    belegt_von: new Date(parsedData.artikel.date_info.belegt_von),
-                                    belegt_bis: new Date(parsedData.artikel.date_info.belegt_bis),
-                                    anlagenummer: parsedData.artikel.asset_numbers.anlagenummer,
-                                    edit_date: new Date(parsedData.artikel.date_info.edit_date),
-                                    firma: parsedData.artikel.asset_details.firma,
-                                    model: parsedData.artikel.asset_details.model,
-                                    seriennummer: parsedData.artikel.asset_numbers.seriennummer,
+                                    artikelname: parsedData.artikel.artikelname,
+                                    preis: parseFloat(parsedData.artikel.preis),
+                                    beschreibung: parsedData.artikel.beschreibung,
+                                    zustand: parsedData.artikel.zustand,
+                                    einkaufs_datum: new Date(parsedData.artikel.einkaufs_datum),
+                                    belegt_von: new Date(parsedData.artikel.belegt_von),
+                                    belegt_bis: new Date(parsedData.artikel.belegt_bis),
+                                    anlagenummer: parsedData.artikel.anlagenummer,
+                                    edit_date: new Date(parsedData.artikel.edit_date),
+                                    firma: parsedData.artikel.firma,
+                                    model: parsedData.artikel.model,
+                                    seriennummer: parsedData.artikel.seriennummer,
                                     unterkategorie: unterkategorie,
                                     assets: assets
                                 }
