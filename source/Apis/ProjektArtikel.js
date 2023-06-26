@@ -178,8 +178,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         case 1: return [2, _a.sent()];
                         case 2:
                             console.log("create wird ausgeführt");
-                            return [4, this.createProjectArticle(projektArtikelData)];
+                            return [4, this.createProjektArtikel(projektArtikelData)];
                         case 3: return [2, _a.sent()];
+                    }
+                });
+            });
+        };
+        ProjektArtikel.prototype.createProjektArtikel = function (projektArtikelData) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4, this.prisma.projekt_artikel.create({
+                                data: {
+                                    menge: parseInt(projektArtikelData.menge),
+                                    tblprojekte: {
+                                        connect: {
+                                            ID: projektArtikelData.projekt_id
+                                        }
+                                    },
+                                    artikel: {
+                                        create: {
+                                            artikelname: projektArtikelData.artikel.artikelname,
+                                            unterkategorie: {
+                                                connect: {
+                                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
+                                                }
+                                            },
+                                            preis: parseFloat(projektArtikelData.artikel.preis),
+                                            beschreibung: projektArtikelData.artikel.beschreibung,
+                                            zustand: projektArtikelData.artikel.zustand,
+                                            einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
+                                            belegt_von: new Date(projektArtikelData.artikel.belegt_von),
+                                            belegt_bis: new Date(projektArtikelData.artikel.belegt_bis),
+                                            anlagenummer: projektArtikelData.artikel.anlagenummer,
+                                            edit_date: new Date(projektArtikelData.artikel.edit_date),
+                                            firma: projektArtikelData.artikel.firma,
+                                            model: projektArtikelData.artikel.model,
+                                            seriennummer: projektArtikelData.artikel.seriennummer,
+                                            assets: {
+                                                create: {
+                                                    Inventarnummer: parseInt(projektArtikelData.artikel.asset.Inventarnummer)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            })];
+                        case 1: return [2, _a.sent()];
                     }
                 });
             });
