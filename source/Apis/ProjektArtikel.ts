@@ -292,23 +292,23 @@ export class ProjektArtikel extends ServerSetup {
 
     create(...args: any[]): any {
 
-        this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
-            this.allow_communikation_from_all_ip_adress(res);
-            console.log(req.body);
-
-            let projektArtikelData = req.body;
-
-            this.upsertProjektArtikel(projektArtikelData)
-                .then((response: any) => {
-                    if (response) {
-                        res.status(200).send({"message": "ProjektArtikel upsertProjektArtikel"});
-                    };
-                })
-                .catch((error: any) => {
-                    res.status(500).send({"message": error.message});
-                    console.log(error.message);
-                });
-        });
+        // this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
+        //     this.allow_communikation_from_all_ip_adress(res);
+        //     console.log(req.body);
+        //
+        //     let projektArtikelData = req.body;
+        //
+        //     this.upsertProjektArtikel(projektArtikelData)
+        //         .then((response: any) => {
+        //             if (response) {
+        //                 res.status(200).send({"message": "ProjektArtikel upsertProjektArtikel"});
+        //             };
+        //         })
+        //         .catch((error: any) => {
+        //             res.status(500).send({"message": error.message});
+        //             console.log(error.message);
+        //         });
+        // });
 
         this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
@@ -380,7 +380,7 @@ export class ProjektArtikel extends ServerSetup {
                 },
                 data: {
                     data: {
-                        menge: projektArtikelData.artikel.asset_numbers.menge,
+                        menge: projektArtikelData.artikel.menge,
                         tblprojekte: {
                             connect: {
                                 ID: projektArtikelData.projekt_id
@@ -388,23 +388,23 @@ export class ProjektArtikel extends ServerSetup {
                         },
                         artikel: {
                             update: {
-                                artikelname: projektArtikelData.artikel.asset_details.artikelname,
+                                artikelname: projektArtikelData.artikel.artikelname,
                                 unterkategorie: {
                                     connect: {
                                         unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
                                     }
                                 },
-                                preis: parseFloat(projektArtikelData.artikel.asset_numbers.preis),
-                                beschreibung: projektArtikelData.artikel.asset_details.beschreibung,
-                                zustand: projektArtikelData.artikel.asset_details.zustand,
-                                einkaufs_datum: new Date(projektArtikelData.artikel.date_info.einkaufs_datum),
-                                belegt_von: new Date(projektArtikelData.artikel.date_info.belegt_von),
-                                belegt_bis: new Date(projektArtikelData.artikel.date_info.belegt_bis),
-                                anlagenummer: projektArtikelData.artikel.asset_numbers.anlagenummer,
-                                edit_date: new Date(projektArtikelData.artikel.date_info.edit_date),
-                                firma: projektArtikelData.artikel.asset_details.firma,
-                                model: projektArtikelData.artikel.asset_details.model,
-                                seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
+                                preis: parseFloat(projektArtikelData.artikel.preis),
+                                beschreibung: projektArtikelData.artikel.beschreibung,
+                                zustand: projektArtikelData.artikel.zustand,
+                                einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
+                                belegt_von: new Date(projektArtikelData.artikel.belegt_von),
+                                belegt_bis: new Date(projektArtikelData.artikel.belegt_bis),
+                                anlagenummer: projektArtikelData.artikel.anlagenummer,
+                                edit_date: new Date(projektArtikelData.artikel.edit_date),
+                                firma: projektArtikelData.artikel.firma,
+                                model: projektArtikelData.artikel.model,
+                                seriennummer: projektArtikelData.artikel.serriennummer,
                                 assets: {
                                     update: {
                                         Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer
@@ -423,22 +423,22 @@ export class ProjektArtikel extends ServerSetup {
 
 
     update(...args: any[]): any {
-        // this.app.post('/projektArtikelAsset', async (req: any, res: any) => {
-        //     this.allow_communikation_from_all_ip_adress(res);
-        //     console.log(req.body);
-        //
-        //     let projektArtikelData = req.body;
-        //
-        //     this.updateProjektArtikel(projektArtikelData)
-        //         .then(() => {
-        //             res.status(200).send({"message": "ProjektArtikel updated"});
-        //             console.log("ProjektArtikel updated");
-        //         })
-        //         .catch((error: any) => {
-        //             res.status(500).send({"message": error.message});
-        //             console.log(error.message);
-        //         });
-        // });
+        this.app.put('/projektArtikelAsset', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            console.log(req.body);
+
+            let projektArtikelData = req.body;
+
+            this.updateProjektArtikel(projektArtikelData)
+                .then(() => {
+                    res.status(200).send({"message": "ProjektArtikel updated"});
+                    console.log("ProjektArtikel updated");
+                })
+                .catch((error: any) => {
+                    res.status(500).send({"message": error.message});
+                    console.log(error.message);
+                });
+        });
     }
 
 
