@@ -280,7 +280,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            console.log("ich bin hier 2 mal");
                             this.allow_communikation_from_all_ip_adress(res);
                             projektArtikelData = req.body;
                             return [4, this.prisma.projekt_artikel.create({
@@ -368,43 +367,46 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             })];
                         case 5:
                             existingArtikel = _g.sent();
-                            if (existingArtikel) {
-                                this.prisma.projekt_artikel.update({
+                            if (!existingArtikel) return [3, 8];
+                            return [4, this.prisma.artikel.update({
                                     where: {
                                         artikel_id: projektArtikelData.artikel_id
                                     },
                                     data: {
-                                        menge: projektArtikelData.menge,
-                                        tblprojekte: {
+                                        artikelname: projektArtikelData.artikel.artikelname,
+                                        unterkategorie: {
                                             connect: {
-                                                ID: projektArtikelData.projekt_id
+                                                unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
                                             }
                                         },
-                                        artikel: {
-                                            update: {
-                                                artikelname: projektArtikelData.artikel.artikelname,
-                                                unterkategorie: {
-                                                    connect: {
-                                                        unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                                    }
-                                                },
-                                                preis: parseFloat(projektArtikelData.artikel.preis) || 0,
-                                                beschreibung: (_a = projektArtikelData.artikel.beschreibung) !== null && _a !== void 0 ? _a : "",
-                                                zustand: (_b = projektArtikelData.artikel.zustand) !== null && _b !== void 0 ? _b : "",
-                                                einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum) || null,
-                                                belegt_von: new Date(projektArtikelData.artikel.belegt_von) || null,
-                                                belegt_bis: new Date(projektArtikelData.artikel.belegt_bis) || null,
-                                                anlagenummer: (_c = projektArtikelData.artikel.anlagenummer) !== null && _c !== void 0 ? _c : "",
-                                                edit_date: new Date(projektArtikelData.artikel.edit_date) || null,
-                                                firma: (_d = projektArtikelData.artikel.firma) !== null && _d !== void 0 ? _d : "",
-                                                model: (_e = projektArtikelData.artikel.model) !== null && _e !== void 0 ? _e : "",
-                                                seriennummer: (_f = projektArtikelData.artikel.seriennummer) !== null && _f !== void 0 ? _f : "",
-                                            }
-                                        }
+                                        preis: parseFloat(projektArtikelData.artikel.preis) || 0,
+                                        beschreibung: (_a = projektArtikelData.artikel.beschreibung) !== null && _a !== void 0 ? _a : "",
+                                        zustand: (_b = projektArtikelData.artikel.zustand) !== null && _b !== void 0 ? _b : "",
+                                        einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum) || undefined,
+                                        belegt_von: new Date(projektArtikelData.artikel.belegt_von) || undefined,
+                                        belegt_bis: new Date(projektArtikelData.artikel.belegt_bis) || undefined,
+                                        anlagenummer: (_c = projektArtikelData.artikel.anlagenummer) !== null && _c !== void 0 ? _c : "",
+                                        edit_date: new Date(projektArtikelData.artikel.edit_date) || undefined,
+                                        firma: (_d = projektArtikelData.artikel.firma) !== null && _d !== void 0 ? _d : "",
+                                        model: (_e = projektArtikelData.artikel.model) !== null && _e !== void 0 ? _e : "",
+                                        seriennummer: (_f = projektArtikelData.artikel.seriennummer) !== null && _f !== void 0 ? _f : "",
                                     }
-                                });
-                            }
-                            return [2];
+                                })];
+                        case 6:
+                            _g.sent();
+                            return [4, this.prisma.projekt_artikel.update({
+                                    where: {
+                                        projekt_artikel_id: projektArtikelData.projekt_artikel_id
+                                    },
+                                    data: {
+                                        menge: projektArtikelData.menge,
+                                    }
+                                })];
+                        case 7:
+                            _g.sent();
+                            return [3, 9];
+                        case 8: throw new Error("Artikel with ID ".concat(projektArtikelData.artikel_id, " does not exist."));
+                        case 9: return [2];
                     }
                 });
             });
