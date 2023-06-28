@@ -348,6 +348,7 @@ export class ProjektArtikel extends ServerSetup {
                 artikel_id: projektArtikelData.artikel_id
             }
         });
+        //fo push
         if (existingArtikel) {
             await this.prisma.artikel.update({
                 where: {
