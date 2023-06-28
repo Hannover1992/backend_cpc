@@ -158,6 +158,7 @@ export class ProjektArtikel extends ServerSetup {
         //     });
         // }
         // test
+        //toDo: menge in Update hinzufugen und lesen
         if(projektArtikelData.artikel.artikel_id) {
             console.log("update wird ausgeführt")
             return await this.updateProjektArtikel(projektArtikelData);
@@ -406,7 +407,7 @@ export class ProjektArtikel extends ServerSetup {
                                 seriennummer: projektArtikelData.artikel.asset_numbers.serriennummer,
                                 assets: {
                                     update: {
-                                        Inventarnummer: parseInt(projektArtikelData.artikel.assets.Inventarnummer)
+                                        Inventarnummer: projektArtikelData.artikel.assets.Inventarnummer
                                     }
                                 }
                             }
