@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Apis/Project", "./Apis/ProjectTable", "./Apis/KategorienTable", "./Apis/Asset", "./Apis/ProjektArtikel"], factory);
+        define(["require", "exports", "./Apis/Project", "./Apis/ProjectTable", "./Apis/KategorienTable", "./Apis/Asset", "./Apis/ProjektAssets", "./Apis/Simkarten"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -49,16 +49,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     var ProjectTable_1 = require("./Apis/ProjectTable");
     var KategorienTable_1 = require("./Apis/KategorienTable");
     var Asset_1 = require("./Apis/Asset");
-    var ProjektArtikel_1 = require("./Apis/ProjektArtikel");
+    var ProjektAssets_1 = require("./Apis/ProjektAssets");
+    var Simkarten_1 = require("./Apis/Simkarten");
     function start() {
         return __awaiter(this, void 0, void 0, function () {
             var project;
             return __generator(this, function (_a) {
                 project = new Project_1.Project();
                 new ProjectTable_1.ProjectTable();
-                new ProjektArtikel_1.ProjektArtikel();
+                new ProjektAssets_1.ProjektAssets();
                 new KategorienTable_1.KategorienTable();
                 new Asset_1.Asset();
+                new Simkarten_1.Simkarten();
                 instantiate(project.prisma);
                 return [2];
             });

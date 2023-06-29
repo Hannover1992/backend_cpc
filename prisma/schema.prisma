@@ -61,6 +61,7 @@ model artikel {
   personal          personal?         @relation(fields: [besitzer_id], references: [Personalnummer], onDelete: NoAction, onUpdate: NoAction, map: "artikel_personal_Personalnummer_fk")
   assets            assets?
   electronics       electronics?
+  simkarten         simkarten?
   projekt_artikel   projekt_artikel[]
 
   @@index([besitzer_id], map: "artikel_personal_Personalnummer_fk")
@@ -71,6 +72,21 @@ model assets {
   ID             Int     @id @unique(map: "tblbe-assets_ID_uindex")
   Inventarnummer Int?
   artikel        artikel @relation(fields: [ID], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "tblbe-assets_artikel_artikel_id_fk")
+}
+
+model simkarten {
+  simkarten_id Int     @id @default(autoincrement())
+  kundennummer String  @db.VarChar(255)
+  rufnummer    String  @db.VarChar(255)
+  tarif        String  @db.VarChar(255)
+  pin          String  @db.VarChar(255)
+  puk          String  @db.VarChar(255)
+  einsatzort   String  @db.VarChar(255)
+  aktiv        Boolean
+  artikel_id   Int
+  artikel      artikel @relation(fields: [simkarten_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([artikel_id], name: "artikel_id")
 }
 
 model electronics {
@@ -113,21 +129,12 @@ model personal {
   @@index([usrzugangs_daten_ID], map: "usrzugangs_daten_ID")
 }
 
-model simkarten {
-  ID             Int           @id @unique(map: "tblbe-simkarten_ID_uindex")
-  Kundennummer   String?       @db.VarChar(55)
-  Rufnummer      String?       @db.VarChar(55)
-  Tarif          String?       @db.VarChar(55)
-  zugangsdatenID Int?          @unique
-  zugangsdaten   zugangsdaten? @relation(fields: [zugangsdatenID], references: [ID])
-}
-
 model zugangsdaten {
-  ID        Int        @id @default(autoincrement())
-  Programm  String     @db.VarChar(50)
-  UserName  String     @db.VarChar(50)
-  Password  String     @db.VarChar(50)
-  Role      String?    @db.VarChar(50)
-  personal  personal[]
-  simkarten simkarten?
+  ID                    Int        @id @default(autoincrement())
+  Programm              String     @db.VarChar(50)
+  UserName              String     @db.VarChar(50)
+  Password              String     @db.VarChar(50)
+  Role                  String?    @db.VarChar(50)
+  personal              personal[]
+  simkartenSimkarten_id Int?
 }

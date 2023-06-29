@@ -2,18 +2,21 @@ import {Project} from "./Apis/Project";
 import {ProjectTable} from "./Apis/ProjectTable";
 import {KategorienTable} from "./Apis/KategorienTable";
 import {Asset} from "./Apis/Asset";
-import {ProjektArtikel} from "./Apis/ProjektArtikel";
+import {ProjektAssets} from "./Apis/ProjektAssets";
 import {ServerSetup} from "./ServerSetup";
 import {kategorien, PrismaClient} from "@prisma/client";
+import {Simkarten} from "./Apis/Simkarten";
 
 
 async function start() {
     let project = new Project();
     new ProjectTable();
-    new ProjektArtikel();
+    new ProjektAssets();
     new KategorienTable();
     new Asset();
+    new Simkarten();
     instantiate(project.prisma);
+
 }
 
 
