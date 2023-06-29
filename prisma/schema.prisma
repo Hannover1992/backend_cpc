@@ -83,8 +83,8 @@ model simkarten {
   puk          String  @db.VarChar(255)
   einsatzort   String  @db.VarChar(255)
   aktiv        Boolean
-  artikel_id   Int
-  artikel      artikel @relation(fields: [simkarten_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction)
+  artikel_id   Int     @unique
+  artikel      artikel @relation(fields: [artikel_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([artikel_id], name: "artikel_id")
 }
