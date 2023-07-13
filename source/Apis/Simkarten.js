@@ -75,8 +75,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }
             this.app.post('/projektArtikelSimkarte', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var projektArtikelData;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
+                var _a, _b, _c, _d, _e, _f, _g;
+                return __generator(this, function (_h) {
+                    switch (_h.label) {
                         case 0:
                             this.allow_communikation_from_all_ip_adress(res);
                             projektArtikelData = req.body;
@@ -109,13 +110,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                                 seriennummer: projektArtikelData.artikel.seriennummer,
                                                 simkarten: {
                                                     create: {
-                                                        kundennummer: projektArtikelData.artikel.simkarten.kundennummer,
-                                                        rufnummer: projektArtikelData.artikel.simkarten.rufnummer,
-                                                        tarif: projektArtikelData.artikel.simkarten.tarif,
-                                                        pin: projektArtikelData.artikel.simkarten.pin,
-                                                        puk: projektArtikelData.artikel.simkarten.puk,
-                                                        einsatzort: projektArtikelData.artikel.simkarten.einsatzort,
-                                                        aktiv: projektArtikelData.artikel.simkarten.aktiv
+                                                        kundennummer: (_a = projektArtikelData.artikel.simkarten.kundennummer) !== null && _a !== void 0 ? _a : "",
+                                                        rufnummer: (_b = projektArtikelData.artikel.simkarten.rufnummer) !== null && _b !== void 0 ? _b : "",
+                                                        tarif: (_c = projektArtikelData.artikel.simkarten.tarif) !== null && _c !== void 0 ? _c : "",
+                                                        pin: (_d = projektArtikelData.artikel.simkarten.pin) !== null && _d !== void 0 ? _d : "",
+                                                        puk: (_e = projektArtikelData.artikel.simkarten.puk) !== null && _e !== void 0 ? _e : "",
+                                                        einsatzort: (_f = projektArtikelData.artikel.simkarten.einsatzort) !== null && _f !== void 0 ? _f : "",
+                                                        aktiv: (_g = projektArtikelData.artikel.simkarten.aktiv) !== null && _g !== void 0 ? _g : false
                                                     }
                                                 }
                                             }
@@ -130,7 +131,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                     res.status(500).send({ "message": error.message });
                                     console.log(error.message);
                                 })];
-                        case 1: return [2, _a.sent()];
+                        case 1: return [2, _h.sent()];
                     }
                 });
             }); });
@@ -245,7 +246,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 args[_i] = arguments[_i];
             }
             this.app.put('/projektArtikelSimkarte', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelData, updatedProjektArtikel, updatedArtikel, updatedSimkarte, error_2;
+                var projektArtikelData, error_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -268,7 +269,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                     }
                                 })];
                         case 2:
-                            updatedProjektArtikel = _a.sent();
+                            _a.sent();
                             return [4, this.prisma.artikel.update({
                                     where: {
                                         artikel_id: projektArtikelData.artikel.artikel_id
@@ -294,7 +295,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                     }
                                 })];
                         case 3:
-                            updatedArtikel = _a.sent();
+                            _a.sent();
                             return [4, this.prisma.simkarten.update({
                                     where: {
                                         simkarten_id: projektArtikelData.artikel.simkarten.simkarten_id
@@ -310,7 +311,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                     }
                                 })];
                         case 4:
-                            updatedSimkarte = _a.sent();
+                            _a.sent();
                             res.status(200).send({ "message": "ProjektArtikel updated" });
                             console.log("ProjektArtikel updated");
                             return [3, 6];

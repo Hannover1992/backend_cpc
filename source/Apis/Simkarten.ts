@@ -43,13 +43,13 @@ export class Simkarten extends ServerSetup {
                             seriennummer: projektArtikelData.artikel.seriennummer,
                             simkarten: {
                                 create: {
-                                    kundennummer: projektArtikelData.artikel.simkarten.kundennummer,
-                                    rufnummer: projektArtikelData.artikel.simkarten.rufnummer,
-                                    tarif: projektArtikelData.artikel.simkarten.tarif,
-                                    pin: projektArtikelData.artikel.simkarten.pin,
-                                    puk: projektArtikelData.artikel.simkarten.puk,
-                                    einsatzort: projektArtikelData.artikel.simkarten.einsatzort,
-                                    aktiv: projektArtikelData.artikel.simkarten.aktiv
+                                    kundennummer: projektArtikelData.artikel.simkarten.kundennummer ?? "",
+                                    rufnummer: projektArtikelData.artikel.simkarten.rufnummer ?? "",
+                                    tarif: projektArtikelData.artikel.simkarten.tarif ?? "",
+                                    pin: projektArtikelData.artikel.simkarten.pin ?? "",
+                                    puk: projektArtikelData.artikel.simkarten.puk ?? "",
+                                    einsatzort: projektArtikelData.artikel.simkarten.einsatzort ?? "",
+                                    aktiv: projektArtikelData.artikel.simkarten.aktiv ?? false
                                 }
                             }
                         }
