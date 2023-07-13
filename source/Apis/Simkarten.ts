@@ -191,63 +191,73 @@ export class Simkarten extends ServerSetup {
         this.app.put('/projektArtikelSimkarte', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             let projektArtikelData = req.body;
+
             try {
-                 await this.prisma.projekt_artikel.update({
-                    where: {
-                        projekt_artikel_id: projektArtikelData.projekt_artikel_id,
-                    },
-                    data: {
-                        menge: projektArtikelData.menge,
-                        tblprojekte: {
-                            connect: {
-                                ID: projektArtikelData.projekt_id
-                            }
+                // update the simkarten if it exists
+                if (projektArtikelData.artikel.simkarten) {
+                    const existingSimkarte = await this.prisma.simkarten.findUnique({
+                        where: {
+                            simkarten_id: projektArtikelData.artikel.simkarten.simkarten_id
                         }
+                    });
+
+                    if (existingSimkarte) {
+                        await this.prisma.simkarten.update({
+                            where: {
+                                simkarten_id: projektArtikelData.artikel.simkarten.simkarten_id
+                            },
+                            data: projektArtikelData.artikel.simkarten
+                        });
+                    }
+                }
+
+                // update the artikel
+                const existingArtikel = await this.prisma.artikel.findUnique({
+                    where: {
+                        artikel_id: projektArtikelData.artikel_id
                     }
                 });
 
-                await this.prisma.artikel.update({
-                    where: {
-                        artikel_id: projektArtikelData.artikel.artikel_id
-                    },
-                    data: {
-                        artikelname: projektArtikelData.artikel.artikelname,
-                        unterkategorie: {
-                            connect: {
-                                unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                            }
+                if (existingArtikel) {
+                    await this.prisma.artikel.update({
+                        where: {
+                            artikel_id: projektArtikelData.artikel_id
                         },
-                        preis: projektArtikelData.artikel.preis,
-                        beschreibung: projektArtikelData.artikel.beschreibung,
-                        zustand: projektArtikelData.artikel.zustand,
-                        einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
-                        belegt_von: new Date(projektArtikelData.artikel.belegt_von),
-                        belegt_bis: new Date(projektArtikelData.artikel.belegt_bis),
-                        anlagenummer: projektArtikelData.artikel.anlagenummer,
-                        edit_date: new Date(projektArtikelData.artikel.edit_date),
-                        firma: projektArtikelData.artikel.firma,
-                        model: projektArtikelData.artikel.model,
-                        seriennummer: projektArtikelData.artikel.seriennummer,
-                    }
-                });
+                        data: {
+                            artikelname: projektArtikelData.artikel.artikelname,
+                            unterkategorie: {
+                                connect: {
+                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
+                                }
+                            },
+                            preis: parseFloat(projektArtikelData.artikel.preis) || 0,
+                            beschreibung: projektArtikelData.artikel.beschreibung ?? "",
+                            zustand: projektArtikelData.artikel.zustand ?? "",
+                            einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum) || undefined,
+                            belegt_von: new Date(projektArtikelData.artikel.belegt_von) || undefined,
+                            belegt_bis: new Date(projektArtikelData.artikel.belegt_bis) || undefined,
+                            anlagenummer: projektArtikelData.artikel.anlagenummer ?? "",
+                            edit_date: new Date(projektArtikelData.artikel.edit_date) || undefined,
+                            firma: projektArtikelData.artikel.firma ?? "",
+                            model: projektArtikelData.artikel.model ?? "",
+                            seriennummer: projektArtikelData.artikel.seriennummer ?? "",
+},
+                    });
 
-                await this.prisma.simkarten.update({
-                    where: {
-                        simkarten_id: projektArtikelData.artikel.simkarten.simkarten_id
-                    },
-                    data: {
-                        kundennummer: projektArtikelData.artikel.simkarten.kundennummer,
-                        rufnummer: projektArtikelData.artikel.simkarten.rufnummer,
-                        tarif: projektArtikelData.artikel.simkarten.tarif,
-                        pin: projektArtikelData.artikel.simkarten.pin,
-                        puk: projektArtikelData.artikel.simkarten.puk,
-                        einsatzort: projektArtikelData.artikel.simkarten.einsatzort,
-                        aktiv: projektArtikelData.artikel.simkarten.aktiv
-                    }
-                });
+                    // Then, update the projekt_artikel
+                    await this.prisma.projekt_artikel.update({
+                        where: {
+                            projekt_artikel_id: projektArtikelData.projekt_artikel_id
+                        },
+                        data: {
+                            menge: projektArtikelData.menge,
+                        }
+                    });
 
-                res.status(200).send({"message": "ProjektArtikel updated"});
-                console.log("ProjektArtikel updated");
+                    res.status(200).send({"message": "ProjektArtikelSimkarte updated"});
+                } else {
+                    throw new Error(`Artikel with ID ${projektArtikelData.artikel_id} does not exist.`);
+                }
             } catch (error) {
                 res.status(500).send({"message": error.message});
                 console.log(error.message);
