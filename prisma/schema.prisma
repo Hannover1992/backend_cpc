@@ -7,39 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tblprojekte {
-  ID                  Int               @id
-  Standort            String?           @db.TinyText
-  Niederlassung       String?           @db.VarChar(255)
-  Auftragsart         String?           @db.VarChar(255)
-  Status              String?           @db.VarChar(255)
-  Logistikkoordinator String?           @db.VarChar(255)
-  LK_1                String?           @db.VarChar(255)
-  LK_2                String?           @db.VarChar(255)
-  ZuKo                String?           @db.VarChar(255)
-  Auftragsdatum       String?           @db.VarChar(255)
-  Startdatum          String?           @db.VarChar(255)
-  Kommentar           String?           @db.VarChar(255)
-  Anlagenummer        Int?
-  PM_1                String?           @db.VarChar(255)
-  PM_2                String?           @db.VarChar(255)
-  Endtermin           String?           @db.VarChar(255)
-  Netto_Auftragswert  String?           @db.VarChar(255)
-  projekt_artikel     projekt_artikel[]
-}
-
-model projekt_artikel {
-  projekt_artikel_id Int         @id @default(autoincrement())
-  projekt_id         Int
-  artikel_id         Int
-  menge              Int
-  tblprojekte        tblprojekte @relation(fields: [projekt_id], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "projekt_artikel_ibfk_1")
-  artikel            artikel     @relation(fields: [artikel_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "projekt_artikel_ibfk_2")
-
-  @@index([artikel_id], map: "artikel_id")
-  @@index([projekt_id], map: "projekt_id")
-}
-
 model artikel {
   artikel_id        Int               @id @default(autoincrement())
   artikelname       String            @db.VarChar(255)
@@ -61,8 +28,8 @@ model artikel {
   personal          personal?         @relation(fields: [besitzer_id], references: [Personalnummer], onDelete: NoAction, onUpdate: NoAction, map: "artikel_personal_Personalnummer_fk")
   assets            assets?
   electronics       electronics?
-  simkarten         simkarten?
   projekt_artikel   projekt_artikel[]
+  simkarten         simkarten?
 
   @@index([besitzer_id], map: "artikel_personal_Personalnummer_fk")
   @@index([unterkategorie_id], map: "unterkategorie_id")
@@ -72,21 +39,6 @@ model assets {
   ID             Int     @id @unique(map: "tblbe-assets_ID_uindex")
   Inventarnummer Int?
   artikel        artikel @relation(fields: [ID], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "tblbe-assets_artikel_artikel_id_fk")
-}
-
-model simkarten {
-  simkarten_id Int     @id @default(autoincrement())
-  kundennummer String  @db.VarChar(255)
-  rufnummer    String  @db.VarChar(255)
-  tarif        String  @db.VarChar(255)
-  pin          String  @db.VarChar(255)
-  puk          String  @db.VarChar(255)
-  einsatzort   String  @db.VarChar(255)
-  aktiv        Boolean
-  artikel_id   Int     @unique
-  artikel      artikel @relation(fields: [artikel_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@index([artikel_id], name: "artikel_id")
 }
 
 model electronics {
@@ -104,16 +56,6 @@ model kategorien {
   unterkategorie unterkategorie[]
 }
 
-model unterkategorie {
-  unterkategorie_id  Int        @id @default(autoincrement())
-  unterkategoriename String     @db.VarChar(255)
-  kategorie_id       Int
-  artikel            artikel[]
-  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "unterkategorie_ibfk_1")
-
-  @@index([kategorie_id], map: "kategorie_id")
-}
-
 model personal {
   Personalnummer      Int           @id
   Vorname             String?       @db.VarChar(50)
@@ -129,12 +71,70 @@ model personal {
   @@index([usrzugangs_daten_ID], map: "usrzugangs_daten_ID")
 }
 
+model projekt_artikel {
+  projekt_artikel_id Int         @id @default(autoincrement())
+  projekt_id         Int
+  artikel_id         Int
+  menge              Int
+  tblprojekte        tblprojekte @relation(fields: [projekt_id], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "projekt_artikel_ibfk_1")
+  artikel            artikel     @relation(fields: [artikel_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "projekt_artikel_ibfk_2")
+
+  @@index([artikel_id], map: "artikel_id")
+  @@index([projekt_id], map: "projekt_id")
+}
+
+model simkarten {
+  simkarten_id Int     @id @default(autoincrement())
+  kundennummer String  @db.VarChar(255)
+  rufnummer    String  @db.VarChar(255)
+  tarif        String  @db.VarChar(255)
+  pin          String  @db.VarChar(255)
+  puk          String  @db.VarChar(255)
+  einsatzort   String  @db.VarChar(255)
+  aktiv        Boolean
+  artikel_id   Int     @unique
+  artikel      artikel @relation(fields: [artikel_id], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([artikel_id], map: "artikel_id")
+}
+
+model tblprojekte {
+  ID                  Int               @id
+  Standort            String?           @db.TinyText
+  Niederlassung       String?           @db.VarChar(255)
+  Auftragsart         String?           @db.VarChar(255)
+  Status              String?           @db.VarChar(255)
+  Logistikkoordinator String?           @db.VarChar(255)
+  LK_1                String?           @db.VarChar(255)
+  LK_2                String?           @db.VarChar(255)
+  ZuKo                String?           @db.VarChar(255)
+  Auftragsdatum       String?           @db.VarChar(255)
+  Startdatum          String?           @db.VarChar(255)
+  Kommentar           String?           @db.VarChar(255)
+  Anlagenummer        Int?
+  PM_1                String?           @db.VarChar(255)
+  PM_2                String?           @db.VarChar(255)
+  Endtermin           String?           @db.VarChar(255)
+  Netto_Auftragswert  String?           @db.VarChar(255)
+  projekt_artikel     projekt_artikel[]
+}
+
+model unterkategorie {
+  unterkategorie_id  Int        @id @default(autoincrement())
+  unterkategoriename String     @db.VarChar(255)
+  kategorie_id       Int
+  artikel            artikel[]
+  kategorien         kategorien @relation(fields: [kategorie_id], references: [kategorie_id], onDelete: NoAction, onUpdate: NoAction, map: "unterkategorie_ibfk_1")
+
+  @@index([kategorie_id], map: "kategorie_id")
+}
+
 model zugangsdaten {
   ID                    Int        @id @default(autoincrement())
   Programm              String     @db.VarChar(50)
   UserName              String     @db.VarChar(50)
   Password              String     @db.VarChar(50)
   Role                  String?    @db.VarChar(50)
-  personal              personal[]
   simkartenSimkarten_id Int?
+  personal              personal[]
 }
