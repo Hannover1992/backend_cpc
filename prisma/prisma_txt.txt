@@ -19,6 +19,8 @@
   - Besitzer -> Fremd Schlussel Person
   - SIM-Karten-Nummer
   - Bildschirmsperre Pin -> Fremd Schlussel Zugangs Daten
+  - E-Mail-Adresse?
+  - Password -> Zugangs Daten?
 - tblSimkarten
   - Kundennummer
   - Rufnummer
