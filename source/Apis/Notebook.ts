@@ -1,63 +1,47 @@
 import {ServerSetup} from "../ServerSetup";
+import {Article} from "./Article";
 
-export class Notebook extends ServerSetup {
+export class Notebook extends Article {
 
 
     constructor() {
         super();
     }
 
-    create(...args: any[]): any {
+    async create(...args: any[]) {
         this.app.post('/projektArtikelNotebook', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
             let projektArtikelData = req.body;
-            return await this.prisma.projekt_artikel.create({
-                data: {
-                    menge: projektArtikelData.menge,
-                    tblprojekte: {
-                        connect: {
-                            ID: projektArtikelData.projekt_id
-                        }
-                    },
-                    artikel: {
-                        create: {
-                            artikelname: projektArtikelData.artikel.artikelname,
-                            unterkategorie: {
-                                connect: {
-                                    unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                }
-                            },
-                            preis: projektArtikelData.artikel.preis,
-                            beschreibung: projektArtikelData.artikel.beschreibung,
-                            zustand: projektArtikelData.artikel.zustand,
-                            einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
-                            belegt_von: new Date(projektArtikelData.artikel.belegt_von),
-                            belegt_bis: new Date(projektArtikelData.artikel.belegt_bis),
-                            anlagenummer: projektArtikelData.artikel.anlagenummer,
-                            edit_date: new Date(projektArtikelData.artikel.edit_date),
-                            firma: projektArtikelData.artikel.firma,
-                            model: projektArtikelData.artikel.model,
-                            seriennummer: projektArtikelData.artikel.seriennummer,
-                            notebook: {
-                                create: {
-                                    admin_konto_name: projektArtikelData.artikel.notebook.admin_konto_name ?? "",
-                                    admin_konto_password: projektArtikelData.artikel.notebook.admin_konto_password ?? "",
-                                    user_konto_name: projektArtikelData.artikel.notebook.user_konto_name ?? "",
-                                    user_konto_password: projektArtikelData.artikel.notebook.user_konto_password ?? "",
-                                }
-                            }
-                        }
+
+            try {
+                const createdArtikel = await this.createArtikel(projektArtikelData);
+                if (projektArtikelData.artikel.notebook) {
+                    await this.createNotebook(projektArtikelData, createdArtikel.artikel_id);
+                }
+                await this.createProjektArtikel(projektArtikelData, createdArtikel.artikel_id);
+
+                res.status(200).send({"message": "ProjektArtikel with Notebook created"});
+                console.log("ProjektArtikel with Notebook created");
+            } catch (error) {
+                res.status(500).send({"message": error.message});
+                console.log(error.message);
+            }
+        });
+    }
+
+    async createNotebook(projektArtikelData: any, artikelId: number) {
+        return await this.prisma.notebook.create({
+            data: {
+                admin_konto_name: projektArtikelData.artikel.notebook.admin_konto_name ?? "",
+                admin_konto_password: projektArtikelData.artikel.notebook.admin_konto_password ?? "",
+                user_konto_name: projektArtikelData.artikel.notebook.user_konto_name ?? "",
+                user_konto_password: projektArtikelData.artikel.notebook.user_konto_password ?? "",
+                artikel: {
+                    connect: {
+                        artikel_id: artikelId, // Link the created notebook to the created artikel
                     }
                 }
-            })
-                .then(() => {
-                    res.status(200).send({"message": "ProjektArtikel with Notebook created"});
-                    console.log("ProjektArtikel with Notebook created");
-                })
-                .catch((error: any) => {
-                    res.status(500).send({"message": error.message});
-                    console.log(error.message);
-                });
+            }
         });
     }
 

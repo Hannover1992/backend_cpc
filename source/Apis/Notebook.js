@@ -55,83 +55,85 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "../ServerSetup"], factory);
+        define(["require", "exports", "./Article"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Notebook = void 0;
-    var ServerSetup_1 = require("../ServerSetup");
+    var Article_1 = require("./Article");
     var Notebook = (function (_super) {
         __extends(Notebook, _super);
         function Notebook() {
             return _super.call(this) || this;
         }
         Notebook.prototype.create = function () {
-            var _this = this;
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            this.app.post('/projektArtikelNotebook', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelData;
-                var _a, _b, _c, _d;
-                return __generator(this, function (_e) {
-                    switch (_e.label) {
-                        case 0:
-                            this.allow_communikation_from_all_ip_adress(res);
-                            projektArtikelData = req.body;
-                            return [4, this.prisma.projekt_artikel.create({
-                                    data: {
-                                        menge: projektArtikelData.menge,
-                                        tblprojekte: {
-                                            connect: {
-                                                ID: projektArtikelData.projekt_id
-                                            }
-                                        },
-                                        artikel: {
-                                            create: {
-                                                artikelname: projektArtikelData.artikel.artikelname,
-                                                unterkategorie: {
-                                                    connect: {
-                                                        unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                                    }
-                                                },
-                                                preis: projektArtikelData.artikel.preis,
-                                                beschreibung: projektArtikelData.artikel.beschreibung,
-                                                zustand: projektArtikelData.artikel.zustand,
-                                                einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
-                                                belegt_von: new Date(projektArtikelData.artikel.belegt_von),
-                                                belegt_bis: new Date(projektArtikelData.artikel.belegt_bis),
-                                                anlagenummer: projektArtikelData.artikel.anlagenummer,
-                                                edit_date: new Date(projektArtikelData.artikel.edit_date),
-                                                firma: projektArtikelData.artikel.firma,
-                                                model: projektArtikelData.artikel.model,
-                                                seriennummer: projektArtikelData.artikel.seriennummer,
-                                                notebook: {
-                                                    create: {
-                                                        admin_konto_name: (_a = projektArtikelData.artikel.notebook.admin_konto_name) !== null && _a !== void 0 ? _a : "",
-                                                        admin_konto_password: (_b = projektArtikelData.artikel.notebook.admin_konto_password) !== null && _b !== void 0 ? _b : "",
-                                                        user_konto_name: (_c = projektArtikelData.artikel.notebook.user_konto_name) !== null && _c !== void 0 ? _c : "",
-                                                        user_konto_password: (_d = projektArtikelData.artikel.notebook.user_konto_password) !== null && _d !== void 0 ? _d : "",
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                })
-                                    .then(function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    this.app.post('/projektArtikelNotebook', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                        var projektArtikelData, createdArtikel, error_1;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    this.allow_communikation_from_all_ip_adress(res);
+                                    projektArtikelData = req.body;
+                                    _a.label = 1;
+                                case 1:
+                                    _a.trys.push([1, 6, , 7]);
+                                    return [4, this.createArtikel(projektArtikelData)];
+                                case 2:
+                                    createdArtikel = _a.sent();
+                                    if (!projektArtikelData.artikel.notebook) return [3, 4];
+                                    return [4, this.createNotebook(projektArtikelData, createdArtikel.artikel_id)];
+                                case 3:
+                                    _a.sent();
+                                    _a.label = 4;
+                                case 4: return [4, this.createProjektArtikel(projektArtikelData, createdArtikel.artikel_id)];
+                                case 5:
+                                    _a.sent();
                                     res.status(200).send({ "message": "ProjektArtikel with Notebook created" });
                                     console.log("ProjektArtikel with Notebook created");
-                                })
-                                    .catch(function (error) {
-                                    res.status(500).send({ "message": error.message });
-                                    console.log(error.message);
-                                })];
+                                    return [3, 7];
+                                case 6:
+                                    error_1 = _a.sent();
+                                    res.status(500).send({ "message": error_1.message });
+                                    console.log(error_1.message);
+                                    return [3, 7];
+                                case 7: return [2];
+                            }
+                        });
+                    }); });
+                    return [2];
+                });
+            });
+        };
+        Notebook.prototype.createNotebook = function (projektArtikelData, artikelId) {
+            var _a, _b, _c, _d;
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_e) {
+                    switch (_e.label) {
+                        case 0: return [4, this.prisma.notebook.create({
+                                data: {
+                                    admin_konto_name: (_a = projektArtikelData.artikel.notebook.admin_konto_name) !== null && _a !== void 0 ? _a : "",
+                                    admin_konto_password: (_b = projektArtikelData.artikel.notebook.admin_konto_password) !== null && _b !== void 0 ? _b : "",
+                                    user_konto_name: (_c = projektArtikelData.artikel.notebook.user_konto_name) !== null && _c !== void 0 ? _c : "",
+                                    user_konto_password: (_d = projektArtikelData.artikel.notebook.user_konto_password) !== null && _d !== void 0 ? _d : "",
+                                    artikel: {
+                                        connect: {
+                                            artikel_id: artikelId,
+                                        }
+                                    }
+                                }
+                            })];
                         case 1: return [2, _e.sent()];
                     }
                 });
-            }); });
+            });
         };
         Notebook.prototype.read = function () {
             var _this = this;
@@ -181,7 +183,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 args[_i] = arguments[_i];
             }
             this.app.put('/projektArtikelNotebook', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelData, existingNotebook, existingArtikel, error_1;
+                var projektArtikelData, existingNotebook, existingArtikel, error_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -239,9 +241,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         case 8: throw new Error("Artikel with ID ".concat(projektArtikelData.artikel_id, " does not exist."));
                         case 9: return [3, 11];
                         case 10:
-                            error_1 = _a.sent();
-                            res.status(500).send({ "message": error_1.message });
-                            console.log(error_1.message);
+                            error_2 = _a.sent();
+                            res.status(500).send({ "message": error_2.message });
+                            console.log(error_2.message);
                             return [3, 11];
                         case 11: return [2];
                     }
@@ -255,7 +257,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }
         };
         return Notebook;
-    }(ServerSetup_1.ServerSetup));
+    }(Article_1.Article));
     exports.Notebook = Notebook;
 });
 //# sourceMappingURL=Notebook.js.map
