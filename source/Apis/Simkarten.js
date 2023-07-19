@@ -55,152 +55,84 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "../ServerSetup"], factory);
+        define(["require", "exports", "./Article"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Simkarten = void 0;
-    var ServerSetup_1 = require("../ServerSetup");
+    var Article_1 = require("./Article");
     var Simkarten = (function (_super) {
         __extends(Simkarten, _super);
         function Simkarten() {
             return _super.call(this) || this;
         }
-        Simkarten.prototype.updateProjektArtikel = function (projektArtikelData) {
-            return __awaiter(this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4, this.prisma.projekt_artikel.update({
-                                where: {
-                                    projekt_artikel_id: projektArtikelData.projekt_artikel_id
-                                },
-                                data: {
-                                    menge: projektArtikelData.menge,
-                                }
-                            })];
-                        case 1:
-                            _a.sent();
-                            return [2];
-                    }
-                });
-            });
-        };
-        Simkarten.prototype.updateArtikel = function (projektArtikelData) {
-            var _a, _b, _c, _d, _e, _f;
-            return __awaiter(this, void 0, void 0, function () {
-                var existingArtikel;
-                return __generator(this, function (_g) {
-                    switch (_g.label) {
-                        case 0: return [4, this.prisma.artikel.findUnique({
-                                where: {
-                                    artikel_id: projektArtikelData.artikel_id
-                                }
-                            })];
-                        case 1:
-                            existingArtikel = _g.sent();
-                            if (!existingArtikel) return [3, 3];
-                            return [4, this.prisma.artikel.update({
-                                    where: {
-                                        artikel_id: projektArtikelData.artikel_id
-                                    },
-                                    data: {
-                                        artikelname: projektArtikelData.artikel.artikelname,
-                                        unterkategorie: {
-                                            connect: {
-                                                unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                            }
-                                        },
-                                        preis: parseFloat(projektArtikelData.artikel.preis) || 0,
-                                        beschreibung: (_a = projektArtikelData.artikel.beschreibung) !== null && _a !== void 0 ? _a : "",
-                                        zustand: (_b = projektArtikelData.artikel.zustand) !== null && _b !== void 0 ? _b : "",
-                                        einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum) || undefined,
-                                        belegt_von: new Date(projektArtikelData.artikel.belegt_von) || undefined,
-                                        belegt_bis: new Date(projektArtikelData.artikel.belegt_bis) || undefined,
-                                        anlagenummer: (_c = projektArtikelData.artikel.anlagenummer) !== null && _c !== void 0 ? _c : "",
-                                        edit_date: new Date(projektArtikelData.artikel.edit_date) || undefined,
-                                        firma: (_d = projektArtikelData.artikel.firma) !== null && _d !== void 0 ? _d : "",
-                                        model: (_e = projektArtikelData.artikel.model) !== null && _e !== void 0 ? _e : "",
-                                        seriennummer: (_f = projektArtikelData.artikel.seriennummer) !== null && _f !== void 0 ? _f : "",
-                                    },
-                                })];
-                        case 2:
-                            _g.sent();
-                            return [3, 4];
-                        case 3: throw new Error("Artikel with ID ".concat(projektArtikelData.artikel_id, " does not exist."));
-                        case 4: return [2];
-                    }
-                });
-            });
-        };
         Simkarten.prototype.create = function () {
-            var _this = this;
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            this.app.post('/projektArtikelSimkarte', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelData;
-                var _a, _b, _c, _d, _e, _f, _g;
-                return __generator(this, function (_h) {
-                    switch (_h.label) {
-                        case 0:
-                            this.allow_communikation_from_all_ip_adress(res);
-                            projektArtikelData = req.body;
-                            return [4, this.prisma.projekt_artikel.create({
-                                    data: {
-                                        menge: projektArtikelData.menge,
-                                        tblprojekte: {
-                                            connect: {
-                                                ID: projektArtikelData.projekt_id
-                                            }
-                                        },
-                                        artikel: {
-                                            create: {
-                                                artikelname: projektArtikelData.artikel.artikelname,
-                                                unterkategorie: {
-                                                    connect: {
-                                                        unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                                    }
-                                                },
-                                                preis: projektArtikelData.artikel.preis,
-                                                beschreibung: projektArtikelData.artikel.beschreibung,
-                                                zustand: projektArtikelData.artikel.zustand,
-                                                einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum),
-                                                belegt_von: new Date(projektArtikelData.artikel.belegt_von),
-                                                belegt_bis: new Date(projektArtikelData.artikel.belegt_bis),
-                                                anlagenummer: projektArtikelData.artikel.anlagenummer,
-                                                edit_date: new Date(projektArtikelData.artikel.edit_date),
-                                                firma: projektArtikelData.artikel.firma,
-                                                model: projektArtikelData.artikel.model,
-                                                seriennummer: projektArtikelData.artikel.seriennummer,
-                                                simkarten: {
-                                                    create: {
-                                                        kundennummer: (_a = projektArtikelData.artikel.simkarten.kundennummer) !== null && _a !== void 0 ? _a : "",
-                                                        rufnummer: (_b = projektArtikelData.artikel.simkarten.rufnummer) !== null && _b !== void 0 ? _b : "",
-                                                        tarif: (_c = projektArtikelData.artikel.simkarten.tarif) !== null && _c !== void 0 ? _c : "",
-                                                        pin: (_d = projektArtikelData.artikel.simkarten.pin) !== null && _d !== void 0 ? _d : "",
-                                                        puk: (_e = projektArtikelData.artikel.simkarten.puk) !== null && _e !== void 0 ? _e : "",
-                                                        einsatzort: (_f = projektArtikelData.artikel.simkarten.einsatzort) !== null && _f !== void 0 ? _f : "",
-                                                        aktiv: (_g = projektArtikelData.artikel.simkarten.aktiv) !== null && _g !== void 0 ? _g : false
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                })
-                                    .then(function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var _this = this;
+                return __generator(this, function (_a) {
+                    this.app.post('/projektArtikelSimkarte', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                        var projektArtikelData, createdArtikel, error_1;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    this.allow_communikation_from_all_ip_adress(res);
+                                    projektArtikelData = req.body;
+                                    _a.label = 1;
+                                case 1:
+                                    _a.trys.push([1, 6, , 7]);
+                                    return [4, this.createArtikel(projektArtikelData)];
+                                case 2:
+                                    createdArtikel = _a.sent();
+                                    if (!projektArtikelData.artikel.simkarten) return [3, 4];
+                                    return [4, this.createSimkarte(projektArtikelData, createdArtikel.artikel_id)];
+                                case 3:
+                                    _a.sent();
+                                    _a.label = 4;
+                                case 4: return [4, this.createProjektArtikel(projektArtikelData, createdArtikel.artikel_id)];
+                                case 5:
+                                    _a.sent();
                                     res.status(200).send({ "message": "ProjektArtikel created" });
                                     console.log("ProjektArtikel created");
-                                })
-                                    .catch(function (error) {
-                                    res.status(500).send({ "message": error.message });
-                                    console.log(error.message);
-                                })];
+                                    return [3, 7];
+                                case 6:
+                                    error_1 = _a.sent();
+                                    res.status(500).send({ "message": error_1.message });
+                                    console.log(error_1.message);
+                                    return [3, 7];
+                                case 7: return [2];
+                            }
+                        });
+                    }); });
+                    return [2];
+                });
+            });
+        };
+        Simkarten.prototype.createSimkarte = function (projektArtikelData, artikelId) {
+            var _a, _b, _c, _d, _e, _f, _g;
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_h) {
+                    switch (_h.label) {
+                        case 0: return [4, this.prisma.simkarten.create({
+                                data: {
+                                    kundennummer: (_a = projektArtikelData.artikel.simkarten.kundennummer) !== null && _a !== void 0 ? _a : "",
+                                    rufnummer: (_b = projektArtikelData.artikel.simkarten.rufnummer) !== null && _b !== void 0 ? _b : "",
+                                    tarif: (_c = projektArtikelData.artikel.simkarten.tarif) !== null && _c !== void 0 ? _c : "",
+                                    pin: (_d = projektArtikelData.artikel.simkarten.pin) !== null && _d !== void 0 ? _d : "",
+                                    puk: (_e = projektArtikelData.artikel.simkarten.puk) !== null && _e !== void 0 ? _e : "",
+                                    einsatzort: (_f = projektArtikelData.artikel.simkarten.einsatzort) !== null && _f !== void 0 ? _f : "",
+                                    aktiv: (_g = projektArtikelData.artikel.simkarten.aktiv) !== null && _g !== void 0 ? _g : false,
+                                    artikel_id: artikelId
+                                }
+                            })];
                         case 1: return [2, _h.sent()];
                     }
                 });
-            }); });
+            });
         };
         Simkarten.prototype.read = function () {
             var _this = this;
@@ -250,7 +182,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 args[_i] = arguments[_i];
             }
             this.app.put('/projektArtikelSimkarte', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelData, existingSimkarte, error_1;
+                var projektArtikelData, existingSimkarte, error_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -286,9 +218,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             res.status(200).send({ "message": "ProjektArtikelSimkarte updated" });
                             return [3, 8];
                         case 7:
-                            error_1 = _a.sent();
-                            res.status(500).send({ "message": error_1.message });
-                            console.log(error_1.message);
+                            error_2 = _a.sent();
+                            res.status(500).send({ "message": error_2.message });
+                            console.log(error_2.message);
                             return [3, 8];
                         case 8: return [2];
                     }
@@ -302,7 +234,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 args[_i] = arguments[_i];
             }
             this.app.delete('/projektArtikelSimkarte/:projekt_artikel_id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelID, projArtikel, simkartenID, error_2;
+                var projektArtikelID, projArtikel, simkartenID, error_3;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -349,8 +281,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             res.status(200).send({ "message": "Simkarte und ProjektArtikel wurden erfolgreich gelöscht" });
                             return [3, 7];
                         case 6:
-                            error_2 = _a.sent();
-                            res.status(500).send({ "message": error_2.message });
+                            error_3 = _a.sent();
+                            res.status(500).send({ "message": error_3.message });
                             return [3, 7];
                         case 7: return [2];
                     }
@@ -358,7 +290,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }); });
         };
         return Simkarten;
-    }(ServerSetup_1.ServerSetup));
+    }(Article_1.Article));
     exports.Simkarten = Simkarten;
 });
 //# sourceMappingURL=Simkarten.js.map
