@@ -136,68 +136,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 });
             }); });
         };
-        Simkarten.prototype.deletee = function () {
-            var _this = this;
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            this.app.delete('/projektArtikelSimkarte/:projekt_artikel_id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelID, projArtikel, simkartenID, error_1;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            this.allow_communikation_from_all_ip_adress(res);
-                            projektArtikelID = parseInt(req.params.projekt_artikel_id);
-                            _a.label = 1;
-                        case 1:
-                            _a.trys.push([1, 6, , 7]);
-                            return [4, this.prisma.projekt_artikel.findUnique({
-                                    where: {
-                                        projekt_artikel_id: projektArtikelID
-                                    },
-                                    include: {
-                                        artikel: {
-                                            select: {
-                                                simkarten: {
-                                                    select: {
-                                                        simkarten_id: true
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                })];
-                        case 2:
-                            projArtikel = _a.sent();
-                            simkartenID = projArtikel === null || projArtikel === void 0 ? void 0 : projArtikel.artikel.simkarten.simkarten_id;
-                            if (!(simkartenID !== undefined)) return [3, 4];
-                            return [4, this.prisma.simkarten.delete({
-                                    where: {
-                                        simkarten_id: simkartenID
-                                    }
-                                })];
-                        case 3:
-                            _a.sent();
-                            _a.label = 4;
-                        case 4: return [4, this.prisma.projekt_artikel.delete({
-                                where: {
-                                    projekt_artikel_id: projektArtikelID
-                                }
-                            })];
-                        case 5:
-                            _a.sent();
-                            res.status(200).send({ "message": "Simkarte und ProjektArtikel wurden erfolgreich gelöscht" });
-                            return [3, 7];
-                        case 6:
-                            error_1 = _a.sent();
-                            res.status(500).send({ "message": error_1.message });
-                            return [3, 7];
-                        case 7: return [2];
-                    }
-                });
-            }); });
-        };
         Simkarten.prototype.read = function () {
             var _this = this;
             var args = [];
@@ -246,16 +184,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 args[_i] = arguments[_i];
             }
             this.app.put('/projektArtikelSimkarte', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelData, existingSimkarte, existingArtikel, error_2;
-                var _a, _b, _c, _d, _e, _f;
-                return __generator(this, function (_g) {
-                    switch (_g.label) {
+                var projektArtikelData, existingSimkarte, error_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0:
                             this.allow_communikation_from_all_ip_adress(res);
                             projektArtikelData = req.body;
-                            _g.label = 1;
+                            _a.label = 1;
                         case 1:
-                            _g.trys.push([1, 10, , 11]);
+                            _a.trys.push([1, 7, , 8]);
                             if (!projektArtikelData.artikel.simkarten) return [3, 4];
                             return [4, this.prisma.simkarten.findUnique({
                                     where: {
@@ -263,7 +200,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                     }
                                 })];
                         case 2:
-                            existingSimkarte = _g.sent();
+                            existingSimkarte = _a.sent();
                             if (!existingSimkarte) return [3, 4];
                             return [4, this.prisma.simkarten.update({
                                     where: {
@@ -272,62 +209,84 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                     data: projektArtikelData.artikel.simkarten
                                 })];
                         case 3:
-                            _g.sent();
-                            _g.label = 4;
-                        case 4: return [4, this.prisma.artikel.findUnique({
+                            _a.sent();
+                            _a.label = 4;
+                        case 4: return [4, updateArtikel(projektArtikelData)];
+                        case 5:
+                            _a.sent();
+                            return [4, updateProjektArtikel(projektArtikelData)];
+                        case 6:
+                            _a.sent();
+                            res.status(200).send({ "message": "ProjektArtikelSimkarte updated" });
+                            return [3, 8];
+                        case 7:
+                            error_1 = _a.sent();
+                            res.status(500).send({ "message": error_1.message });
+                            console.log(error_1.message);
+                            return [3, 8];
+                        case 8: return [2];
+                    }
+                });
+            }); });
+        };
+        Simkarten.prototype.deletee = function () {
+            var _this = this;
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            this.app.delete('/projektArtikelSimkarte/:projekt_artikel_id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var projektArtikelID, projArtikel, simkartenID, error_2;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            this.allow_communikation_from_all_ip_adress(res);
+                            projektArtikelID = parseInt(req.params.projekt_artikel_id);
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 6, , 7]);
+                            return [4, this.prisma.projekt_artikel.findUnique({
+                                    where: {
+                                        projekt_artikel_id: projektArtikelID
+                                    },
+                                    include: {
+                                        artikel: {
+                                            select: {
+                                                simkarten: {
+                                                    select: {
+                                                        simkarten_id: true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                })];
+                        case 2:
+                            projArtikel = _a.sent();
+                            simkartenID = projArtikel === null || projArtikel === void 0 ? void 0 : projArtikel.artikel.simkarten.simkarten_id;
+                            if (!(simkartenID !== undefined)) return [3, 4];
+                            return [4, this.prisma.simkarten.delete({
+                                    where: {
+                                        simkarten_id: simkartenID
+                                    }
+                                })];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4: return [4, this.prisma.projekt_artikel.delete({
                                 where: {
-                                    artikel_id: projektArtikelData.artikel_id
+                                    projekt_artikel_id: projektArtikelID
                                 }
                             })];
                         case 5:
-                            existingArtikel = _g.sent();
-                            if (!existingArtikel) return [3, 8];
-                            return [4, this.prisma.artikel.update({
-                                    where: {
-                                        artikel_id: projektArtikelData.artikel_id
-                                    },
-                                    data: {
-                                        artikelname: projektArtikelData.artikel.artikelname,
-                                        unterkategorie: {
-                                            connect: {
-                                                unterkategorie_id: projektArtikelData.artikel.unterkategorie_id
-                                            }
-                                        },
-                                        preis: parseFloat(projektArtikelData.artikel.preis) || 0,
-                                        beschreibung: (_a = projektArtikelData.artikel.beschreibung) !== null && _a !== void 0 ? _a : "",
-                                        zustand: (_b = projektArtikelData.artikel.zustand) !== null && _b !== void 0 ? _b : "",
-                                        einkaufs_datum: new Date(projektArtikelData.artikel.einkaufs_datum) || undefined,
-                                        belegt_von: new Date(projektArtikelData.artikel.belegt_von) || undefined,
-                                        belegt_bis: new Date(projektArtikelData.artikel.belegt_bis) || undefined,
-                                        anlagenummer: (_c = projektArtikelData.artikel.anlagenummer) !== null && _c !== void 0 ? _c : "",
-                                        edit_date: new Date(projektArtikelData.artikel.edit_date) || undefined,
-                                        firma: (_d = projektArtikelData.artikel.firma) !== null && _d !== void 0 ? _d : "",
-                                        model: (_e = projektArtikelData.artikel.model) !== null && _e !== void 0 ? _e : "",
-                                        seriennummer: (_f = projektArtikelData.artikel.seriennummer) !== null && _f !== void 0 ? _f : "",
-                                    },
-                                })];
+                            _a.sent();
+                            res.status(200).send({ "message": "Simkarte und ProjektArtikel wurden erfolgreich gelöscht" });
+                            return [3, 7];
                         case 6:
-                            _g.sent();
-                            return [4, this.prisma.projekt_artikel.update({
-                                    where: {
-                                        projekt_artikel_id: projektArtikelData.projekt_artikel_id
-                                    },
-                                    data: {
-                                        menge: projektArtikelData.menge,
-                                    }
-                                })];
-                        case 7:
-                            _g.sent();
-                            res.status(200).send({ "message": "ProjektArtikelSimkarte updated" });
-                            return [3, 9];
-                        case 8: throw new Error("Artikel with ID ".concat(projektArtikelData.artikel_id, " does not exist."));
-                        case 9: return [3, 11];
-                        case 10:
-                            error_2 = _g.sent();
+                            error_2 = _a.sent();
                             res.status(500).send({ "message": error_2.message });
-                            console.log(error_2.message);
-                            return [3, 11];
-                        case 11: return [2];
+                            return [3, 7];
+                        case 7: return [2];
                     }
                 });
             }); });

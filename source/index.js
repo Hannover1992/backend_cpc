@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Apis/Project", "./Apis/ProjectTable", "./Apis/KategorienTable", "./Apis/Asset", "./Apis/ProjektAssets", "./Apis/Simkarten"], factory);
+        define(["require", "exports", "./Apis/Project", "./Apis/ProjectTable", "./Apis/KategorienTable", "./Apis/Asset", "./Apis/ProjektAssets", "./Apis/Simkarten", "./Apis/Notebook"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     var Asset_1 = require("./Apis/Asset");
     var ProjektAssets_1 = require("./Apis/ProjektAssets");
     var Simkarten_1 = require("./Apis/Simkarten");
+    var Notebook_1 = require("./Apis/Notebook");
     function start() {
         return __awaiter(this, void 0, void 0, function () {
             var project;
@@ -61,6 +62,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 new KategorienTable_1.KategorienTable();
                 new Asset_1.Asset();
                 new Simkarten_1.Simkarten();
+                new Notebook_1.Notebook();
                 instantiate(project.prisma);
                 return [2];
             });

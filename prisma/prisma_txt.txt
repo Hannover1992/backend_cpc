@@ -10,9 +10,6 @@
     - ICCID
     - PIN PUK -> Zugangs Daten Fremd
 
-- tblNotebook (done)
-  - Adminkonto Name Adminkonto Password -> Zugangs
-  - Userkonto Name Userkonto Password -> Zugangs
 
 - tblHandy
   - IMEI 1
@@ -21,10 +18,10 @@
   - Bildschirmsperre Pin -> Fremd Schlussel Zugangs Daten
   - E-Mail-Adresse?
   - Password -> Zugangs Daten?
-- tblSimkarten
-  - Kundennummer
-  - Rufnummer
-  - Tarif
-  - PIN PUK -> Zugangs Dat
-  - Einsatzort
-  - aktiv?
+
+
+- Notebook
+  - Adminkonto Name Adminkonto Password -> Zugangs
+  - Adnin Password
+  - Userkonto Name Userkonto Password -> Zugangs
+  - User Password

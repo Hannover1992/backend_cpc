@@ -5,8 +5,6 @@ import {ServerSetup} from "../ServerSetup";
 
 export class Simkarten extends ServerSetup {
 
-
-
     constructor(){
         super();
     }
@@ -69,91 +67,6 @@ export class Simkarten extends ServerSetup {
 
 
 
-// {
-//     "projekt_id": 802007,
-//     "menge": 0,
-//     "artikel": {
-//         "artikelname": "karte2",
-//         "unterkategorie_id": 2,
-//         "preis": "1",
-//         "beschreibung": "lkj",
-//         "bild_url": null,
-//         "zustand": null,
-//         "einkaufs_datum": "2023-06-12T07:24:06.000Z",
-//         "belegt_von": "2023-06-12T08:24:29.000Z",
-//         "belegt_bis": "2023-06-12T08:24:29.000Z",
-//         "anlagenummer": "123",
-//         "edit_date": "2023-06-12T07:24:06.000Z",
-//         "besitzer_id": null,
-//         "firma": "lkj",
-//         "model": "lkj",
-//         "seriennummer": "123",
-//         "unterkategorie": {
-//             "unterkategorie_id": 2,
-//             "unterkategoriename": "Simkarten",
-//             "kategorie_id": 2
-//         },
-//         "simkarten": {
-//             "kundennummer": "1",
-//             "rufnummer": "2",
-//             "tarif": "3",
-//             "pin": "4",
-//             "puk": "5",
-//             "einsatzort": "6",
-//             "aktiv": false
-//         }
-//     }
-// }
-
-    deletee(...args: any[]): any {
-        this.app.delete('/projektArtikelSimkarte/:projekt_artikel_id', async (req: any, res: any) => {
-            this.allow_communikation_from_all_ip_adress(res);
-            let projektArtikelID = parseInt(req.params.projekt_artikel_id);
-
-            try {
-                // Find the related simkarten_id before deleting the projekt_artikel
-                const projArtikel = await this.prisma.projekt_artikel.findUnique({
-                    where: {
-                        projekt_artikel_id: projektArtikelID
-                    },
-                    include: {
-                        artikel: {
-                            select: {
-                                simkarten: {
-                                    select: {
-                                        simkarten_id: true
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-
-                const simkartenID = projArtikel?.artikel.simkarten.simkarten_id;
-
-                if (simkartenID !== undefined) {
-                    // Delete the associated simkarten entry
-                    await this.prisma.simkarten.delete({
-                        where: {
-                            simkarten_id: simkartenID
-                        }
-                    });
-                }
-
-                // Delete the projekt_artikel entry
-                await this.prisma.projekt_artikel.delete({
-                    where: {
-                        projekt_artikel_id: projektArtikelID
-                    }
-                });
-
-                res.status(200).send({"message": "Simkarte und ProjektArtikel wurden erfolgreich gelöscht"});
-            } catch (error) {
-                res.status(500).send({"message": error.message});
-            }
-        });
-    }
-
     read(...args: any[]): any {
         this.app.get('/projektArtikelSimkarte/:projekt_id/:unterkategoriename', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);
@@ -186,6 +99,9 @@ export class Simkarten extends ServerSetup {
             });
         });
     }
+
+
+
 
     update(...args: any[]): any {
         this.app.put('/projektArtikelSimkarte', async (req: any, res: any) => {
@@ -264,5 +180,92 @@ export class Simkarten extends ServerSetup {
             }
         });
     }
+
+
+    deletee(...args: any[]): any {
+        this.app.delete('/projektArtikelSimkarte/:projekt_artikel_id', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            let projektArtikelID = parseInt(req.params.projekt_artikel_id);
+
+            try {
+                // Find the related simkarten_id before deleting the projekt_artikel
+                const projArtikel = await this.prisma.projekt_artikel.findUnique({
+                    where: {
+                        projekt_artikel_id: projektArtikelID
+                    },
+                    include: {
+                        artikel: {
+                            select: {
+                                simkarten: {
+                                    select: {
+                                        simkarten_id: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const simkartenID = projArtikel?.artikel.simkarten.simkarten_id;
+
+                if (simkartenID !== undefined) {
+                    // Delete the associated simkarten entry
+                    await this.prisma.simkarten.delete({
+                        where: {
+                            simkarten_id: simkartenID
+                        }
+                    });
+                }
+
+                // Delete the projekt_artikel entry
+                await this.prisma.projekt_artikel.delete({
+                    where: {
+                        projekt_artikel_id: projektArtikelID
+                    }
+                });
+
+                res.status(200).send({"message": "Simkarte und ProjektArtikel wurden erfolgreich gelöscht"});
+            } catch (error) {
+                res.status(500).send({"message": error.message});
+            }
+        });
+    }
 }
 
+
+
+// {
+//     "projekt_id": 802007,
+//     "menge": 0,
+//     "artikel": {
+//         "artikelname": "karte2",
+//         "unterkategorie_id": 2,
+//         "preis": "1",
+//         "beschreibung": "lkj",
+//         "bild_url": null,
+//         "zustand": null,
+//         "einkaufs_datum": "2023-06-12T07:24:06.000Z",
+//         "belegt_von": "2023-06-12T08:24:29.000Z",
+//         "belegt_bis": "2023-06-12T08:24:29.000Z",
+//         "anlagenummer": "123",
+//         "edit_date": "2023-06-12T07:24:06.000Z",
+//         "besitzer_id": null,
+//         "firma": "lkj",
+//         "model": "lkj",
+//         "seriennummer": "123",
+//         "unterkategorie": {
+//             "unterkategorie_id": 2,
+//             "unterkategoriename": "Simkarten",
+//             "kategorie_id": 2
+//         },
+//         "simkarten": {
+//             "kundennummer": "1",
+//             "rufnummer": "2",
+//             "tarif": "3",
+//             "pin": "4",
+//             "puk": "5",
+//             "einsatzort": "6",
+//             "aktiv": false
+//         }
+//     }
+// }

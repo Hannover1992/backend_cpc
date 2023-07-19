@@ -30,9 +30,22 @@ model artikel {
   electronics       electronics?
   projekt_artikel   projekt_artikel[]
   simkarten         simkarten?
+  notebook          notebook?
 
   @@index([besitzer_id], map: "artikel_personal_Personalnummer_fk")
   @@index([unterkategorie_id], map: "unterkategorie_id")
+}
+
+model notebook {
+  notebook_id           Int     @id @default(autoincrement())
+  admin_konto_name      String? @db.VarChar(255)
+  admin_konto_password  String? @db.VarChar(255)
+  user_konto_name       String? @db.VarChar(255)
+  user_konto_password   String? @db.VarChar(255)
+  artikel_artikel_id_fk Int     @unique
+  artikel               artikel @relation(fields: [artikel_artikel_id_fk], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "notebook_artikel_artikel_id_fk")
+
+  @@index([artikel_artikel_id_fk], map: "artikel_artikel_id_fk")
 }
 
 model assets {

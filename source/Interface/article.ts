@@ -1,6 +1,7 @@
 import {Subcategory} from "./subcategory";
 import {Asset} from "./article/asset";
 import {Simkarten} from "./article/Simkarte";
+import {Notebook} from "./article/Notebook";
 
 
 
@@ -25,5 +26,13 @@ export interface Article {
   besitzer_id?: null | number;
   assets?: Asset;
   simkarte?: Simkarten;
+  notebook?: Notebook;
   unterkategorie?: Subcategory;
 }
+
+// - Notebook
+// - Adminkonto Name Adminkonto Password -> Zugangs
+//     - Adnin Password
+// - Userkonto Name Userkonto Password -> Zugangs
+//     - User Password
+

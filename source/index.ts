@@ -6,6 +6,7 @@ import {ProjektAssets} from "./Apis/ProjektAssets";
 import {ServerSetup} from "./ServerSetup";
 import {kategorien, PrismaClient} from "@prisma/client";
 import {Simkarten} from "./Apis/Simkarten";
+import {Notebook} from "./Apis/Notebook";
 
 
 async function start() {
@@ -15,6 +16,7 @@ async function start() {
     new KategorienTable();
     new Asset();
     new Simkarten();
+    new Notebook();
     instantiate(project.prisma);
 
 }
