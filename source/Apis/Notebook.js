@@ -183,7 +183,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 args[_i] = arguments[_i];
             }
             this.app.put('/projektArtikelNotebook', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-                var projektArtikelData, existingNotebook, existingArtikel, error_2;
+                var projektArtikelData, existingNotebook, error_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -191,7 +191,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             projektArtikelData = req.body;
                             _a.label = 1;
                         case 1:
-                            _a.trys.push([1, 10, , 11]);
+                            _a.trys.push([1, 7, , 8]);
                             if (!projektArtikelData.artikel.notebook) return [3, 4];
                             return [4, this.prisma.notebook.findUnique({
                                     where: {
@@ -210,42 +210,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         case 3:
                             _a.sent();
                             _a.label = 4;
-                        case 4: return [4, this.prisma.artikel.findUnique({
-                                where: {
-                                    artikel_id: projektArtikelData.artikel_id
-                                }
-                            })];
+                        case 4: return [4, this.updateArtikel(projektArtikelData)];
                         case 5:
-                            existingArtikel = _a.sent();
-                            if (!existingArtikel) return [3, 8];
-                            return [4, this.prisma.artikel.update({
-                                    where: {
-                                        artikel_id: projektArtikelData.artikel_id
-                                    },
-                                    data: {},
-                                })];
+                            _a.sent();
+                            return [4, this.updateProjektArtikel(projektArtikelData)];
                         case 6:
                             _a.sent();
-                            return [4, this.prisma.projekt_artikel.update({
-                                    where: {
-                                        projekt_artikel_id: projektArtikelData.projekt_artikel_id
-                                    },
-                                    data: {
-                                        menge: projektArtikelData.menge,
-                                    }
-                                })];
-                        case 7:
-                            _a.sent();
                             res.status(200).send({ "message": "ProjektArtikelNotebook updated" });
-                            return [3, 9];
-                        case 8: throw new Error("Artikel with ID ".concat(projektArtikelData.artikel_id, " does not exist."));
-                        case 9: return [3, 11];
-                        case 10:
+                            return [3, 8];
+                        case 7:
                             error_2 = _a.sent();
                             res.status(500).send({ "message": error_2.message });
                             console.log(error_2.message);
-                            return [3, 11];
-                        case 11: return [2];
+                            return [3, 8];
+                        case 8: return [2];
                     }
                 });
             }); });

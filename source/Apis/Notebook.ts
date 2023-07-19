@@ -85,7 +85,7 @@ export class Notebook extends Article {
             let projektArtikelData = req.body;
 
             try {
-                // update the notebook if it exists
+                // Update the notebook if it exists
                 if (projektArtikelData.artikel.notebook) {
                     const existingNotebook = await this.prisma.notebook.findUnique({
                         where: {
@@ -103,38 +103,11 @@ export class Notebook extends Article {
                     }
                 }
 
-                // update the artikel
-                const existingArtikel = await this.prisma.artikel.findUnique({
-                    where: {
-                        artikel_id: projektArtikelData.artikel_id
-                    }
-                });
+                // Call the separated methods using 'this'
+                await this.updateArtikel(projektArtikelData);
+                await this.updateProjektArtikel(projektArtikelData);
 
-                if (existingArtikel) {
-                    await this.prisma.artikel.update({
-                        where: {
-                            artikel_id: projektArtikelData.artikel_id
-                        },
-                        data: {
-                            // Copy the rest of artikel data update here.
-                            // ...
-                        },
-                    });
-
-                    // Then, update the projekt_artikel
-                    await this.prisma.projekt_artikel.update({
-                        where: {
-                            projekt_artikel_id: projektArtikelData.projekt_artikel_id
-                        },
-                        data: {
-                            menge: projektArtikelData.menge,
-                        }
-                    });
-
-                    res.status(200).send({"message": "ProjektArtikelNotebook updated"});
-                } else {
-                    throw new Error(`Artikel with ID ${projektArtikelData.artikel_id} does not exist.`);
-                }
+                res.status(200).send({"message": "ProjektArtikelNotebook updated"});
             } catch (error) {
                 res.status(500).send({"message": error.message});
                 console.log(error.message);
