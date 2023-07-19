@@ -229,10 +229,66 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }); });
         };
         Notebook.prototype.deletee = function () {
+            var _this = this;
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
+            this.app.delete('/projektArtikelNotebook/:projekt_artikel_id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var projektArtikelID, projArtikel, notebookID, error_3;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            this.allow_communikation_from_all_ip_adress(res);
+                            projektArtikelID = parseInt(req.params.projekt_artikel_id);
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 6, , 7]);
+                            return [4, this.prisma.projekt_artikel.findUnique({
+                                    where: {
+                                        projekt_artikel_id: projektArtikelID
+                                    },
+                                    include: {
+                                        artikel: {
+                                            select: {
+                                                notebook: {
+                                                    select: {
+                                                        notebook_id: true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                })];
+                        case 2:
+                            projArtikel = _a.sent();
+                            notebookID = projArtikel === null || projArtikel === void 0 ? void 0 : projArtikel.artikel.notebook.notebook_id;
+                            if (!(notebookID !== undefined)) return [3, 4];
+                            return [4, this.prisma.notebook.delete({
+                                    where: {
+                                        notebook_id: notebookID
+                                    }
+                                })];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4: return [4, this.prisma.projekt_artikel.delete({
+                                where: {
+                                    projekt_artikel_id: projektArtikelID
+                                }
+                            })];
+                        case 5:
+                            _a.sent();
+                            res.status(200).send({ "message": "Notebook und ProjektArtikel wurden erfolgreich gelöscht" });
+                            return [3, 7];
+                        case 6:
+                            error_3 = _a.sent();
+                            res.status(500).send({ "message": error_3.message });
+                            return [3, 7];
+                        case 7: return [2];
+                    }
+                });
+            }); });
         };
         return Notebook;
     }(Article_1.Article));

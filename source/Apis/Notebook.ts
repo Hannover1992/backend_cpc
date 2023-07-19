@@ -116,6 +116,52 @@ export class Notebook extends Article {
     }
 
     deletee(...args: any[]): any {
+        this.app.delete('/projektArtikelNotebook/:projekt_artikel_id', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            let projektArtikelID = parseInt(req.params.projekt_artikel_id);
+
+            try {
+                // Find the related notebook_id before deleting the projekt_artikel
+                const projArtikel = await this.prisma.projekt_artikel.findUnique({
+                    where: {
+                        projekt_artikel_id: projektArtikelID
+                    },
+                    include: {
+                        artikel: {
+                            select: {
+                                notebook: {
+                                    select: {
+                                        notebook_id: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const notebookID = projArtikel?.artikel.notebook.notebook_id;
+
+                if (notebookID !== undefined) {
+                    // Delete the associated notebook entry
+                    await this.prisma.notebook.delete({
+                        where: {
+                            notebook_id: notebookID
+                        }
+                    });
+                }
+
+                // Delete the projekt_artikel entry
+                await this.prisma.projekt_artikel.delete({
+                    where: {
+                        projekt_artikel_id: projektArtikelID
+                    }
+                });
+
+                res.status(200).send({"message": "Notebook und ProjektArtikel wurden erfolgreich gelöscht"});
+            } catch (error) {
+                res.status(500).send({"message": error.message});
+            }
+        });
     }
 
 }
