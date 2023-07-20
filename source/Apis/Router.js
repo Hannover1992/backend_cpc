@@ -232,10 +232,68 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }); });
         };
         Router.prototype.deletee = function () {
+            var _this = this;
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
+            this.app.delete('/projektArtikelRouter/:projekt_artikel_id', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var projektArtikelID, projArtikel, routerID, error_3;
+                var _a, _b;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0:
+                            this.allow_communikation_from_all_ip_adress(res);
+                            projektArtikelID = parseInt(req.params.projekt_artikel_id);
+                            _c.label = 1;
+                        case 1:
+                            _c.trys.push([1, 6, , 7]);
+                            return [4, this.prisma.projekt_artikel.findUnique({
+                                    where: {
+                                        projekt_artikel_id: projektArtikelID
+                                    },
+                                    include: {
+                                        artikel: {
+                                            select: {
+                                                router: {
+                                                    select: {
+                                                        router_id: true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                })];
+                        case 2:
+                            projArtikel = _c.sent();
+                            routerID = (_b = (_a = projArtikel === null || projArtikel === void 0 ? void 0 : projArtikel.artikel) === null || _a === void 0 ? void 0 : _a.router) === null || _b === void 0 ? void 0 : _b.router_id;
+                            if (!routerID) return [3, 4];
+                            return [4, this.prisma.router.delete({
+                                    where: {
+                                        router_id: routerID
+                                    }
+                                })];
+                        case 3:
+                            _c.sent();
+                            _c.label = 4;
+                        case 4: return [4, this.prisma.projekt_artikel.delete({
+                                where: {
+                                    projekt_artikel_id: projektArtikelID
+                                }
+                            })];
+                        case 5:
+                            _c.sent();
+                            res.status(200).send({ "message": "Router und ProjektArtikel wurden erfolgreich gelöscht" });
+                            return [3, 7];
+                        case 6:
+                            error_3 = _c.sent();
+                            res.status(500).send({ "message": error_3.message });
+                            console.log(error_3.message);
+                            return [3, 7];
+                        case 7: return [2];
+                    }
+                });
+            }); });
         };
         return Router;
     }(Article_1.Article));

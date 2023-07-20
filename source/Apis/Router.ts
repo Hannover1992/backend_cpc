@@ -113,6 +113,53 @@ export class Router extends Article {
     }
 
     deletee(...args: any[]): any {
+        this.app.delete('/projektArtikelRouter/:projekt_artikel_id', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            let projektArtikelID = parseInt(req.params.projekt_artikel_id);
+
+            try {
+                // Find the related router_id before deleting the projekt_artikel
+                const projArtikel = await this.prisma.projekt_artikel.findUnique({
+                    where: {
+                        projekt_artikel_id: projektArtikelID
+                    },
+                    include: {
+                        artikel: {
+                            select: {
+                                router: {
+                                    select: {
+                                        router_id: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const routerID = projArtikel?.artikel?.router?.router_id;
+
+                if (routerID) {
+                    // Delete the associated router entry
+                    await this.prisma.router.delete({
+                        where: {
+                            router_id: routerID
+                        }
+                    });
+                }
+
+                // Delete the projekt_artikel entry
+                await this.prisma.projekt_artikel.delete({
+                    where: {
+                        projekt_artikel_id: projektArtikelID
+                    }
+                });
+
+                res.status(200).send({"message": "Router und ProjektArtikel wurden erfolgreich gelöscht"});
+            } catch (error) {
+                res.status(500).send({"message": error.message});
+                console.log(error.message);
+            }
+        });
     }
 
 
