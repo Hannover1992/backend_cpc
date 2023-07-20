@@ -262,7 +262,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         case 2:
                             projArtikel = _a.sent();
                             simkartenID = projArtikel === null || projArtikel === void 0 ? void 0 : projArtikel.artikel.simkarten.simkarten_id;
-                            if (!(simkartenID !== undefined)) return [3, 4];
+                            if (!(simkartenID !== undefined || simkartenID !== null)) return [3, 4];
                             return [4, this.prisma.simkarten.delete({
                                     where: {
                                         simkarten_id: simkartenID

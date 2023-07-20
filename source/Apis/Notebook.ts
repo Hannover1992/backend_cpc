@@ -139,23 +139,24 @@ export class Notebook extends Article {
                     }
                 });
 
-                const notebookID = projArtikel?.artikel.notebook.notebook_id;
+                const notebookID = projArtikel?.artikel?.notebook?.notebook_id;
 
-                if (notebookID !== undefined) {
+                if (notebookID) {
                     // Delete the associated notebook entry
                     await this.prisma.notebook.delete({
                         where: {
                             notebook_id: notebookID
                         }
                     });
+                } else {
+                    // Delete the projekt_artikel entry
+                    await this.prisma.projekt_artikel.delete({
+                        where: {
+                            projekt_artikel_id: projektArtikelID
+                        }
+                    });
                 }
 
-                // Delete the projekt_artikel entry
-                await this.prisma.projekt_artikel.delete({
-                    where: {
-                        projekt_artikel_id: projektArtikelID
-                    }
-                });
 
                 res.status(200).send({"message": "Notebook und ProjektArtikel wurden erfolgreich gelöscht"});
             } catch (error) {

@@ -148,7 +148,7 @@ export class Simkarten extends Article {
 
                 const simkartenID = projArtikel?.artikel.simkarten.simkarten_id;
 
-                if (simkartenID !== undefined) {
+                if (simkartenID !== undefined || simkartenID !== null) {
                     // Delete the associated simkarten entry
                     await this.prisma.simkarten.delete({
                         where: {
