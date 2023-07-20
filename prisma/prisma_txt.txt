@@ -1,14 +1,17 @@
-- Netzwerk
+- tblACU(done)
+- Router
+- IP-Adresse Router
   - IP-Adresse
-  - tblACU(done)
-    - Router
-    - IP-Adresse Router
-  - tblRouter(done)
+
+tblRouter
     - IMEI
     - IP-Adresse
-    - Benutzername Passwort -> Zugangs Daten
+    - Benutzername
+    - Passwort
     - ICCID
-    - PIN PUK -> Zugangs Daten Fremd
+    - PIN
+    - PUK
+    - IP-Adresse
 
 
 - tblHandy
@@ -18,10 +21,3 @@
   - Bildschirmsperre Pin
   - E-Mail-Adresse?
   - Password
-
-
-- Notebook
-  - Adminkonto Name Adminkonto Password -> Zugangs
-  - Adnin Password
-  - Userkonto Name Userkonto Password -> Zugangs
-  - User Password

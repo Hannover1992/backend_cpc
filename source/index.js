@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Apis/Project", "./Apis/ProjectTable", "./Apis/KategorienTable", "./Apis/Asset", "./Apis/ProjektAssets", "./Apis/Simkarten", "./Apis/Notebook", "./Apis/Handy"], factory);
+        define(["require", "exports", "./Apis/Project", "./Apis/ProjectTable", "./Apis/KategorienTable", "./Apis/Asset", "./Apis/ProjektAssets", "./Apis/Simkarten", "./Apis/Notebook", "./Apis/Router", "./Apis/Handy"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -52,6 +52,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     var ProjektAssets_1 = require("./Apis/ProjektAssets");
     var Simkarten_1 = require("./Apis/Simkarten");
     var Notebook_1 = require("./Apis/Notebook");
+    var Router_1 = require("./Apis/Router");
     var Handy_1 = require("./Apis/Handy");
     function start() {
         return __awaiter(this, void 0, void 0, function () {
@@ -65,6 +66,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 new Simkarten_1.Simkarten();
                 new Notebook_1.Notebook();
                 new Handy_1.Handy();
+                new Router_1.Router();
                 instantiate(project.prisma);
                 return [2];
             });

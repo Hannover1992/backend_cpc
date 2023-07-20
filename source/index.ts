@@ -6,6 +6,7 @@ import {ProjektAssets} from "./Apis/ProjektAssets";
 import {kategorien, PrismaClient} from "@prisma/client";
 import {Simkarten} from "./Apis/Simkarten";
 import {Notebook} from "./Apis/Notebook";
+import {Router} from "./Apis/Router";
 import {Handy} from "./Apis/Handy";
 
 
@@ -17,7 +18,8 @@ async function start() {
     new Asset();
     new Simkarten();
     new Notebook();
-    new Handy();
+    new Handy()
+    new Router();
     instantiate(project.prisma);
 
 }
