@@ -31,6 +31,7 @@ model artikel {
   projekt_artikel   projekt_artikel[]
   simkarten         simkarten?
   notebook          notebook?
+  handy             Handy?
 
   @@index([besitzer_id], map: "artikel_personal_Personalnummer_fk")
   @@index([unterkategorie_id], map: "unterkategorie_id")
@@ -44,6 +45,20 @@ model notebook {
   user_konto_password   String? @db.VarChar(255)
   artikel_artikel_id_fk Int     @unique
   artikel               artikel @relation(fields: [artikel_artikel_id_fk], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "notebook_artikel_artikel_id_fk")
+
+  @@index([artikel_artikel_id_fk], map: "artikel_artikel_id_fk")
+}
+
+model Handy {
+  handy_id              Int     @id @default(autoincrement())
+  imei_1                String  @db.VarChar(255)
+  besitzer              String  @db.VarChar(255)
+  sim_karten_nummer     String? @db.VarChar(255)
+  bildschirmsperre_pin  String? @db.VarChar(255)
+  email_adresse         String? @db.VarChar(255)
+  password              String? @db.VarChar(255)
+  artikel_artikel_id_fk Int     @unique
+  artikel               artikel @relation(fields: [artikel_artikel_id_fk], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "handy_artikel_artikel_id_fk")
 
   @@index([artikel_artikel_id_fk], map: "artikel_artikel_id_fk")
 }

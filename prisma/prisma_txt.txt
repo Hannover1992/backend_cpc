@@ -13,11 +13,11 @@
 
 - tblHandy
   - IMEI 1
-  - Besitzer -> Fremd Schlussel Person
+  - Besitzer
   - SIM-Karten-Nummer
-  - Bildschirmsperre Pin -> Fremd Schlussel Zugangs Daten
+  - Bildschirmsperre Pin
   - E-Mail-Adresse?
-  - Password -> Zugangs Daten?
+  - Password
 
 
 - Notebook
