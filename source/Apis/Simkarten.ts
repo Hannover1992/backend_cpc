@@ -146,9 +146,10 @@ export class Simkarten extends Article {
                     }
                 });
 
-                const simkartenID = projArtikel?.artikel.simkarten.simkarten_id;
 
-                if (simkartenID !== undefined || simkartenID !== null) {
+                const simkartenID = projArtikel?.artikel?.simkarten?.simkarten_id;
+
+                if (simkartenID) {
                     // Delete the associated simkarten entry
                     await this.prisma.simkarten.delete({
                         where: {
@@ -157,13 +158,14 @@ export class Simkarten extends Article {
                     });
                 }
 
-                // Delete the projekt_artikel entry
-                await this.prisma.projekt_artikel.delete({
-                    where: {
-                        projekt_artikel_id: projektArtikelID
-                    }
-                });
-
+                if (projArtikel) {
+                    // Delete the projekt_artikel entry
+                    await this.prisma.projekt_artikel.delete({
+                        where: {
+                            projekt_artikel_id: projektArtikelID
+                        }
+                    });
+                }
                 res.status(200).send({"message": "Simkarte und ProjektArtikel wurden erfolgreich gelöscht"});
             } catch (error) {
                 res.status(500).send({"message": error.message});

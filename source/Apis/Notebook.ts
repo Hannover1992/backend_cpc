@@ -148,8 +148,9 @@ export class Notebook extends Article {
                             notebook_id: notebookID
                         }
                     });
-                } else {
-                    // Delete the projekt_artikel entry
+                }
+
+                if( projArtikel){
                     await this.prisma.projekt_artikel.delete({
                         where: {
                             projekt_artikel_id: projektArtikelID

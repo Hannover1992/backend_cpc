@@ -272,12 +272,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                 })];
                         case 3:
                             _c.sent();
-                            return [3, 6];
-                        case 4: return [4, this.prisma.projekt_artikel.delete({
-                                where: {
-                                    projekt_artikel_id: projektArtikelID
-                                }
-                            })];
+                            _c.label = 4;
+                        case 4:
+                            if (!projArtikel) return [3, 6];
+                            return [4, this.prisma.projekt_artikel.delete({
+                                    where: {
+                                        projekt_artikel_id: projektArtikelID
+                                    }
+                                })];
                         case 5:
                             _c.sent();
                             _c.label = 6;
