@@ -113,6 +113,53 @@ export class Handy extends Article {
     }
 
     deletee(...args: any[]): any {
+        this.app.delete('/projektArtikelHandy/:projekt_artikel_id', async (req: any, res: any) => {
+            this.allow_communikation_from_all_ip_adress(res);
+            let projektArtikelID = parseInt(req.params.projekt_artikel_id);
+
+            try {
+                // Find the related handy_id before deleting the projekt_artikel
+                const projArtikel = await this.prisma.projekt_artikel.findUnique({
+                    where: {
+                        projekt_artikel_id: projektArtikelID
+                    },
+                    include: {
+                        artikel: {
+                            select: {
+                                handy: {
+                                    select: {
+                                        handy_id: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const handyID = projArtikel?.artikel?.handy?.handy_id;
+
+                if (handyID) {
+                    // Delete the associated handy entry
+                    await this.prisma.handy.delete({
+                        where: {
+                            handy_id: handyID
+                        }
+                    });
+                }
+
+                // Delete the projekt_artikel entry
+                await this.prisma.projekt_artikel.delete({
+                    where: {
+                        projekt_artikel_id: projektArtikelID
+                    }
+                });
+
+                res.status(200).send({"message": "Handy und ProjektArtikel wurden erfolgreich gelöscht"});
+            } catch (error) {
+                res.status(500).send({"message": error.message});
+                console.log(error.message);
+            }
+        });
     }
 
 }
