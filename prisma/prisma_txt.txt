@@ -1,7 +1,7 @@
 - tblACU(done)
-- Router
-- IP-Adresse Router
-  - IP-Adresse
+    - Router
+    - IP-Adresse Router
+      - IP-Adresse
 
 tblRouter
     - IMEI
@@ -12,12 +12,3 @@ tblRouter
     - PIN
     - PUK
     - IP-Adresse
-
-
-- tblHandy
-  - IMEI 1
-  - Besitzer
-  - SIM-Karten-Nummer
-  - Bildschirmsperre Pin
-  - E-Mail-Adresse?
-  - Password

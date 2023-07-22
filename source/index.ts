@@ -8,6 +8,7 @@ import {Simkarten} from "./Apis/Simkarten";
 import {Notebook} from "./Apis/Notebook";
 import {Router} from "./Apis/Router";
 import {Handy} from "./Apis/Handy";
+import {Acu} from "./Apis/Acu";
 
 
 async function start() {
@@ -20,6 +21,7 @@ async function start() {
     new Notebook();
     new Handy()
     new Router();
+    new Acu();
     instantiate(project.prisma);
 
 }

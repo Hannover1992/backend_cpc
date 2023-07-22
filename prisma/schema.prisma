@@ -33,9 +33,20 @@ model artikel {
   notebook          notebook?
   handy             Handy?
   router            Router?
+  acu               Acu?
 
   @@index([besitzer_id], map: "artikel_personal_Personalnummer_fk")
   @@index([unterkategorie_id], map: "unterkategorie_id")
+}
+
+model Acu {
+  acu_id                Int     @id @default(autoincrement())
+  router                String  @db.VarChar(255)
+  ip_adresse            String  @db.VarChar(255)
+  artikel_artikel_id_fk Int     @unique
+  artikel               artikel @relation(fields: [artikel_artikel_id_fk], references: [artikel_id], onDelete: NoAction, onUpdate: NoAction, map: "acu_artikel_artikel_id_fk_unique")
+
+  @@index([artikel_artikel_id_fk], map: "artikel_artikel_id_fk")
 }
 
 model Router {
