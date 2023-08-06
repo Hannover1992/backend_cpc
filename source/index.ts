@@ -13,7 +13,7 @@ import {DeliveryNote} from "./Apis/DeliveryNote";
 //
 import {User} from "./Apis/User";
 import {Role} from "./Apis/Role";
-import {DeliveryNoteComponent} from "../../FR_Master/src/app/Components/delivery-note/delivery-note.component";
+// import {DeliveryNoteComponent} from "../../FR_Master/src/app/Components/delivery-note/delivery-note.component";
 //
 
 async function start() {

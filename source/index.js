@@ -13,7 +13,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -40,7 +40,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Apis/Project", "./Apis/ProjectTable", "./Apis/KategorienTable", "./Apis/Asset", "./Apis/ProjektAssets", "./Apis/Simkarten", "./Apis/Notebook", "./Apis/Router", "./Apis/Handy", "./Apis/Acu"], factory);
+        define(["require", "exports", "./Apis/Project", "./Apis/ProjectTable", "./Apis/KategorienTable", "./Apis/Asset", "./Apis/ProjektAssets", "./Apis/Simkarten", "./Apis/Notebook", "./Apis/Router", "./Apis/Handy", "./Apis/Acu", "./Apis/DeliveryNote", "./Apis/User", "./Apis/Role"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -55,9 +55,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     var Router_1 = require("./Apis/Router");
     var Handy_1 = require("./Apis/Handy");
     var Acu_1 = require("./Apis/Acu");
+    var DeliveryNote_1 = require("./Apis/DeliveryNote");
+    var User_1 = require("./Apis/User");
+    var Role_1 = require("./Apis/Role");
     function start() {
         return __awaiter(this, void 0, void 0, function () {
-            var project;
+            var project, jwtSecretKey;
             return __generator(this, function (_a) {
                 project = new Project_1.Project();
                 new ProjectTable_1.ProjectTable();
@@ -69,6 +72,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 new Handy_1.Handy();
                 new Router_1.Router();
                 new Acu_1.Acu();
+                jwtSecretKey = process.env.JWT_SECRET || require('crypto').randomBytes(64).toString('hex');
+                new User_1.User(jwtSecretKey);
+                new Role_1.Role();
+                new DeliveryNote_1.DeliveryNote();
                 instantiate(project.prisma);
                 return [2];
             });
