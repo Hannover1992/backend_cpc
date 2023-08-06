@@ -9,7 +9,12 @@ import {Notebook} from "./Apis/Notebook";
 import {Router} from "./Apis/Router";
 import {Handy} from "./Apis/Handy";
 import {Acu} from "./Apis/Acu";
-
+import {DeliveryNote} from "./Apis/DeliveryNote";
+//
+import {User} from "./Apis/User";
+import {Role} from "./Apis/Role";
+import {DeliveryNoteComponent} from "../../FR_Master/src/app/Components/delivery-note/delivery-note.component";
+//
 
 async function start() {
     let project = new Project();
@@ -22,6 +27,10 @@ async function start() {
     new Handy()
     new Router();
     new Acu();
+    const jwtSecretKey = process.env.JWT_SECRET || require('crypto').randomBytes(64).toString('hex');
+    new User(jwtSecretKey);
+    new Role();
+    new DeliveryNote();
     instantiate(project.prisma);
 
 }
