@@ -39,7 +39,6 @@ export class Acu extends Article {
 
     read(...args: any[]): any {
         this.read_single();
-        this.read_multiple();
     }
 
     private read_single() {
@@ -76,9 +75,6 @@ export class Acu extends Article {
     }
 
 
-    private read_multiple() {
-
-    }
     update(...args: any[]): any {
         this.app.put('/projektArtikelAcu', async (req: any, res: any) => {
             this.allow_communikation_from_all_ip_adress(res);

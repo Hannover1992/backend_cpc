@@ -48,6 +48,21 @@ export class KategorienTable extends ServerSetup {
                 res.status(500).send({"message": error.message});
             });
         });
+
+        this.app.get('/getCorrespondingId/:kategoriename', async (req: any, res: any) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            const kategoriename = req.params.kategoriename;
+
+            await this.prisma.kategorien.findMany({
+                where: {
+                    kategoriename: kategoriename
+                }
+            }).then((kategorie: any) => {
+                res.status(200).send(kategorie.id);
+            }).catch((error: any) => {
+                res.status(500).send({"message": error.message});
+            });
+        });
     }
 
 
