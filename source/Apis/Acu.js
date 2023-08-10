@@ -133,11 +133,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             });
         };
         Acu.prototype.read = function () {
-            var _this = this;
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
+            this.read_single();
+        };
+        Acu.prototype.read_single = function () {
+            var _this = this;
             this.app.get('/projektArtikelAcu/:projekt_id/:unterkategoriename', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
                 var inputet_projekt_id, inputet_unterkategoriename;
                 return __generator(this, function (_a) {

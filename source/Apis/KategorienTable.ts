@@ -63,6 +63,7 @@ export class KategorienTable extends ServerSetup {
                 res.status(500).send({"message": error.message});
             });
         });
+
     }
 
 

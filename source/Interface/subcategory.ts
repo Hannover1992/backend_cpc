@@ -5,4 +5,5 @@ export interface Subcategory {
   unterkategoriename: string;
   kategorie_id: number;
   kategorien: Category;
+  zeigt_alles_an: boolean;
 }

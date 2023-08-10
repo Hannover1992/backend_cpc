@@ -132,6 +132,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     }
                 });
             }); });
+            this.app.get('/getCorrespondingId/:kategoriename', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                var kategoriename;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            res.setHeader('Access-Control-Allow-Origin', '*');
+                            kategoriename = req.params.kategoriename;
+                            return [4, this.prisma.kategorien.findMany({
+                                    where: {
+                                        kategoriename: kategoriename
+                                    }
+                                }).then(function (kategorie) {
+                                    res.status(200).send(kategorie.id);
+                                }).catch(function (error) {
+                                    res.status(500).send({ "message": error.message });
+                                })];
+                        case 1:
+                            _a.sent();
+                            return [2];
+                    }
+                });
+            }); });
         };
         KategorienTable.prototype.update = function () {
             var _this = this;

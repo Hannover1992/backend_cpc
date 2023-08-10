@@ -39,9 +39,9 @@ export class User extends ServerSetup {
     private _speakeasy: any;
     private qrcode: any;
 
-    constructor(secretKey: string) {
+    constructor() {
         super();
-        this.secretKey = secretKey;
+        this.secretKey = this.generateSecretKey();
         this._speakeasy = speakeasy;
         this.login();
         this.create();
@@ -52,6 +52,11 @@ export class User extends ServerSetup {
         this.updateStatus();
         //this.TwoFactorAuth();
         this.verifyOTP();
+    }
+
+
+    generateSecretKey() {
+        return process.env.JWT_SECRET || require('crypto').randomBytes(64).toString('hex');
     }
 
     create() {

@@ -60,9 +60,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     var Role_1 = require("./Apis/Role");
     function start() {
         return __awaiter(this, void 0, void 0, function () {
-            var project, jwtSecretKey;
             return __generator(this, function (_a) {
-                project = new Project_1.Project();
+                new Project_1.Project();
                 new ProjectTable_1.ProjectTable();
                 new ProjektAssets_1.ProjektAssets();
                 new KategorienTable_1.KategorienTable();
@@ -72,97 +71,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 new Handy_1.Handy();
                 new Router_1.Router();
                 new Acu_1.Acu();
-                jwtSecretKey = process.env.JWT_SECRET || require('crypto').randomBytes(64).toString('hex');
-                new User_1.User(jwtSecretKey);
+                new User_1.User();
                 new Role_1.Role();
                 new DeliveryNote_1.DeliveryNote();
-                instantiate(project.prisma);
                 return [2];
-            });
-        });
-    }
-    function instantiate(prisma) {
-        return __awaiter(this, void 0, void 0, function () {
-            var kategories, unterkategorie, projekte, artikels, projekt_artikels;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, prisma.kategorien.findMany()];
-                    case 1:
-                        kategories = _a.sent();
-                        if (!(kategories.length === 0)) return [3, 3];
-                        return [4, prisma.kategorien.create({
-                                data: {
-                                    kategoriename: "Asset",
-                                },
-                            })];
-                    case 2:
-                        kategories = [_a.sent()];
-                        _a.label = 3;
-                    case 3: return [4, prisma.unterkategorie.findMany()];
-                    case 4:
-                        unterkategorie = _a.sent();
-                        if (!(unterkategorie.length === 0)) return [3, 6];
-                        return [4, prisma.unterkategorie.create({
-                                data: {
-                                    unterkategoriename: "Divers",
-                                    kategorien: {
-                                        connect: {
-                                            kategorie_id: kategories[0].kategorie_id,
-                                        },
-                                    },
-                                },
-                            })];
-                    case 5:
-                        _a.sent();
-                        _a.label = 6;
-                    case 6: return [4, prisma.tblprojekte.findMany()];
-                    case 7:
-                        projekte = _a.sent();
-                        if (!(projekte.length === 0)) return [3, 9];
-                        return [4, prisma.tblprojekte.create({
-                                data: {
-                                    ID: 802007,
-                                    Standort: "Lager Hannover",
-                                },
-                            })];
-                    case 8:
-                        _a.sent();
-                        _a.label = 9;
-                    case 9: return [4, prisma.artikel.findMany()];
-                    case 10:
-                        artikels = _a.sent();
-                        if (!(artikels.length === 0)) return [3, 12];
-                        return [4, prisma.artikel.create({
-                                data: {
-                                    artikelname: "other Kabel last over REST API",
-                                    unterkategorie: {
-                                        connect: {
-                                            unterkategorie_id: 1,
-                                        },
-                                    },
-                                    einkaufs_datum: new Date(),
-                                    edit_date: new Date(),
-                                },
-                            })];
-                    case 11:
-                        artikels = [_a.sent()];
-                        _a.label = 12;
-                    case 12: return [4, prisma.projekt_artikel.findMany()];
-                    case 13:
-                        projekt_artikels = _a.sent();
-                        if (!(projekt_artikels.length === 0)) return [3, 15];
-                        return [4, prisma.projekt_artikel.create({
-                                data: {
-                                    projekt_id: 802007,
-                                    menge: 6,
-                                    artikel_id: artikels[0].artikel_id,
-                                },
-                            })];
-                    case 14:
-                        _a.sent();
-                        _a.label = 15;
-                    case 15: return [2];
-                }
             });
         });
     }
